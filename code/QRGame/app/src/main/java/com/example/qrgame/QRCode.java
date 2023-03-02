@@ -1,7 +1,7 @@
 package com.example.qrgame;
 
 
-public class QRCode {
+public class QRCode implements Comparable{
 
     private int score;
     private String hash;
@@ -41,4 +41,12 @@ public class QRCode {
         return name;
     }
 
+    @Override
+    public int compareTo(Object o) {
+
+        if (this.score > ((QRCode) o).getScore()) {
+            return 1;
+        }
+        return 0;
+    }
 }
