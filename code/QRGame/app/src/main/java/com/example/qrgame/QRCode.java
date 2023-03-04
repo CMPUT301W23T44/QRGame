@@ -8,7 +8,7 @@ public class QRCode implements Comparable{
     private String name;
 
     QRCode() {
-        hash = QRCodeHasher.hash();
+        //hash = QRCodeHasher.hash();
         calcScore();
         generateName();
     }

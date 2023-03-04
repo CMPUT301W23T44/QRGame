@@ -10,7 +10,7 @@ public class NameFaceScheme {
     public static String[] hex5;
 
     NameFaceScheme() {
-        hex0 = [""]
+        //hex0 = [""]
     }
 
     public static String generateName(String hash) {
