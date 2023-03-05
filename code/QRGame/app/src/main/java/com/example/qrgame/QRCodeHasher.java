@@ -8,9 +8,9 @@ public class QRCodeHasher {
 
     public static String hash(String s) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedhash = digest.digest(
+        byte[] encodedHash = digest.digest(
                 s.getBytes(StandardCharsets.UTF_8));
-        return bytesToHex(encodedhash);
+        return bytesToHex(encodedHash);
     }
 
     private static String bytesToHex(byte[] hash) {
@@ -24,5 +24,4 @@ public class QRCodeHasher {
         }
         return hexString.toString();
     }
-
 }

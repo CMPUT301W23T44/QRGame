@@ -1,32 +1,38 @@
 package com.example.qrgame;
 
 
+import java.security.NoSuchAlgorithmException;
+
 public class QRCode implements Comparable{
 
-    private int score;
+    private int score = 0;
     private String hash;
     private String name;
 
-    QRCode() {
-        //hash = QRCodeHasher.hash();
+    QRCode(String data) throws NoSuchAlgorithmException {
+        hash = QRCodeHasher.hash(data);
         calcScore();
         generateName();
     }
 
     private void calcScore() {
-        String previous = String.valueOf(hash.charAt(0));
-        String current;
-        int current_value = 1;
+        String previousChar = String.valueOf(hash.charAt(0));
+        String currentChar;
+        int currentScoreValue = 1;
 
         for (int i = 1; i < hash.length(); i++) {
-            current = String.valueOf(hash.charAt(i));
-            if (current.equals(previous)) {
-                current_value *= (Integer.parseInt(current, 16));
+            currentChar = String.valueOf(hash.charAt(i));
+            if (currentChar.equals(previousChar)) {
+                if (currentChar == "0") {
+                    currentScoreValue *= 20;
+                } else {
+                    currentScoreValue *= (Integer.parseInt(currentChar, 16));
+                }
             } else {
-                score += current_value;
-                current_value = 1;
+                score += currentScoreValue;
+                currentScoreValue = 1;
             }
-            previous = current;
+            previousChar = currentChar;
         }
     }
     public int getScore() {
@@ -43,10 +49,20 @@ public class QRCode implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-
         if (this.score > ((QRCode) o).getScore()) {
             return 1;
         }
         return 0;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "QRCode{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

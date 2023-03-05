@@ -27,6 +27,7 @@ package com.example.qrgame;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -58,10 +59,11 @@ public class QRScannerActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        Toast.makeText(QRScannerActivity.this, new String(result.getRawBytes()), Toast.LENGTH_SHORT).show();
-
-                        Log.d(TAG, String.valueOf(result.getRawBytes()));
+                        Intent previous = new Intent();
+                        previous.putExtra("result", result.getText());
+                        //Toast.makeText(QRScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK, previous);
+                        finish();
                     }
                 });
             }

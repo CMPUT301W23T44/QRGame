@@ -1,31 +1,70 @@
 package com.example.qrgame;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class NameFaceScheme {
 
-    public static String[] hex0;
-    public static String[] hex1;
-    public static String[] hex2;
-    public static String[] hex3;
-    public static String[] hex4;
-    public static String[] hex5;
+    private static String[] hex0 = new String[]{"Concerned ",
+                                                "Ambiguous ",
+                                                "Far ",
+                                                "Hallowed ",
+                                                "Wide-eyed ",
+                                                "Tawdry ",
+                                                "Venomous ",
+                                                "Industrious "};
+    private static String[] hex1= new String[]{"Flo",
+                                               "Ble",
+                                               "Cla",
+                                               "Ni",
+                                               "Wes",
+                                               "Dea",
+                                               "Cse",
+                                               "Try"};
+    private static String[] hex2= new String[] {"ck",
+                                                "lim",
+                                                "her",
+                                                "ism",
+                                                "ly",
+                                                "ede",
+                                                "tar",
+                                                "dim"};
+    private static String[] hex3 = new String[] {"it",
+                                                "ely",
+                                                "dum",
+                                                "cey",
+                                                "ght",
+                                                "ism",
+                                                "ould",
+                                                "hey"};
 
-    NameFaceScheme() {
-        //hex0 = [""]
-    }
 
     public static String generateName(String hash) {
         String name = "";
+        int hashFraction = 0;
+        int section = 1;
+        int currentLength = 0;
 
-        name += hex0[generateString(hash,0)];
-        name += hex1[generateString(hash,1)];
-        name += hex2[generateString(hash,2)];
-        name += hex3[generateString(hash,3)];
-        name += hex4[generateString(hash,4)];
-        name += hex5[generateString(hash,5)];
+        for (int i = 0; i < hash.length(); i++) {
+            hashFraction += Integer.parseInt(String.valueOf(hash.charAt(i)), 16);
+            currentLength++;
+            if (currentLength%16 == 0) {
+                int index = hashFraction%8;
+                if (section == 1) {
+                    name += hex0[index];
+                    section++;
+                } else if (section == 2) {
+                    name += hex1[index];
+                    section++;
+                } else if (section == 2) {
+                    name += hex2[index];
+                    section++;
+                } else {
+                    name += hex3[index];
+                }
+                hashFraction = 0;
+            }
+        }
         return name;
-    }
-
-    private static int generateString(String hash, int index) {
-        return Integer.parseInt(String.valueOf(hash.charAt(index)), 16);
     }
 }
