@@ -1,8 +1,5 @@
 package com.example.qrgame;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class NameFaceScheme {
 
     private static String[] hex0 = new String[]{"Concerned ",

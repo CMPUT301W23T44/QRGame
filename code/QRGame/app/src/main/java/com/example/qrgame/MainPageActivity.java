@@ -21,7 +21,7 @@ public class MainPageActivity extends AppCompatActivity {
 
     final int QR_SCANNER_REQUEST = 0;
     final int INVENTORY_REQUEST = 1;
-    final int SOCIAL_REQUEST = 3;
+    final int SOCIAL_REQUEST = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
