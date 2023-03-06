@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button start = findViewById(R.id.start_button);
 
-        Intent main_page = new Intent(this, MainPageActivity.class);
+        Intent main_page = new Intent(this, SignUp.class);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
