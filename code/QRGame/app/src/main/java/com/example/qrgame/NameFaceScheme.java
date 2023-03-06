@@ -75,7 +75,7 @@ public class NameFaceScheme {
 
 
     public static String generateName(String hash) {
-        String name = "";
+        StringBuilder name = new StringBuilder();
         int hashFraction = 0;
         int section = 1;
         int currentLength = 0;
@@ -86,25 +86,25 @@ public class NameFaceScheme {
             if (currentLength%16 == 0) {
                 int index = hashFraction%8;
                 if (section == 1) {
-                    name += STRING_0[index];
+                    name.append(STRING_0[index]);
                     section++;
                 } else if (section == 2) {
-                    name += STRING_1[index];
+                    name.append(STRING_1[index]);
                     section++;
                 } else if (section == 3) {
-                    name += STRING_2[index];
+                    name.append(STRING_2[index]);
                     section++;
                 } else {
-                    name += STRING_3[index];
+                    name.append(STRING_3[index]);
                 }
                 hashFraction = 0;
             }
         }
-        return name;
+        return name.toString();
     }
 
     public static String generateFace(String hash) {
-        String face = "";
+        StringBuilder face = new StringBuilder();
         int hashFraction = 0;
         int section = 1;
         int currentLength = 0;
@@ -115,24 +115,24 @@ public class NameFaceScheme {
             if (currentLength%16 == 0) {
                 int index = hashFraction%8;
                 if (section == 1) {
-                    face += FACE_0[index] + NEWLINE_CARRIAGE;
-                    face += FACE_FILLER + NEWLINE_CARRIAGE;
+                    face.append(FACE_0[index]).append(NEWLINE_CARRIAGE);
+                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
                     section++;
                 } else if (section == 2) {
-                    face += FACE_1[index] + NEWLINE_CARRIAGE;
-                    face += FACE_FILLER + NEWLINE_CARRIAGE;
+                    face.append(FACE_1[index]).append(NEWLINE_CARRIAGE);
+                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
                     section++;
                 } else if (section == 3) {
-                    face += FACE_2[index] + NEWLINE_CARRIAGE;
+                    face.append(FACE_2[index]).append(NEWLINE_CARRIAGE);
                     section++;
                 } else {
-                    face += FACE_3[index] + NEWLINE_CARRIAGE;
-                    face += FACE_FILLER + NEWLINE_CARRIAGE;
-                    face += FACE_CHIN;
+                    face.append(FACE_3[index]).append(NEWLINE_CARRIAGE);
+                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
+                    face.append(FACE_CHIN);
                 }
                 hashFraction = 0;
             }
         }
-        return face;
+        return face.toString();
     }
 }
