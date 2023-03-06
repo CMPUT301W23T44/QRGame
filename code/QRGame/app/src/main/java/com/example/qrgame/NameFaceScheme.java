@@ -2,7 +2,7 @@ package com.example.qrgame;
 
 public class NameFaceScheme {
 
-    private static String[] hex0 = new String[]{"Concerned ",
+    static final private String[] STRING_0 = new String[]{"Concerned ",
                                                 "Ambiguous ",
                                                 "Far ",
                                                 "Hallowed ",
@@ -10,7 +10,7 @@ public class NameFaceScheme {
                                                 "Tawdry ",
                                                 "Venomous ",
                                                 "Industrious "};
-    private static String[] hex1= new String[]{"Flo",
+    static final private String[] STRING_1 = new String[]{"Flo",
                                                "Ble",
                                                "Cla",
                                                "Ni",
@@ -18,7 +18,7 @@ public class NameFaceScheme {
                                                "Dea",
                                                "Cse",
                                                "Try"};
-    private static String[] hex2= new String[] {"ck",
+    static final private String[] STRING_2 = new String[] {"ck",
                                                 "lim",
                                                 "her",
                                                 "ism",
@@ -26,7 +26,7 @@ public class NameFaceScheme {
                                                 "ede",
                                                 "tar",
                                                 "dim"};
-    private static String[] hex3 = new String[] {"it",
+    static final private String[] STRING_3 = new String[] {"it",
                                                 "ely",
                                                 "dum",
                                                 "cey",
@@ -34,6 +34,44 @@ public class NameFaceScheme {
                                                 "ism",
                                                 "ould",
                                                 "hey"};
+
+    static final private String[] FACE_0 = new String[] {"<--->",
+                                                        "/_________\\",
+                                                        ".~~~~~~~~~~.",
+                                                        "T__________T",
+                                                        "I----------I",
+                                                        "/0000000000\\",
+                                                        "|----|",
+                                                        "''''''''''"};
+    static final private String[] FACE_1 = new String[] {"$|  @  @  |$",
+                                                            "$|    ^   ^   |$",
+                                                            "%|  U U  |%",
+                                                            "(  OO  )",
+                                                            "<(  ?  ?  )>",
+                                                            "^| I  I |^",
+                                                            "%/    O    O   /%",
+                                                            "$(  U U  )$"};
+    static final private String[] FACE_2 = new String[] {"|   ^   |",
+                                                        "/   V   \\",
+                                                        "\\    .    //",
+                                                        "|   []   |",
+                                                        "(   v   )",
+                                                        "<    x    >",
+                                                        "[     #     ]",
+                                                        "{    V    }"};
+    static final private String[] FACE_3 = new String[] {"(    w    )",
+                                                        "|    xxxxx    |",
+                                                        "/  uu  \\",
+                                                        "(  \\________/  )",
+                                                        "|  v-----v  |",
+                                                        "/    ~~~~~~~   \\",
+                                                        "\\  /-----\\  /",
+                                                        "|  _    _  |"};
+
+    static final private String FACE_FILLER = "|              |";
+    static final private String FACE_CHIN = "\\___/";
+    static final private String NEWLINE_CARRIAGE = "\n";
+
 
 
     public static String generateName(String hash) {
@@ -48,20 +86,53 @@ public class NameFaceScheme {
             if (currentLength%16 == 0) {
                 int index = hashFraction%8;
                 if (section == 1) {
-                    name += hex0[index];
+                    name += STRING_0[index];
                     section++;
                 } else if (section == 2) {
-                    name += hex1[index];
+                    name += STRING_1[index];
                     section++;
-                } else if (section == 2) {
-                    name += hex2[index];
+                } else if (section == 3) {
+                    name += STRING_2[index];
                     section++;
                 } else {
-                    name += hex3[index];
+                    name += STRING_3[index];
                 }
                 hashFraction = 0;
             }
         }
         return name;
+    }
+
+    public static String generateFace(String hash) {
+        String face = "";
+        int hashFraction = 0;
+        int section = 1;
+        int currentLength = 0;
+
+        for (int i = 0; i < hash.length(); i++) {
+            hashFraction += Integer.parseInt(String.valueOf(hash.charAt(i)), 16);
+            currentLength++;
+            if (currentLength%16 == 0) {
+                int index = hashFraction%8;
+                if (section == 1) {
+                    face += FACE_0[index] + NEWLINE_CARRIAGE;
+                    face += FACE_FILLER + NEWLINE_CARRIAGE;
+                    section++;
+                } else if (section == 2) {
+                    face += FACE_1[index] + NEWLINE_CARRIAGE;
+                    face += FACE_FILLER + NEWLINE_CARRIAGE;
+                    section++;
+                } else if (section == 3) {
+                    face += FACE_2[index] + NEWLINE_CARRIAGE;
+                    section++;
+                } else {
+                    face += FACE_3[index] + NEWLINE_CARRIAGE;
+                    face += FACE_FILLER + NEWLINE_CARRIAGE;
+                    face += FACE_CHIN;
+                }
+                hashFraction = 0;
+            }
+        }
+        return face;
     }
 }

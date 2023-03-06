@@ -67,7 +67,9 @@ public class MainPageActivity extends AppCompatActivity {
                     String result = data.getStringExtra("result");
                     QRCode qrCode = new QRCode(result);
                     //Toast.makeText(this, qrCode.getHash(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(this, qrCode.getName(), Toast.LENGTH_SHORT).show();
+                    Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
+                    qrInfoIntent.putExtra("qrCode", qrCode);
+                    startActivity(qrInfoIntent);
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }

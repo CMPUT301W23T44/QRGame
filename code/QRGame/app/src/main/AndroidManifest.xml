@@ -30,6 +30,7 @@
 
         <activity android:name=".MainPageActivity"></activity>
         <activity android:name=".QRScannerActivity"></activity>
+        <activity android:name=".QRInfoActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.CAMERA"/>

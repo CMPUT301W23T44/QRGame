@@ -1,18 +1,21 @@
 package com.example.qrgame;
 
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
-public class QRCode implements Comparable{
+public class QRCode implements Comparable, Serializable {
 
     private int score = 0;
     private String hash;
     private String name;
+    private String face;
 
     QRCode(String data) throws NoSuchAlgorithmException {
         hash = QRCodeHasher.hash(data);
         calcScore();
-        generateName();
+        generate();
     }
 
     private void calcScore() {
@@ -39,13 +42,16 @@ public class QRCode implements Comparable{
         return score;
     }
 
-    private void generateName() {
+    private void generate() {
         name = NameFaceScheme.generateName(hash);
+        face = NameFaceScheme.generateFace(hash);
     }
 
     public String getName() {
         return name;
     }
+
+    public String getFace() { return face;}
 
     @Override
     public int compareTo(Object o) {
