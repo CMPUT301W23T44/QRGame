@@ -23,6 +23,7 @@ public class QRInfoActivity extends AppCompatActivity {
         scoreTextView = findViewById(R.id.textView_score);
 
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
+
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + String.valueOf(qrCode.getScore()));
