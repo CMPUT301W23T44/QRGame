@@ -42,6 +42,8 @@ public class MainPageActivity extends AppCompatActivity {
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(MainPageActivity.this,Inventory_activity.class);
+                startActivity(intent);
 
             }
         });
