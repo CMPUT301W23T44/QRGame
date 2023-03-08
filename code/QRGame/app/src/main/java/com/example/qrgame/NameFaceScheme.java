@@ -73,7 +73,7 @@ public class NameFaceScheme {
                                                         "\\  /-----\\  /",
                                                         "|  _    _  |"};
 
-    static final private String FACE_FILLER = "|                  |";
+    static final private String FACE_FILLER = "|                |";
     static final private String FACE_CHIN = "\\___/";
     static final private String NEWLINE_CARRIAGE = "\n";
 

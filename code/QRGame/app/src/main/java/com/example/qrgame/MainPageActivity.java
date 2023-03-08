@@ -65,6 +65,8 @@ public class MainPageActivity extends AppCompatActivity {
                 try {
                     String result = data.getStringExtra("result");
                     QRCode qrCode = new QRCode(result);
+                    QRFirebase.addQR(qrCode);
+
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);
                     startActivity(qrInfoIntent);
