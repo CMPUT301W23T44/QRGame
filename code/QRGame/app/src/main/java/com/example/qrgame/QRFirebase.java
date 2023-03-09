@@ -12,6 +12,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interface between the program app and the online Firebase database
@@ -30,23 +35,21 @@ public class QRFirebase {
      * @param qrCode - QR code to be added to the database
      */
     public static void addQR(QRCode qrCode) {
-        if (!findQR(qrCode)) {
-            QR_CODE_COLLECTION
-                    .document(qrCode.getHash())
-                    .set(qrCode)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d(TAG, "Add successful");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Add failure");
-                        }
-                    });
-        }
+        QR_CODE_COLLECTION
+                .document(qrCode.getHash())
+                .set(qrCode)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Add successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Add failure");
+                    }
+                });
     }
 
     /**
@@ -98,4 +101,5 @@ public class QRFirebase {
         });
         return result[0];
     }
+
 }

@@ -10,7 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPageActivity extends AppCompatActivity {
 

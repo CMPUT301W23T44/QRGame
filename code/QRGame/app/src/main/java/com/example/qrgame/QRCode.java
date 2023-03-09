@@ -4,6 +4,7 @@ package com.example.qrgame;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents the QR code object
@@ -12,16 +13,25 @@ public class QRCode implements Comparable, Serializable {
 
     private int score = 0;
     private String hash;
+
     private String name;
     private String face;
 
+    private int latitude;
+    private int longitude;
+
+//    private ArrayList<Player> playersList = new ArrayList<Player>();
+
     private int RADIX = 16;
     private int ZERO_VALUE = 20;
+
+
 
     QRCode(String data) throws NoSuchAlgorithmException {
         hash = QRCodeHasher.hash(data);
         calcScore();
         generate();
+        setLocation(0,0);
     }
 
     /**
@@ -30,21 +40,32 @@ public class QRCode implements Comparable, Serializable {
     private void calcScore() {
         String previousChar = String.valueOf(hash.charAt(0));
         String currentChar;
-        int currentScoreValue = 1;
+        int currentScoreValue = 0;
+        boolean firstInstance = true;
 
         // Finds consecutive instances of a character in the hash and bases the score off the
         // power of these consecutive values
         for (int i = 1; i < hash.length(); i++) {
             currentChar = String.valueOf(hash.charAt(i));
+            if (previousChar.equals("0") && firstInstance) {
+                currentScoreValue = 1;
+                firstInstance = false;
+            }
             if (currentChar.equals(previousChar)) {
-                if (currentChar == "0") {
-                    currentScoreValue *= ZERO_VALUE;
+                if (firstInstance) {
+                    currentScoreValue = Integer.parseInt(currentChar, RADIX);
+                    firstInstance = false;
                 } else {
-                    currentScoreValue *= (Integer.parseInt(currentChar, RADIX));
+                    if (currentChar.equals("0")) {
+                        currentScoreValue *= ZERO_VALUE;
+                    } else {
+                        currentScoreValue *= (Integer.parseInt(currentChar, RADIX));
+                    }
                 }
             } else {
                 score += currentScoreValue;
-                currentScoreValue = 1;
+                currentScoreValue = 0;
+                firstInstance = true;
             }
             previousChar = currentChar;
         }
@@ -87,4 +108,25 @@ public class QRCode implements Comparable, Serializable {
                 "name='" + name + '\'' +
                 '}';
     }
+
+    private void setLocation(int latitude, int longitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    public HashMap<String, Integer> getLocation() {
+        HashMap<String, Integer> location = new HashMap<String, Integer>();
+        location.put("Latitude", latitude);
+        location.put("Longitude", longitude);
+        return location;
+    }
+
+//    public void addPlayer(Player player) {
+//        playersList.add(player);
+//    }
+
+//    public ArrayList<Player> getPlayers() {
+//        return playerList;
+//    }
+
 }
