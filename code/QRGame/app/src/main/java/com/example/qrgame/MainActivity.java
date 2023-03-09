@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
 
         Button start = findViewById(R.id.start_button);
 
-        Intent main_page = new Intent(this, MainPageActivity.class);
+        Intent login_page = new Intent(this, LogIn.class);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(main_page);
+                startActivity(login_page);
             }
         });
     }
