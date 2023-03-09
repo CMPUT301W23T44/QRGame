@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -37,6 +38,7 @@ import androidx.fragment.app.Fragment;
 public class SignUp extends AppCompatActivity {
     private Button Finish;
     ArrayList<User> dataList;
+    public boolean isHave;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,14 +64,18 @@ public class SignUp extends AppCompatActivity {
                 String userName = UserName.getText().toString();
                 String phoneNumber = PhoneNumber.getText().toString();
                 String androidId = getUdid();
-
+                User checkUser= new User(userName, phoneNumber, androidId);
+                findUser(checkUser);
                 if (userName.isEmpty()) {
                     Toast warningToast = Toast.makeText(SignUp.this, "Username is empty", Toast.LENGTH_LONG);
                     warningToast.show();
                 } else if (phoneNumber.isEmpty()) {
                     Toast warningToast = Toast.makeText(SignUp.this, "PhoneNumber is empty", Toast.LENGTH_LONG);
                     warningToast.show();
-                } else {
+                } else if (isHave==true) {
+                    Toast warningToast = Toast.makeText(SignUp.this, "Username was already register", Toast.LENGTH_LONG);
+                    warningToast.show();
+                }else {
                     dataList.add((new User(userName, phoneNumber, androidId)));
                     CollectionReference user = fireStore.collection("UserCollection");
                     curUser.put("UserNameKey", dataList.get(0).getUsername());
@@ -115,4 +121,54 @@ public class SignUp extends AppCompatActivity {
         String androidID=AndroidID();
         return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
     }
+    public void checkExist(){
+        isHave=true;
+    }
+
+    /**
+     * This function will check the username is exist or not in database
+     * if exist, bollean isHave will change to true,otherwise, will change to false
+     *
+     * @param user
+     */
+    public  void findUser(User user) {
+        //final boolean[] result = new boolean[1];
+        final boolean[] isExist = {false};
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = fireStore.collection("UserCollection").document(user.getUsername());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        isExist[0] = true;
+                        Toast warningToast = Toast.makeText(SignUp.this, "Username was already register", Toast.LENGTH_LONG);
+                        warningToast.show();
+                        Log.d("RRG", "a true");
+
+                    } else {
+                        isExist[0] = false;
+
+                        Log.d("RRG", "EXIST false");
+                    }
+                } else {
+                    isExist[0] = false;
+                    Log.d("RRG", "Get failure");
+                }
+
+            }
+        });
+
+
+        if (isExist[0] = true) {
+            checkExist();
+        } else {
+
+            isHave=false;
+        }
+
+    }
+
+
 }
