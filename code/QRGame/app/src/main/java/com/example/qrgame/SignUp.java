@@ -143,8 +143,6 @@ public class SignUp extends AppCompatActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot.exists()) {
                         isExist[0] = true;
-                        Toast warningToast = Toast.makeText(SignUp.this, "Username was already register", Toast.LENGTH_LONG);
-                        warningToast.show();
                         Log.d("RRG", "a true");
 
                     } else {
@@ -161,7 +159,7 @@ public class SignUp extends AppCompatActivity {
         });
 
 
-        if (isExist[0] = true) {
+        if (isExist[0] == true) {
             checkExist();
         } else {
 
