@@ -15,8 +15,16 @@
         tools:ignore="ExtraText">
         android:hardwareAccelerated="true"
         <activity
+            android:name=".Inventory_activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
+            android:screenOrientation="portrait"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +36,19 @@
                 android:value="" />
         </activity>
 
-        <activity android:name=".MainPageActivity"></activity>
-        <activity android:name=".QRScannerActivity"></activity>
+        <activity
+            android:name=".MainPageActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".QRScannerActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".QRInfoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
     <uses-permission android:name="android.permission.CAMERA"/>
