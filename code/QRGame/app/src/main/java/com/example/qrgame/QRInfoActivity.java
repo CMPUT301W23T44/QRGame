@@ -1,5 +1,6 @@
 package com.example.qrgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,10 +32,12 @@ public class QRInfoActivity extends AppCompatActivity {
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + String.valueOf(qrCode.getScore()));
+        Intent surroundingsPictureActivity = new Intent(this, CameraActivitySurrounding.class);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                startActivity(surroundingsPictureActivity);
             }
         });
 
