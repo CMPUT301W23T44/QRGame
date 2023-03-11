@@ -3,29 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
-
-    <!--        app:layout_constrainBottom_toBottomOf="@+id/add_qr"-->
-    <!--        app:layout_constrainLeft_toLeftOf="parent"-->
-    <!--        app:layout_constrainRight_toRightOf="parent"-->
-    <!--        app:layout_constrainTop_toTopOf="parent" -->
-
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mMap"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-
-        android:layout_width="match_parent"
-        android:layout_height="600dp" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,9 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/white"
             android:clickable="true"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:backgroundTint="@color/white"/>
 
         <Button
             android:id="@+id/social_button"
