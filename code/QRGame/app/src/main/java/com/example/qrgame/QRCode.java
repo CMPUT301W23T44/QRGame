@@ -3,7 +3,6 @@ package com.example.qrgame;
 
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -22,8 +21,8 @@ public class QRCode implements Comparable, Serializable {
 
 //    private ArrayList<Player> playersList = new ArrayList<Player>();
 
-    private int RADIX = 16;
-    private int ZERO_VALUE = 20;
+    private final int RADIX = 16;
+    private final int ZERO_VALUE = 20;
 
 
 

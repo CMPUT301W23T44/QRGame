@@ -1,7 +1,5 @@
 package com.example.qrgame;
 
-import org.checkerframework.checker.units.qual.A;
-
 /**
  * Generates a unique face and name based off a hash
  */
@@ -79,7 +77,7 @@ public class NameFaceScheme {
 
     static final private int HASH_FRACTION_LENGTH = 16;
     static final private int ARRAY_LENGTH = 8;
-    static private int RADIX = 16;
+    static final private int RADIX = 16;
 
     /**
      * Generates a name based on the hexadecimal digits of the hash provided

@@ -18,11 +18,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture Image"
+        android:text="@string/capture_image"
         android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:background="@color/design_default_color_primary"
-        android:id="@+id/button"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/teal_200"
+        android:id="@+id/capture_button"
         >
 
     </Button>

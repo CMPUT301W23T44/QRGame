@@ -10,11 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainPageActivity extends AppCompatActivity {
 
@@ -71,7 +67,7 @@ public class MainPageActivity extends AppCompatActivity {
                 try {
                     String result = data.getStringExtra("result");
                     QRCode qrCode = new QRCode(result);
-                    QRFirebase.addQR(qrCode);
+                    QRDatabaseController.addQR(qrCode);
 
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);
