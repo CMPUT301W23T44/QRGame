@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "519717846633",
+    "project_id": "qrgame-qrstore",
+    "storage_bucket": "qrgame-qrstore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519717846633:android:6c690943f1b48204f8acf8",
+        "android_client_info": {
+          "package_name": "com.example.qrgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519717846633-c7r34sa46kaukubgpav2nfi5jl80ksps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhy8p9UQhpnaiE8HTp_NmLAQHeDWiBtvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519717846633-c7r34sa46kaukubgpav2nfi5jl80ksps.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

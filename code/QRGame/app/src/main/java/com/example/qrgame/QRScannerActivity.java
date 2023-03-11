@@ -43,6 +43,9 @@ import com.google.zxing.Result;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * QR scanner activity allowing the scanning of a QR code with a camera
+ */
 public class QRScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
@@ -61,7 +64,6 @@ public class QRScannerActivity extends AppCompatActivity {
                     public void run() {
                         Intent previous = new Intent();
                         previous.putExtra("result", result.getText());
-                        //Toast.makeText(QRScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK, previous);
                         finish();
                     }
