@@ -21,7 +21,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.548"
         android:gravity="center"
-        android:padding="25dp"/>
+        android:padding="25dp"
+        android:textSize="15dp"/>
 
     <EditText
         android:id="@+id/editText_comment"
@@ -75,18 +76,19 @@
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:text="Name"
         android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/textView_score"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.313"
+        app:layout_constraintHorizontal_bias="0.308"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="20dp"
         android:text="Score"
         android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/textView_comment"
