@@ -71,6 +71,7 @@ public class QRDatabaseController {
     }
 
     /**
+     * NOT WORKING
      * Finds a provided QR code in the database
      * @param hash - QR code hash to be found
      * @return
@@ -98,6 +99,7 @@ public class QRDatabaseController {
     }
 
     /**
+     * NOT WORKING
      * Gets the provided QR code from the firebase database
      * @param hash - QR code hash to be retrieved
      * @return
@@ -105,23 +107,14 @@ public class QRDatabaseController {
      */
     public static QRCode getQRCode(String hash) {
         final QRCode[] qrCode = new QRCode[1];
+        qrCode[0] = null;
         DocumentReference docRef = QR_CODE_COLLECTION.document(hash);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.exists()) {
-                        qrCode[0] = documentSnapshot.toObject(QRCode.class);
-                    } else {
-                        qrCode[0] = null;
-                    }
-                } else {
-                    Log.d(TAG, "Get failure");
-                }
+                qrCode[0] = task.getResult().toObject(QRCode.class);
             }
         });
         return qrCode[0];
     }
-
 }

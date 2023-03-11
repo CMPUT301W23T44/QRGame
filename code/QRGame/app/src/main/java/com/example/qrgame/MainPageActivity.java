@@ -56,7 +56,6 @@ public class MainPageActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
@@ -68,7 +67,8 @@ public class MainPageActivity extends AppCompatActivity {
                     String result = data.getStringExtra("result");
                     QRCode qrCode = new QRCode(result);
                     QRDatabaseController.addQR(qrCode);
-
+                    boolean test = QRDatabaseController.findQR(qrCode.getHash());
+                    QRCode qrCode2 = QRDatabaseController.getQRCode(qrCode.getHash());
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);
                     startActivity(qrInfoIntent);
@@ -78,7 +78,5 @@ public class MainPageActivity extends AppCompatActivity {
 
             }
         }
-
-
     }
 }

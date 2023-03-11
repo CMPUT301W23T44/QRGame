@@ -50,7 +50,14 @@
             android:name=".QRInfoActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".CameraActivitySurrounding"></activity>
+        <activity
+            android:name=".PromptUserPictureActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".SaveSurroundingPictureActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
 
     </application>

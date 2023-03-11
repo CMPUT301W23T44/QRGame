@@ -15,12 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class CameraActivitySurrounding extends AppCompatActivity {
+/**
+ * Prompts user to take a picture of the location they are in
+ */
+public class PromptUserPictureActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button captureButton;
-
-    private final static int REQUEST_CODE = 1;
+    private final static int REQUEST_CODE = 0;
+    private final static int RESULT_NEXT = 1;
+    private final static int RESULT_BACK = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,25 +34,21 @@ public class CameraActivitySurrounding extends AppCompatActivity {
         imageView = findViewById(R.id.imageview);
         captureButton = findViewById(R.id.capture_button);
 
-        if (ContextCompat.checkSelfPermission(CameraActivitySurrounding.this, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(CameraActivitySurrounding.this, new String[] {
-                    Manifest.permission.CAMERA
-            }, REQUEST_CODE);
-        }
+
         captureButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, REQUEST_CODE);
+            Intent savePicture = new Intent(this, SaveSurroundingPictureActivity.class);
+            startActivityForResult(savePicture, REQUEST_CODE);
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-            assert data != null;
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(bitmap);
+        if (resultCode == RESULT_NEXT) {
+            finish();
+        } else {
+            Intent savePicture = new Intent(this, SaveSurroundingPictureActivity.class);
+            startActivityForResult(savePicture, REQUEST_CODE);
         }
     }
 }

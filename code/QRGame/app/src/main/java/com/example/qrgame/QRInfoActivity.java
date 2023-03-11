@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Displays all the information of a QR code to the user
+ */
 public class QRInfoActivity extends AppCompatActivity {
 
     private TextView qrImageTextView;
@@ -31,13 +34,14 @@ public class QRInfoActivity extends AppCompatActivity {
 
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
-        scoreTextView.setText("Score: " + String.valueOf(qrCode.getScore()));
-        Intent surroundingsPictureActivity = new Intent(this, CameraActivitySurrounding.class);
+        scoreTextView.setText("Score: " + qrCode.getScore());
+        Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(surroundingsPictureActivity);
+                finish();
             }
         });
 

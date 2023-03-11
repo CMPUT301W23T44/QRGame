@@ -1,46 +1,47 @@
 package com.example.qrgame;
 
-
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
 /**
  * Represents the QR code object
  */
+@IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
 
-    private int score = 0;
+    private int score;
     private String hash;
 
+    @PropertyName("name")
     private String name;
+
+    @PropertyName("face")
     private String face;
 
-    private int latitude;
-    private int longitude;
+    public QRCode() {
+    }
 
-//    private ArrayList<Player> playersList = new ArrayList<Player>();
-
-    private final int RADIX = 16;
-    private final int ZERO_VALUE = 20;
-
-
-
-    QRCode(String data) throws NoSuchAlgorithmException {
+    public QRCode(String data) throws NoSuchAlgorithmException {
         hash = QRCodeHasher.hash(data);
-        calcScore();
-        generate();
-        setLocation(0,0);
+        score = calcScore();
+        face = NameFaceScheme.generateFace(hash);
+        name = NameFaceScheme.generateName(hash);
     }
 
     /**
      * Calculates the score of a QR code based off the hash provided
      */
-    private void calcScore() {
+    private int calcScore() {
+        int RADIX = 16;
+        int ZERO_VALUE = 20;
         String previousChar = String.valueOf(hash.charAt(0));
         String currentChar;
         int currentScoreValue = 0;
         boolean firstInstance = true;
+        int score = 0;
 
         // Finds consecutive instances of a character in the hash and bases the score off the
         // power of these consecutive values
@@ -68,26 +69,28 @@ public class QRCode implements Comparable, Serializable {
             }
             previousChar = currentChar;
         }
+        return score;
     }
 
+    @PropertyName("score")
     public int getScore() {
         return score;
     }
 
-    /**
-     * Generates a unique name and face for a QR code based
-     * on a provided hash
-     */
-    private void generate() {
-        name = NameFaceScheme.generateName(hash);
-        face = NameFaceScheme.generateFace(hash);
+    @PropertyName("hash")
+    public String getHash() {
+        return hash;
     }
 
+    @PropertyName("name")
     public String getName() {
         return name;
     }
 
-    public String getFace() { return face;}
+    @PropertyName("face")
+    public String getFace() {
+        return face;
+    }
 
     @Override
     public int compareTo(Object o) {
@@ -97,28 +100,14 @@ public class QRCode implements Comparable, Serializable {
         return 0;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        return "QRCode{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
-    private void setLocation(int latitude, int longitude) {
-        this.longitude = longitude;
-        this.latitude = latitude;
-    }
-
-    public HashMap<String, Integer> getLocation() {
-        HashMap<String, Integer> location = new HashMap<String, Integer>();
-        location.put("Latitude", latitude);
-        location.put("Longitude", longitude);
-        return location;
-    }
+    //    private void setLocation(int latitude, int longitude) {
+//        location.put("Latitude", latitude);
+//        location.put("Longitude", longitude);
+//    }
+//
+//    public HashMap<String, Integer> getLocation() {
+//        return location;
+//    }
 
 //    public void addPlayer(Player player) {
 //        playersList.add(player);
@@ -127,5 +116,7 @@ public class QRCode implements Comparable, Serializable {
 //    public ArrayList<Player> getPlayers() {
 //        return playerList;
 //    }
-
 }
+
+
+
