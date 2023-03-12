@@ -2,21 +2,38 @@ package com.example.qrgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.service.autofill.RegexValidator;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class MainPageActivity extends AppCompatActivity {
 
     private FloatingActionButton addQr_button;
     private Button inventory_button;
     private Button social_button;
+    private Button logout_button;
+
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static String COLLECTION_NAME = "LoginUser";
+
 
     final int QR_SCANNER_REQUEST = 0;
     final int INVENTORY_REQUEST = 1;
@@ -57,7 +74,21 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
 
+        logout_button = findViewById(R.id.logout_button);
+        Intent login_page = new Intent(this, LogIn.class);
+
+        String udId = getUdid();
+        logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.collection(COLLECTION_NAME).document(udId).delete();
+                startActivity(login_page);
+            }
+        });
+
+
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -81,4 +112,18 @@ public class MainPageActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    public String AndroidID() {
+        String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        return id == null ? "" : id;
+    }
+
+    public String getUdid() {
+        String androidID=AndroidID();
+        return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
+    }
 }
+
+

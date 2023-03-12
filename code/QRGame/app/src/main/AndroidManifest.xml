@@ -41,6 +41,15 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".LogIn"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".SignUp"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".QRScannerActivity"
             android:screenOrientation="portrait">
         </activity>
