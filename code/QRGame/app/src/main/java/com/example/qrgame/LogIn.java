@@ -29,8 +29,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-
+/**
+ * This class allows a user to log in to the application using a username and a phone number
+ */
 public class LogIn extends AppCompatActivity {
     Button login_button;
     Button signup_button;
@@ -38,14 +42,14 @@ public class LogIn extends AppCompatActivity {
     TextView noAccount_txt;
     EditText username;
     EditText phone_number;
+    public boolean isHave;
     ArrayList<User> dataList;
-    String UserCollection;
-    String LoginCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
 
         title_txt = findViewById(R.id.login_title);
         username = findViewById(R.id.username);
@@ -53,29 +57,32 @@ public class LogIn extends AppCompatActivity {
         login_button = findViewById(R.id.login_button);
         noAccount_txt = findViewById(R.id.noAccount);
         signup_button = findViewById(R.id.signup_button);
-        UserCollection="UserCollection";
-        LoginCollection="LoginUser";
-        Map<String, Object> currUser = new HashMap<>();
+
 
         FirebaseApp.initializeApp(this);
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         Intent main_page = new Intent(this, MainPageActivity.class);
-        String lo= getUdid();
-        CollectionReference logUser = fireStore.collection(LoginCollection);
+        Map<String, Object> currUser = new HashMap<>();
+        CollectionReference logUser = fireStore.collection("LoginUser");
+
 
         /**
-         * chech the current user ,if exist, auto login
-         *
+         * Create a a reference to LogInUser collection and gets the data
          */
-        CollectionReference docRef = fireStore.collection(LoginCollection);
+        CollectionReference docRef = fireStore.collection("LoginUser");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+            /**
+             * Checks if there is a user has logged in without logging out. If so go directly to main page
+             * @param task
+             */
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot.isEmpty()) {
 
-                        Log.d("RRG", "check" );
+                        Log.d("RRG", "check" + isHave);
 
                     } else {
                         startActivity(main_page);
@@ -89,13 +96,18 @@ public class LogIn extends AppCompatActivity {
         });
 
         login_button.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Check if username and phone number are in the database if so, log in
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
                 String userName = username.getText().toString();
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();
-                fireStore.collection(UserCollection)
+                fireStore.collection("UserCollection")
                         .whereEqualTo("UserNameKey", username.getText().toString())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -104,18 +116,13 @@ public class LogIn extends AppCompatActivity {
                                 if (task.isSuccessful()) {
 
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String user= (String) document.getData().get("UserNameKey");
                                         String phone= (String) document.getData().get("PhoneKey");
                                         if(!Objects.equals(phone, phone_number.getText().toString())){
-                                            Toast warning = Toast.makeText(LogIn.this, "Phone incorrect", Toast.LENGTH_SHORT);
+                                            Toast warning = Toast.makeText(LogIn.this, "Wrong phone number", Toast.LENGTH_SHORT);
                                             warning.show();
-                                        }else if(!Objects.equals(user, username.getText().toString())) {
-                                            Toast warningToast = Toast.makeText(LogIn.this, "Username doesn't find", Toast.LENGTH_SHORT);
-                                            warningToast.show();
                                         }else{
                                             dataList = new ArrayList<>();
                                             dataList.add(new User(userName,phoneNumber,androidId));
-
 
                                             currUser.put("UserNameKey", dataList.get(0).getUsername());
                                             currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
@@ -143,29 +150,39 @@ public class LogIn extends AppCompatActivity {
 
         Intent sign_page = new Intent(this, SignUp.class);
         signup_button.setOnClickListener(new View.OnClickListener() {
-            @Override
 
+            /**
+             * Starts SignUp activity when clicked
+             * @param view
+             */
+            @Override
             public void onClick(View view) {
                 startActivity(sign_page);
                 finish();
 
-
             }
         });
+
+
+
+
     }
 
-    /**
-     * return the AndroidID
-     * @return
-     */
 
+    /**
+     * Gets Android Id
+     * @return
+     * Android Id as a String
+     */
     public String AndroidID() {
         String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         return id == null ? "" : id;
     }
+
     /**
-     * return the deviceId
+     * Gets device Id
      * @return
+     * Device Id as a String
      */
     public String getUdid() {
         String androidID=AndroidID();
