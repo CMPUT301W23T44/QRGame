@@ -7,12 +7,14 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
 
 /**
- * Represents the QR code object
+ * Represents a QR code object
  */
 @IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
 
+    @PropertyName("score")
     private int score;
+    @PropertyName("hash")
     private String hash;
 
     @PropertyName("name")
@@ -56,6 +58,7 @@ public class QRCode implements Comparable, Serializable {
                     currentScoreValue = Integer.parseInt(currentChar, RADIX);
                     firstInstance = false;
                 } else {
+                    // Zeroes are worth the most points
                     if (currentChar.equals("0")) {
                         currentScoreValue *= ZERO_VALUE;
                     } else {
@@ -100,22 +103,6 @@ public class QRCode implements Comparable, Serializable {
         return 0;
     }
 
-    //    private void setLocation(int latitude, int longitude) {
-//        location.put("Latitude", latitude);
-//        location.put("Longitude", longitude);
-//    }
-//
-//    public HashMap<String, Integer> getLocation() {
-//        return location;
-//    }
-
-//    public void addPlayer(Player player) {
-//        playersList.add(player);
-//    }
-
-//    public ArrayList<Player> getPlayers() {
-//        return playerList;
-//    }
 }
 
 

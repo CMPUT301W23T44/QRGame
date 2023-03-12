@@ -1,3 +1,8 @@
+/************************************************************************
+ * Code from https://www.baeldung.com/sha-256-hashing-java
+ * Created by baeldung https://github.com/Baeldung
+ ***********************************************************************/
+
 package com.example.qrgame;
 
 import java.nio.charset.StandardCharsets;

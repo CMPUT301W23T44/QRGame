@@ -18,9 +18,9 @@ public class MainPageActivity extends AppCompatActivity {
     private Button inventory_button;
     private Button social_button;
 
-    final int QR_SCANNER_REQUEST = 0;
-    final int INVENTORY_REQUEST = 1;
-    final int SOCIAL_REQUEST = 2;
+    private final int QR_SCANNER_REQUEST = 0;
+    private final int INVENTORY_REQUEST = 1;
+    private final int SOCIAL_REQUEST = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class MainPageActivity extends AppCompatActivity {
         addQr_button = findViewById(R.id.add_qr);
 
         Intent qr_scanner = new Intent(this, QRScannerActivity.class);
+        // Player chose to add a QR code
         addQr_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,14 +65,23 @@ public class MainPageActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == QR_SCANNER_REQUEST) {
                 try {
-                    String result = data.getStringExtra("result");
+                    String result = null;
+                    if (data != null) {
+                        result = data.getStringExtra("result");
+                    } else {
+                        result = "00000000";    // TODO - Change with a zero score QR code
+                    }
+                    // Create a new QR code and add it to the database
                     QRCode qrCode = new QRCode(result);
-                    QRDatabaseController.addQR(qrCode);
-                    boolean test = QRDatabaseController.findQR(qrCode.getHash());
-                    QRCode qrCode2 = QRDatabaseController.getQRCode(qrCode.getHash());
+                    QRDatabaseController qrDB = new QRDatabaseController();
+                    qrDB.addQR(qrCode);
+                    QRCode qrCode1 = new QRCode();
+                    qrCode1 = qrDB.getQRCode(qrCode.getHash());
+                    // Display the QR codes info
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);
                     startActivity(qrInfoIntent);
+
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }

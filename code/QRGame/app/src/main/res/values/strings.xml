@@ -10,4 +10,7 @@
     <string name="stop_capture">Stop Capture</string>
     <string name="capture_image">Capture Image</string>
     <string name="back">Back</string>
+    <string name="name">Name</string>
+    <string name="score">Score</string>
+    <string name="image">Image</string>
 </resources>

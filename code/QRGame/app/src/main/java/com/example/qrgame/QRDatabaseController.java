@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -18,18 +19,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class QRDatabaseController {
 
-
-    private static final FirebaseFirestore qrDB = FirebaseFirestore.getInstance();
+    private FirebaseFirestore qrFireStore;
+    private FirebaseDatabase qrDatabase;
     private static final String COLLECTION_NAME = "qrCodes";
-    private final static CollectionReference QR_CODE_COLLECTION = qrDB.collection(COLLECTION_NAME);
+    private CollectionReference QR_CODE_COLLECTION;
 
-    private final static String TAG = "QR_adder";
+    private final static String TAG = "QRDataBaseAction";
+    private String hash;
+
+    QRDatabaseController() {
+        qrFireStore = FirebaseFirestore.getInstance();
+        QR_CODE_COLLECTION = qrFireStore.collection(COLLECTION_NAME);
+        qrDatabase = FirebaseDatabase.getInstance();
+
+    }
 
     /**
      * Adds a QR code to the Firebase database
      * @param qrCode - QR code to be added to the database
      */
-    public static void addQR(QRCode qrCode) {
+    public void addQR(QRCode qrCode) {
         QR_CODE_COLLECTION
                 .document(qrCode.getHash())
                 .set(qrCode)
@@ -51,23 +60,22 @@ public class QRDatabaseController {
      * Deletes a provided QR code from the database, if it exists
      * @param hash - QR code hash to be deleted
      */
-    public static void deleteQR(String hash) {
-        if (findQR(hash)) {
-            QR_CODE_COLLECTION.document(hash)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d(TAG, "Delete successful");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Delete failure");
-                        }
-                    });
-        }
+    public void deleteQR(String hash) {
+        QR_CODE_COLLECTION.document(hash)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Delete successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Delete failure");
+                    }
+                });
+
     }
 
     /**
@@ -77,7 +85,7 @@ public class QRDatabaseController {
      * @return
      *      True if the QR code exists in the database
      */
-    public static boolean findQR(String hash) {
+    public boolean findQR(String hash) { // TODO - Fix find function
         final boolean[] result = new boolean[1];
         DocumentReference docRef = QR_CODE_COLLECTION.document(hash);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -105,16 +113,31 @@ public class QRDatabaseController {
      * @return
      *      Desired QR code object
      */
-    public static QRCode getQRCode(String hash) {
-        final QRCode[] qrCode = new QRCode[1];
-        qrCode[0] = null;
+    public QRCode getQRCode(String hash) {   // TODO - Fix get function
+        final QRCode[] qrCode1 = new QRCode[1];
+        qrCode1[0] = null;
+        this.hash = hash;
+        readData(new FirebaseCallback() {
+            @Override
+            public void onCallback(QRCode qrCode) {
+                qrCode1[0] = qrCode;
+            }
+        });
+        return qrCode1[0];
+    }
+
+    private void readData(FirebaseCallback firebaseCallback) {
         DocumentReference docRef = QR_CODE_COLLECTION.document(hash);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                qrCode[0] = task.getResult().toObject(QRCode.class);
+                QRCode qrCode = task.getResult().toObject(QRCode.class);
+                firebaseCallback.onCallback(qrCode);
             }
         });
-        return qrCode[0];
     }
+    private interface FirebaseCallback{
+        void onCallback(QRCode qrCode);
+    }
+
 }

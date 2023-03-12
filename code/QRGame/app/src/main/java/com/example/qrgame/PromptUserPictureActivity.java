@@ -44,8 +44,10 @@ public class PromptUserPictureActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // If the user was happy with the picture, the system returns to the main page
         if (resultCode == RESULT_NEXT) {
             finish();
+        // If the user does not like the picture, another one can be taken
         } else {
             Intent savePicture = new Intent(this, SaveSurroundingPictureActivity.class);
             startActivityForResult(savePicture, REQUEST_CODE);
