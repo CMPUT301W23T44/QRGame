@@ -58,8 +58,6 @@ public class MainPageActivity extends AppCompatActivity {
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainPageActivity.this,Inventory_activity.class);
-                startActivity(intent);
 
             }
         });
@@ -83,8 +81,6 @@ public class MainPageActivity extends AppCompatActivity {
                 try {
                     String result = data.getStringExtra("result");
                     QRCode qrCode = new QRCode(result);
-                    QRFirebase.addQR(qrCode);
-
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);
                     startActivity(qrInfoIntent);
