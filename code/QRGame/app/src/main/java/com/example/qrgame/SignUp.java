@@ -79,12 +79,13 @@ public class SignUp extends AppCompatActivity {
                 }else if (PhoneNumber.length()!=10) {
                     Toast warningToast = Toast.makeText(SignUp.this, "Phonenumber ivalid", Toast.LENGTH_SHORT);
                     warningToast.show();
-                }else if (findUser(checkUser)==true) {
-                    Toast warningToast = Toast.makeText(SignUp.this, "Username was already register", Toast.LENGTH_SHORT);
-                    warningToast.show();
                 }else {
                     DocumentReference docRef = fireStore.collection(UserCollection).document(checkUser.getUsername());
                     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        /**
+                         * check user exist or not
+                         * @param task
+                         */
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
@@ -138,42 +139,4 @@ public class SignUp extends AppCompatActivity {
         return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
     }
 
-
-    /**
-     * This function will check the username is exist or not in database
-     * if exist, bollean isHave will change to true,otherwise, will change to false
-     *
-     * @param user
-     */
-
-
-    public static boolean findUser(User user) {
-        boolean  checkpoint[]={false};
-        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-
-        DocumentReference docRef = fireStore.collection("UserCollection").document(user.getUsername());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            /**
-             * check if user exist
-             * @param task
-             */
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.exists()) {
-                        checkpoint[0] = true;
-                        Log.d("RRG", "a ture is");
-                    } else {
-                        checkpoint[0] = false;
-                        Log.d("RRG", "a false is");
-                    }
-                } else {
-                    Log.d("RRG", "Get failure");
-                }
-            }
-        });
-        Log.d("RRG", "check return"+ checkpoint);
-        return checkpoint[0];
-    }
 }
