@@ -83,16 +83,33 @@ public class SignUp extends AppCompatActivity {
                     Toast warningToast = Toast.makeText(SignUp.this, "Username was already register", Toast.LENGTH_SHORT);
                     warningToast.show();
                 }else {
-                    dataList.add((new User(userName, phoneNumber, androidId)));
-                    CollectionReference user = fireStore.collection( UserCollection);
-                    CollectionReference logUser = fireStore.collection(LoginCollection);
-                    curUser.put("UserNameKey", dataList.get(0).getUsername());
-                    curUser.put("PhoneKey", dataList.get(0).getPhonenumber());
-                    curUser.put("AndroidKey", dataList.get(0).getAndroidId());
+                    DocumentReference docRef = fireStore.collection(UserCollection).document(checkUser.getUsername());
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document=task.getResult();
+                                if (document.exists()){
+                                    Toast.makeText(getBaseContext(), "Username exist " , Toast.LENGTH_SHORT).show();
+                                }else{
+                                    dataList.add((new User(userName, phoneNumber, androidId)));
+                                    CollectionReference user = fireStore.collection( UserCollection);
+                                    CollectionReference logUser = fireStore.collection(LoginCollection);
+                                    curUser.put("UserNameKey", dataList.get(0).getUsername());
+                                    curUser.put("PhoneKey", dataList.get(0).getPhonenumber());
+                                    curUser.put("AndroidKey", dataList.get(0).getAndroidId());
 
-                    user.document(dataList.get(0).getUsername()).set(curUser);
-                    logUser.document(dataList.get(0).getAndroidId()).set(curUser);
-                    startActivity(sign_page);
+                                    user.document(dataList.get(0).getUsername()).set(curUser);
+                                    logUser.document(dataList.get(0).getAndroidId()).set(curUser);
+                                    startActivity(sign_page);
+
+                                }
+
+                            }else {
+                                Log.d("RRG", "get failed with ", task.getException());
+                            }
+                        }
+                    });
 
                 }
 
