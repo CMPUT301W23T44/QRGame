@@ -30,6 +30,7 @@ public class QRInfoActivity extends AppCompatActivity {
         scoreTextView = findViewById(R.id.textView_score);
         nextButton = findViewById(R.id.button_next);
 
+
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
 
         qrImageTextView.setText(qrCode.getFace());
@@ -44,7 +45,6 @@ public class QRInfoActivity extends AppCompatActivity {
                 finish();
             }
         });
-
 
 
     }
