@@ -48,6 +48,14 @@
             android:name=".QRInfoActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".LogIn"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".SignUp"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 

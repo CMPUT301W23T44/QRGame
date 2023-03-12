@@ -29,7 +29,7 @@
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="PhoneNumber"
-        android:inputType="text" />
+        android:inputType="phone" />
     <Button
         android:id="@+id/Finish_button"
         android:layout_width="wrap_content"
