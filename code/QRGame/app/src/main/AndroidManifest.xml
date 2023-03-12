@@ -28,9 +28,13 @@
                 android:value="" />
         </activity>
 
+
         <activity android:name=".MainPageActivity"></activity>
         <activity android:name=".QRScannerActivity"></activity>
         <activity android:name=".QRInfoActivity"></activity>
+        <activity android:name=".LogIn"></activity>
+        <activity android:name=".SignUp"></activity>
+
     </application>
 
     <uses-permission android:name="android.permission.CAMERA"/>
