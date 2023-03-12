@@ -1,3 +1,8 @@
+/************************************************************************
+ * Code from https://www.baeldung.com/sha-256-hashing-java
+ * Created by baeldung https://github.com/Baeldung
+ ***********************************************************************/
+
 package com.example.qrgame;
 
 import java.nio.charset.StandardCharsets;
@@ -31,9 +36,9 @@ public class QRCodeHasher {
      */
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
                 hexString.append('0');
             }
             hexString.append(hex);

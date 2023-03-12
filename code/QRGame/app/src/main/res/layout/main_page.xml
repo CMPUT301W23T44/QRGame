@@ -49,17 +49,19 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_qr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             android:clickable="true"
+            android:foreground="@drawable/ic_code_scanner_auto_focus_off"
+            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:layout_constraintVertical_bias="0.0" />
+
 
         <Button
             android:id="@+id/logout_button"
@@ -72,6 +74,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_qr" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
