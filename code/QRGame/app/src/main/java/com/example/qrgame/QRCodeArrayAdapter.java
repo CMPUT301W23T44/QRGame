@@ -36,12 +36,8 @@ public class QRCodeArrayAdapter extends ArrayAdapter {
         TextView name=view.findViewById(R.id.inventory_qr_name);
 
 
-        point.setText(qrCode.getScore());
-        name.setText(qrCode.getName());
-
-
-
-
+        point.setText("points:"+qrCode.getScore());
+        name.setText("name:"+qrCode.getName());
 
 
 

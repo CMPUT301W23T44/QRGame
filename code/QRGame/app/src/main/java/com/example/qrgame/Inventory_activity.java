@@ -31,6 +31,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Inventory_activity extends AppCompatActivity {
 
@@ -64,7 +66,18 @@ public class Inventory_activity extends AppCompatActivity {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 System.out.println(document.getData());
-                                //QrDataList.add((QRCode) document.getData());
+                                Map map=document.getData();
+                                int score=( (Long) map.get("score")).intValue();
+                                String hash= (String) map.get("hash");
+                                String name= (String) map.get("name");
+                                String face= (String) map.get("face");
+
+                                QRCode qrCode=new QRCode(score,hash,name,face);
+
+                                QrAdapter.add(qrCode);
+                                QrAdapter.notifyDataSetChanged();
+
+
                             }}else{
                             Log.d("QRread","error on getting doc",task.getException());
                             }
