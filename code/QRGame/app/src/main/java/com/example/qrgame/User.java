@@ -1,5 +1,8 @@
 package com.example.qrgame;
-
+/**
+ *
+ * The user class contain the username,phonenumber,and android device id
+ */
 
 public class User {
     private String username;
