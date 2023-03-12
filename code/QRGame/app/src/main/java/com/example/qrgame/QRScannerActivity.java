@@ -25,23 +25,17 @@
 
 package com.example.qrgame;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
-import com.google.zxing.Result;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * QR scanner activity allowing the scanning of a QR code with a camera
@@ -49,6 +43,8 @@ import java.nio.charset.StandardCharsets;
 public class QRScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
+    private final static int REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +52,22 @@ public class QRScannerActivity extends AppCompatActivity {
         setContentView(R.layout.qr_scanner);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
-        mCodeScanner.setDecodeCallback(new DecodeCallback() {
-            @Override
-            public void onDecoded(@NonNull final Result result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent previous = new Intent();
-                        previous.putExtra("result", result.getText());
-                        setResult(RESULT_OK, previous);
-                        finish();
-                    }
-                });
-            }
-        });
-        scannerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCodeScanner.startPreview();
-            }
-        });
+
+        // Check for camera permission before continuing
+        if (ContextCompat.checkSelfPermission(QRScannerActivity.this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[] {
+                    Manifest.permission.CAMERA
+            }, REQUEST_CODE);
+        }
+
+        mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
+            Intent previous = new Intent();
+            previous.putExtra("result", result.getText());
+            setResult(RESULT_OK, previous);
+            finish();
+        }));
+        scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
     }
 
     @Override
