@@ -136,6 +136,10 @@ public class SignUp extends AppCompatActivity {
 
         DocumentReference docRef = fireStore.collection("UserCollection").document(user.getUsername());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            /**
+             * check if user exist
+             * @param task
+             */
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
