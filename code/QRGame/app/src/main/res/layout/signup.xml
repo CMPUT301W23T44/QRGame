@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="UserName"
+        android:hint="Please type a Username less than 8 letters"
         android:inputType="text" />
 
     <EditText

@@ -72,7 +72,7 @@ public class SignUp extends AppCompatActivity {
                     Toast warningToast = Toast.makeText(SignUp.this, "PhoneNumber is empty", Toast.LENGTH_SHORT);
                     warningToast.show();
                 } else if (userName.length()>8) {
-                    Toast warningToast = Toast.makeText(SignUp.this, "userName too long", Toast.LENGTH_SHORT);
+                    Toast warningToast = Toast.makeText(SignUp.this, "UserName too long", Toast.LENGTH_SHORT);
                     warningToast.show();
 
 
