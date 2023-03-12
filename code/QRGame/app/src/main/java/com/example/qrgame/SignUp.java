@@ -77,7 +77,7 @@ public class SignUp extends AppCompatActivity {
 
 
                 }else if (PhoneNumber.length()!=10) {
-                    Toast warningToast = Toast.makeText(SignUp.this, "Phonenumber ivalid", Toast.LENGTH_SHORT);
+                    Toast warningToast = Toast.makeText(SignUp.this, "Phonenumber invalid", Toast.LENGTH_SHORT);
                     warningToast.show();
                 }else {
                     DocumentReference docRef = fireStore.collection(UserCollection).document(checkUser.getUsername());
