@@ -75,8 +75,6 @@ public class MainPageActivity extends AppCompatActivity {
                     QRCode qrCode = new QRCode(result);
                     QRDatabaseController qrDB = new QRDatabaseController();
                     qrDB.addQR(qrCode);
-                    QRCode qrCode1 = new QRCode();
-                    qrCode1 = qrDB.getQRCode(qrCode.getHash());
                     // Display the QR codes info
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
                     qrInfoIntent.putExtra("qrCode", qrCode);

@@ -31,7 +31,30 @@ public class QRCodeUnitTest {
     }
 
     @Test
-    public void test
+    public void testQRCodeObject() throws NoSuchAlgorithmException {
+        String mockData1 = "Random String";
+        String mockData2 = "Another Random String";
+
+        String hash1 = QRCodeHasher.hash(mockData1);
+        QRCode qrCode = MockQRCode(mockData1);
+        assertEquals(qrCode.getHash(), hash1);
+
+        String hash2 = QRCodeHasher.hash(mockData2);
+        QRCode qrCode2 = MockQRCode(mockData2);
+        assertEquals(qrCode2.getHash(), hash2);
+
+        assertNotEquals(qrCode.getHash(), qrCode2.getHash());
+
+        assertNotNull(qrCode.getFace());
+        assertNotNull(qrCode.getName());
+        assertNotNull(qrCode.getScore());
+
+        assertNotEquals(qrCode.getFace(), qrCode2.getFace());
+        assertNotEquals(qrCode.getName(), qrCode2.getName());
+        assertNotEquals(qrCode.getScore(), qrCode2.getScore());
+    }
+
+
 
 
 }
