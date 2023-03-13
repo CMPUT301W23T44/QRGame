@@ -92,22 +92,22 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
-        search_button = findViewById(R.id.search);
-        search_button.setOnClickListener(v -> {
-            new Map().show(getSupportFragmentManager(), "Search QRCode");
-        });
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
-        mapFragment.getMapAsync(this);
+//        search_button = findViewById(R.id.search);
+//        search_button.setOnClickListener(v -> {
+//            new Map().show(getSupportFragmentManager(), "Search QRCode");
+//        });
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
+//        mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
         String deviceId= getUdid();
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            OnGPS();
-        } else {
-            getLocation();
-        }
+//        ActivityCompat.requestPermissions(this,
+//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            OnGPS();
+//        } else {
+//            getLocation();
+//        }
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,17 +125,18 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         addQr_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    startActivityForResult(qr_scanner, QR_SCANNER_REQUEST);
+                startActivityForResult(qr_scanner, QR_SCANNER_REQUEST);
             }
         });
 
         inventory_button = findViewById(R.id.inventory_button);
-
+        Intent inventory =new Intent(MainPageActivity.this,Inventory_activity.class);
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Intent intent=new Intent(MainPageActivity.this,Inventory_activity.class);
                 //startActivity(intent);
+                startActivity(inventory);
             }
         });
 

@@ -1,18 +1,11 @@
 package com.example.qrgame;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
-
-import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
+
+import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Represents a QR code object
