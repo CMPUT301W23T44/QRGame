@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -69,25 +71,25 @@ public class LogIn extends AppCompatActivity {
         /**
          * Create a a reference to LogInUser collection and gets the data
          */
-        CollectionReference docRef = fireStore.collection("LoginUser");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
             /**
              * Checks if there is a user has logged in without logging out. If so go directly to main page
              * @param task
              */
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    QuerySnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.isEmpty()) {
-
+                    DocumentSnapshot document=task.getResult();
+                    if (document.exists()) {
+                        startActivity(main_page);
                         Log.d("RRG", "check" + isHave);
 
                     } else {
-                        startActivity(main_page);
 
-                        Log.d("RRG", "check");
+
+                        Log.d("RRG", "check not exist");
                     }
                 }else{
                     Log.d("RRG", "check");
