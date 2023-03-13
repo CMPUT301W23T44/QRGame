@@ -144,7 +144,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         social_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent social_page  = new Intent(MainPageActivity.this, Social.class);
+                startActivity(social_page);
             }
         });
     }
