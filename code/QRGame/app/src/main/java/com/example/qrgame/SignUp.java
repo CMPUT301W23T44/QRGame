@@ -61,6 +61,7 @@ public class SignUp extends AppCompatActivity {
              */
             @Override
             public void onClick(View view) {
+
                 String userName = UserName.getText().toString();
                 String phoneNumber = PhoneNumber.getText().toString();
                 String androidId = getUdid();
@@ -68,14 +69,13 @@ public class SignUp extends AppCompatActivity {
                 if (userName.isEmpty()) {
                     Toast warningToast = Toast.makeText(SignUp.this, "Username is empty", Toast.LENGTH_SHORT);
                     warningToast.show();
-                } else if (phoneNumber.isEmpty()) {
+                }
+                if (phoneNumber.isEmpty()) {
                     Toast warningToast = Toast.makeText(SignUp.this, "PhoneNumber is empty", Toast.LENGTH_SHORT);
                     warningToast.show();
                 } else if (userName.length()>8) {
                     Toast warningToast = Toast.makeText(SignUp.this, "userName too long", Toast.LENGTH_SHORT);
                     warningToast.show();
-
-
                 }else if (PhoneNumber.length()!=10) {
                     Toast warningToast = Toast.makeText(SignUp.this, "Phonenumber ivalid", Toast.LENGTH_SHORT);
                     warningToast.show();

@@ -1,11 +1,11 @@
 package com.example.qrgame;
-
+// Made by Abdirahman
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.service.autofill.RegexValidator;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
@@ -32,8 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+
 
 /**
  * This class allows a user to log in to the application using a username and a phone number
@@ -65,8 +62,7 @@ public class LogIn extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         Intent main_page = new Intent(this, MainPageActivity.class);
-        Map<String, Object> currUser = new HashMap<>();
-        CollectionReference logUser = fireStore.collection("LoginUser");
+
 
 
         /**
@@ -110,6 +106,11 @@ public class LogIn extends AppCompatActivity {
                 String userName = username.getText().toString();
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();
+
+                if (userName.isEmpty() || phoneNumber.isEmpty()) {
+                    Toast.makeText(getBaseContext(), "Please enter username and phone number" , Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 User checkUser= new User(userName, phoneNumber, androidId);
                 DocumentReference docRef = fireStore.collection("UserCollection").document(checkUser.getUsername());
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -125,14 +126,8 @@ public class LogIn extends AppCompatActivity {
                                 Log.d("RRG", document.getString("PhoneKey"));
                                 Log.d("RRG", phoneNumber);
                                 if (Objects.equals(document.getString("PhoneKey"), phoneNumber)) {
-                                    dataList = new ArrayList<>();
-                                    dataList.add(new User(userName,phoneNumber,androidId));
-
-                                    currUser.put("UserNameKey", dataList.get(0).getUsername());
-                                    currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
-                                    currUser.put("AndroidKey", dataList.get(0).getAndroidId());
-                                    logUser.document(dataList.get(0).getAndroidId()).set(currUser);
-                                    startActivity(main_page);
+                                    addCurrUser(userName, phoneNumber, androidId);
+                                    goToMainPage(view);
                                 } else {
                                     Toast.makeText(getBaseContext(), "Wrong phone number" , Toast.LENGTH_SHORT).show();
                                 }
@@ -152,9 +147,6 @@ public class LogIn extends AppCompatActivity {
 
 
 
-
-
-        Intent sign_page = new Intent(this, SignUp.class);
         signup_button.setOnClickListener(new View.OnClickListener() {
 
             /**
@@ -163,17 +155,52 @@ public class LogIn extends AppCompatActivity {
              */
             @Override
             public void onClick(View view) {
-                startActivity(sign_page);
-                finish();
-
+               gotToSignUp(view);
             }
         });
 
 
-
-
     }
 
+
+    /**
+     * Adds the current user to the LoginUser collection
+     * @param userName
+     * @param phoneNumber
+     * @param androidId
+     */
+    public void addCurrUser(String userName, String phoneNumber, String androidId){
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        Map<String, Object> currUser = new HashMap<>();
+        CollectionReference logUser = fireStore.collection("LoginUser");
+        dataList = new ArrayList<>();
+        dataList.add(new User(userName,phoneNumber,androidId));
+
+        currUser.put("UserNameKey", dataList.get(0).getUsername());
+        currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
+        currUser.put("AndroidKey", dataList.get(0).getAndroidId());
+        logUser.document(dataList.get(0).getAndroidId()).set(currUser);
+    }
+
+    /**
+     * Starts MainPageActivity
+     * @param view
+     */
+    public void goToMainPage(View view) {
+        Intent main_page = new Intent(this, MainPageActivity.class);
+        startActivity(main_page);
+    }
+
+    /**
+     * Starts SignUp activity
+     * @param view
+     */
+    public boolean gotToSignUp(View view) {
+        Intent sign_page = new Intent(this, SignUp.class);
+        startActivity(sign_page);
+        finish();
+        return true;
+    }
 
     /**
      * Gets Android Id
@@ -194,5 +221,8 @@ public class LogIn extends AppCompatActivity {
         String androidID=AndroidID();
         return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
     }
+
+
+
 }
 
