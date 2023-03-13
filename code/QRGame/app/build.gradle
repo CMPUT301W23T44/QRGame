@@ -44,10 +44,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-<<<<<<< HEAD
+
     implementation 'com.google.firebase:firebase-database:20.0.4'
     testImplementation 'junit:junit:4.13.2'
-=======
+
     implementation 'androidx.camera:camera-view:1.1.0-beta02'
     implementation 'androidx.camera:camera-video:1.1.0-beta02'
     implementation 'com.google.firebase:firebase-database:20.0.4'
@@ -60,7 +60,7 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.5.0"
     androidTestImplementation "com.jayway.android.robotium:robotium-solo:5.2.1"
 
->>>>>>> 78776db4a7a5ba60c7d84942b3eb5b5d80044486
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 

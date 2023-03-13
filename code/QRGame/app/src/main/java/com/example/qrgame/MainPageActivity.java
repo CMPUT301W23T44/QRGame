@@ -94,9 +94,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
         search_button = findViewById(R.id.search);
-        search_button.setOnClickListener(v -> {
-            new Map().show(getSupportFragmentManager(), "Search QRCode");
-        });
+//        search_button.setOnClickListener(v -> {
+//            new Map().show(getSupportFragmentManager(), "Search QRCode");
+//        });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
         mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
@@ -131,11 +131,11 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         });
 
         inventory_button = findViewById(R.id.inventory_button);
-
+        Intent inventory =new Intent(MainPageActivity.this,Inventory_activity.class);
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(inventory);
             }
         });
 

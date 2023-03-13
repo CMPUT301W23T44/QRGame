@@ -1,6 +1,6 @@
 package com.example.qrgame;
 
-import static com.example.qrgame.QRFirebase.deleteQR;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+//import com.example.qrgame.QRDatabaseController.deleteQR;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -53,6 +55,10 @@ public class Inventory_activity extends AppCompatActivity {
         QrCodeList.setAdapter(QrAdapter);
 
 //
+
+        TextView username=findViewById(R.id.inventory_username_text);
+        TextView totalPoint=findViewById(R.id.inventory_total_score);
+        TextView totalQr=findViewById(R.id.inventory_total_amount);
 
         FirebaseFirestore qrDB = FirebaseFirestore.getInstance();
         String COLLECTION_NAME = "qrCodes";
@@ -113,7 +119,7 @@ public class Inventory_activity extends AppCompatActivity {
                         if (i >=0) {
                             //
                             QRCode qrCode=QrDataList.get(i);
-                            deleteQR(qrCode);
+//                            deleteQR(qrCode);
 
                             //
                             QrDataList.remove(i);

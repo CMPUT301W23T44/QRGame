@@ -68,6 +68,10 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".Inventory_activity"
+            android:screenOrientation="portrait">
+        </activity>
 
 
         <activity android:name=".LogIn"></activity>
