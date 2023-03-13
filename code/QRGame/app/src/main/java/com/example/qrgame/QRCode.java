@@ -1,27 +1,52 @@
 package com.example.qrgame;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
 /**
- * Represents the QR code object
+ * Represents a QR code object
  */
+@IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
 
-    private int score = 0;
+    LatLng Near1 = new LatLng(54, -114);
+
+
+    @PropertyName("score")
+    private int score;
+    @PropertyName("hash")
     private String hash;
+
+    @PropertyName("name")
     private String name;
+
+    @PropertyName("face")
     private String face;
 
-    private int RADIX = 16;
-    private int ZERO_VALUE = 20;
+    @PropertyName("Location")
+    private LatLng Location;
 
-    QRCode(String data) throws NoSuchAlgorithmException {
+    public QRCode() {
+    }
+
+    public QRCode(String data) throws NoSuchAlgorithmException {
+
         hash = QRCodeHasher.hash(data);
-        calcScore();
-        generate();
+        score = calcScore();
+        face = NameFaceScheme.generateFace(hash);
+        name = NameFaceScheme.generateName(hash);
+        Location = Near1;
     }
 //
 
@@ -52,47 +77,64 @@ public class QRCode implements Comparable, Serializable {
     /**
      * Calculates the score of a QR code based off the hash provided
      */
-    private void calcScore() {
+    private int calcScore() {
+        int RADIX = 16;
+        int ZERO_VALUE = 20;
         String previousChar = String.valueOf(hash.charAt(0));
         String currentChar;
-        int currentScoreValue = 1;
+        int currentScoreValue = 0;
+        boolean firstInstance = true;
+        int score = 0;
 
         // Finds consecutive instances of a character in the hash and bases the score off the
         // power of these consecutive values
         for (int i = 1; i < hash.length(); i++) {
             currentChar = String.valueOf(hash.charAt(i));
+            if (previousChar.equals("0") && firstInstance) {
+                currentScoreValue = 1;
+                firstInstance = false;
+            }
             if (currentChar.equals(previousChar)) {
-                if (currentChar == "0") {
-                    currentScoreValue *= ZERO_VALUE;
+                if (firstInstance) {
+                    currentScoreValue = Integer.parseInt(currentChar, RADIX);
+                    firstInstance = false;
                 } else {
-                    currentScoreValue *= (Integer.parseInt(currentChar, RADIX));
+                    // Zeroes are worth the most points
+                    if (currentChar.equals("0")) {
+                        currentScoreValue *= ZERO_VALUE;
+                    } else {
+                        currentScoreValue *= (Integer.parseInt(currentChar, RADIX));
+                    }
                 }
             } else {
                 score += currentScoreValue;
-                currentScoreValue = 1;
+                currentScoreValue = 0;
+                firstInstance = true;
             }
             previousChar = currentChar;
         }
+        return score;
     }
 
+    @PropertyName("score")
     public int getScore() {
         return score;
     }
 
-    /**
-     * Generates a unique name and face for a QR code based
-     * on a provided hash
-     */
-    private void generate() {
-        name = NameFaceScheme.generateName(hash);
-        face = NameFaceScheme.generateFace(hash);
+    @PropertyName("hash")
+    public String getHash() {
+        return hash;
     }
 
+    @PropertyName("name")
     public String getName() {
         return name;
     }
 
-    public String getFace() { return face;}
+    @PropertyName("face")
+    public String getFace() {
+        return face;
+    }
 
     @Override
     public int compareTo(Object o) {
@@ -102,14 +144,9 @@ public class QRCode implements Comparable, Serializable {
         return 0;
     }
 
-    public String getHash() {
-        return hash;
-    }
 
-    @Override
-    public String toString() {
-        return "QRCode{" +
-                "name='" + name + '\'' +
-                '}';
-    }
+
 }
+
+
+
