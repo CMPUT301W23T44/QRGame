@@ -66,7 +66,7 @@ public class QRCode implements Comparable, Serializable {
     public void setFace(String face) {
         this.face = face;
     }
-//
+
     /**
      * Calculates the score of a QR code based off the hash provided
      */
