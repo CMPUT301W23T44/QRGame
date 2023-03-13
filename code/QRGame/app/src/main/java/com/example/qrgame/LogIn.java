@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.service.autofill.RegexValidator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -69,23 +72,23 @@ public class LogIn extends AppCompatActivity {
         /**
          * Create a a reference to LogInUser collection and gets the data
          */
-        CollectionReference docRef = fireStore.collection("LoginUser");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
             /**
              * Checks if there is a user has logged in without logging out. If so go directly to main page
              * @param task
              */
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    QuerySnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.isEmpty()) {
-
+                    DocumentSnapshot document=task.getResult();
+                    if (document.exists()) {
+                        startActivity(main_page);
                         Log.d("RRG", "check" + isHave);
 
                     } else {
-                        startActivity(main_page);
+
 
                         Log.d("RRG", "check");
                     }
@@ -107,39 +110,42 @@ public class LogIn extends AppCompatActivity {
                 String userName = username.getText().toString();
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();
-                fireStore.collection("UserCollection")
-                        .whereEqualTo("UserNameKey", username.getText().toString())
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
+                User checkUser= new User(userName, phoneNumber, androidId);
+                DocumentReference docRef = fireStore.collection("UserCollection").document(checkUser.getUsername());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    /**
+                     * check user exist or not
+                     * @param task
+                     */
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document=task.getResult();
+                            if (document.exists()){
+                                Log.d("RRG", document.getString("PhoneKey"));
+                                Log.d("RRG", phoneNumber);
+                                if (Objects.equals(document.getString("PhoneKey"), phoneNumber)) {
+                                    dataList = new ArrayList<>();
+                                    dataList.add(new User(userName,phoneNumber,androidId));
 
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String phone= (String) document.getData().get("PhoneKey");
-                                        if(!Objects.equals(phone, phone_number.getText().toString())){
-                                            Toast warning = Toast.makeText(LogIn.this, "Wrong phone number", Toast.LENGTH_SHORT);
-                                            warning.show();
-                                        }else{
-                                            dataList = new ArrayList<>();
-                                            dataList.add(new User(userName,phoneNumber,androidId));
-
-                                            currUser.put("UserNameKey", dataList.get(0).getUsername());
-                                            currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
-                                            currUser.put("AndroidKey", dataList.get(0).getAndroidId());
-                                            logUser.document(dataList.get(0).getAndroidId()).set(currUser);
-                                            startActivity(main_page);
-
-                                        }
-                                        Log.d("RRG", document.getId() + " => " + document.getData());
-                                    }
+                                    currUser.put("UserNameKey", dataList.get(0).getUsername());
+                                    currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
+                                    currUser.put("AndroidKey", dataList.get(0).getAndroidId());
+                                    logUser.document(dataList.get(0).getAndroidId()).set(currUser);
+                                    startActivity(main_page);
                                 } else {
-                                    Toast warningToast = Toast.makeText(LogIn.this, "Username doesn't find", Toast.LENGTH_SHORT);
-                                    warningToast.show();
-                                    Log.d("RRG", "Error getting documents: ", task.getException());
+                                    Toast.makeText(getBaseContext(), "Wrong phone number" , Toast.LENGTH_SHORT).show();
                                 }
+
+                            }else {
+                                Toast.makeText(getBaseContext(), "Wrong username. Account not found" , Toast.LENGTH_SHORT).show();
                             }
-                        });
+
+                        } else {
+                            Log.d("RRG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
             }
         });
@@ -189,3 +195,4 @@ public class LogIn extends AppCompatActivity {
         return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
     }
 }
+
