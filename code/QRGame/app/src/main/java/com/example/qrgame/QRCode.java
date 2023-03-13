@@ -48,7 +48,32 @@ public class QRCode implements Comparable, Serializable {
         name = NameFaceScheme.generateName(hash);
         Location = Near1;
     }
+//
 
+
+    public QRCode(int score, String hash, String name, String face) {
+        this.score = score;
+        this.hash = hash;
+        this.name = name;
+        this.face = face;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFace(String face) {
+        this.face = face;
+    }
+//
     /**
      * Calculates the score of a QR code based off the hash provided
      */
