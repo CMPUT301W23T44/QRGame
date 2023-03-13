@@ -59,7 +59,8 @@ public class MainPageActivity extends AppCompatActivity {
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Intent intent=new Intent(MainPageActivity.this,Inventory_activity.class);
+                //startActivity(intent);
             }
         });
 
@@ -68,7 +69,8 @@ public class MainPageActivity extends AppCompatActivity {
         social_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent social_page  = new Intent(MainPageActivity.this, Social.class);
+                startActivity(social_page);
             }
         });
     }
