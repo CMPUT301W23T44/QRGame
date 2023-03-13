@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
+
+    <!--        app:layout_constrainBottom_toBottomOf="@+id/add_qr"-->
+    <!--        app:layout_constrainLeft_toLeftOf="parent"-->
+    <!--        app:layout_constrainRight_toRightOf="parent"-->
+    <!--        app:layout_constrainTop_toTopOf="parent" -->
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+
+        android:layout_width="match_parent"
+        android:layout_height="550dp" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -13,6 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/white" />
+    <Button
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
