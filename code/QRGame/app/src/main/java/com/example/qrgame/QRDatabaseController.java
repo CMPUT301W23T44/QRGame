@@ -13,33 +13,49 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.C;
+
+import java.util.Map;
 
 /**
  * Interface between the program app and the online Firebase database
  */
 public class QRDatabaseController {
 
-    private FirebaseFirestore qrFireStore;
-    private FirebaseDatabase qrDatabase;
-    private static final String COLLECTION_NAME = "qrCodes";
-    private CollectionReference QR_CODE_COLLECTION;
-
-    private final static String TAG = "QRDataBaseAction";
-    private String hash;
-
-    QRDatabaseController() {
-        qrFireStore = FirebaseFirestore.getInstance();
-        QR_CODE_COLLECTION = qrFireStore.collection(COLLECTION_NAME);
-        qrDatabase = FirebaseDatabase.getInstance();
-
+    public interface QRCodeExistsCallback{
+        void onQRCodeCallback(boolean qrExists);
     }
 
-    /**
-     * Adds a QR code to the Firebase database
-     * @param qrCode - QR code to be added to the database
-     */
-    public void addQR(QRCode qrCode) {
-        QR_CODE_COLLECTION
+    private FirebaseFirestore db;
+    private static QRDatabaseController instance = null;
+
+
+    private static final String COLLECTION_NAME = "qrCodes";
+
+    private final static String TAG = "QRDataBaseAction";
+
+    private QRDatabaseController() {
+        db = FirebaseFirestore.getInstance();
+    }
+
+    public static QRDatabaseController getInstance() {
+        if (instance == null) {
+            instance = new QRDatabaseController();
+        }
+        return instance;
+    }
+
+
+        /**
+         * Adds a QR code to the Firebase database
+         * @param qrCode - QR code to be added to the database
+         */
+    public void pushQR (QRCode qrCode) {
+        db.collection(COLLECTION_NAME)
                 .document(qrCode.getHash())
                 .set(qrCode)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -61,7 +77,7 @@ public class QRDatabaseController {
      * @param hash - QR code hash to be deleted
      */
     public void deleteQR(String hash) {
-        QR_CODE_COLLECTION.document(hash)
+        db.collection(COLLECTION_NAME).document(hash)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -85,25 +101,20 @@ public class QRDatabaseController {
      * @return
      *      True if the QR code exists in the database
      */
-    public boolean findQR(String hash) { // TODO - Fix find function
-        final boolean[] result = new boolean[1];
-        DocumentReference docRef = QR_CODE_COLLECTION.document(hash);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public static void findQR(String hash, QRDatabaseController.QRCodeExistsCallback callback) { // TODO - Fix find function
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Query conflicts = db.collection(COLLECTION_NAME)
+                .whereEqualTo("hash", hash);
+        conflicts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.exists()) {
-                        result[0] = true;
-                    } else {
-                        result[0] = false;
-                    }
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.isEmpty()) {
+                    callback.onQRCodeCallback(false);
                 } else {
-                    Log.d(TAG, "Find failure");
+                    callback.onQRCodeCallback(true);
                 }
             }
         });
-        return result[0];
     }
 
     /**
@@ -113,31 +124,32 @@ public class QRDatabaseController {
      * @return
      *      Desired QR code object
      */
-    public QRCode getQRCode(String hash) {   // TODO - Fix get function
-        final QRCode[] qrCode1 = new QRCode[1];
-        qrCode1[0] = null;
-        this.hash = hash;
-        readData(new FirebaseCallback() {
-            @Override
-            public void onCallback(QRCode qrCode) {
-                qrCode1[0] = qrCode;
-            }
-        });
-        return qrCode1[0];
-    }
+    public static QRCode getQRCode(String hash) {   // TODO - Fix get function
+        FirebaseFirestore qrFireStore = FirebaseFirestore.getInstance();
+        qrFireStore.collection("qrCodes")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                System.out.println(document.getData());
+                                Map map = document.getData();
+                                int score = ((Long) map.get("score")).intValue();
+                                String hash = (String) map.get("hash");
+                                String name = (String) map.get("name");
+                                String face = (String) map.get("face");
 
-    private void readData(FirebaseCallback firebaseCallback) {
-        DocumentReference docRef = QR_CODE_COLLECTION.document(hash);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                QRCode qrCode = task.getResult().toObject(QRCode.class);
-                firebaseCallback.onCallback(qrCode);
-            }
-        });
-    }
-    private interface FirebaseCallback{
-        void onCallback(QRCode qrCode);
+                                QRCode qrCode = new QRCode(score, hash, name, face);
+
+                            }
+                        } else {
+                            Log.d("QRread", "error on getting doc", task.getException());
+                        }
+                    }
+
+                });
+        return null;
     }
 
 }

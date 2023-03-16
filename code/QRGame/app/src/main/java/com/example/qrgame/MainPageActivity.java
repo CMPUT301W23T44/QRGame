@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.location.LocationRequest;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -192,8 +193,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == QR_SCANNER_REQUEST) {
+
+        if (requestCode == QR_SCANNER_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 try {
                     String result = null;
                     if (data != null) {
@@ -203,13 +205,22 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                     // Create a new QR code and add it to the database
                     QRCode qrCode = new QRCode(result);
-
-                    QRDatabaseController qrDB = new QRDatabaseController();
-                    qrDB.addQR(qrCode);
+                    QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
+                    dbAdapter.pushQR(qrCode);
+                    final boolean[] exists = new boolean[1];
+                    dbAdapter.findQR(qrCode.getHash(), new QRDatabaseController.QRCodeExistsCallback() {
+                        @Override
+                        public void onQRCodeCallback(boolean qrExists) {
+                            Log.d("TestQR", "here");
+                        }
+                    });
                     // Display the QR codes info
                     Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
+                    Log.d("Test", "here");
+
                     qrInfoIntent.putExtra("qrCode", qrCode);
                     startActivity(qrInfoIntent);
+
 
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
