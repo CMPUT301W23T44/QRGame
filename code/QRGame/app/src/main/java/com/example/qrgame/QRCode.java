@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 @IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
 
-    LatLng Near1 = new LatLng(54, -114);
+    //LatLng Near1 = new LatLng(54, -114);
 
 
     @PropertyName("score")
@@ -39,9 +39,9 @@ public class QRCode implements Comparable, Serializable {
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);
-        Location = Near1;
+        //Location = Near1;
     }
-//
+
 
 
     public QRCode(int score, String hash, String name, String face) {
