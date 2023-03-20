@@ -33,9 +33,9 @@ public class QRCode implements Comparable, Serializable {
     public QRCode() {
     }
 
-    public QRCode(String data) throws NoSuchAlgorithmException {
+    public QRCode(String hash){
 
-        hash = QRCodeHasher.hash(data);
+        this.hash = hash;
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);

@@ -39,6 +39,8 @@ import androidx.core.content.ContextCompat;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * QR scanner activity allowing the scanning of a QR code with a camera
  */
@@ -66,7 +68,11 @@ public class QRScannerActivity extends AppCompatActivity {
 
         mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
             Intent previous = new Intent();
-            previous.putExtra("result", result.getText());
+            try {
+                previous.putExtra("result", QRCodeHasher.hash(result.getText()));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             setResult(RESULT_OK, previous);
             finish();
         }));

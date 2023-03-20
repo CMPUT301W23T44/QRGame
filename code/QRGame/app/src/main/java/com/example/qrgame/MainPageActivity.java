@@ -191,40 +191,27 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
 
         if (requestCode == QR_SCANNER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                try {
-                    String result = null;
-                    if (data != null) {
-                        result = data.getStringExtra("result");
-                    } else {
-                        result = "00000000";    // TODO - Change with a zero score QR code
-                    }
-                    // Create a new QR code and add it to the database
-                    QRCode qrCode = new QRCode(result);
-                    QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
-                    dbAdapter.pushQR(qrCode);
-                    final boolean[] exists = new boolean[1];
-                    dbAdapter.findQR(qrCode.getHash(), new QRDatabaseController.QRCodeExistsCallback() {
-                        @Override
-                        public void onQRCodeCallback(boolean qrExists) {
-                            Log.d("TestQR", "here");
-                        }
-                    });
-                    // Display the QR codes info
-                    Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
-                    Log.d("Test", "here");
-
-                    qrInfoIntent.putExtra("qrCode", qrCode);
-                    startActivity(qrInfoIntent);
-
-
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                String hash = null;
+                if (result != null) {
+                    hash = result.getStringExtra("result");
+                } else {
+                    hash = "00000000";    // TODO - Change with a zero score QR code
                 }
+
+                if (QRPreprocess.exists(hash)) {
+                    Log.d("Test", "here");
+                }
+                QRCode qrCode = new QRCode(hash);
+
+                Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
+
+                qrInfoIntent.putExtra("qrCode", qrCode);
+                startActivity(qrInfoIntent);
 
             }
         }
