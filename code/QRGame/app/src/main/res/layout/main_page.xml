@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/mMap"-->
-<!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
-
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="550dp" />-->
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -19,11 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/white" />
-    <Button
-        android:id="@+id/search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +22,7 @@
 
         <Button
             android:id="@+id/inventory_button"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
@@ -46,7 +35,7 @@
 
         <Button
             android:id="@+id/social_button"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"

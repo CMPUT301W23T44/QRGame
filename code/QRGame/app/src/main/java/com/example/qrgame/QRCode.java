@@ -1,20 +1,16 @@
 package com.example.qrgame;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.PropertyName;
-
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
+
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.PropertyName;
 
 /**
  * Represents a QR code object
  */
 @IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
-
-    //LatLng Near1 = new LatLng(54, -114);
-
 
     @PropertyName("score")
     private int score;
@@ -27,44 +23,14 @@ public class QRCode implements Comparable, Serializable {
     @PropertyName("face")
     private String face;
 
-    @PropertyName("Location")
-    private LatLng Location;
-
     public QRCode() {
     }
 
     public QRCode(String data) throws NoSuchAlgorithmException {
-
         hash = QRCodeHasher.hash(data);
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);
-        //Location = Near1;
-    }
-
-
-
-    public QRCode(int score, String hash, String name, String face) {
-        this.score = score;
-        this.hash = hash;
-        this.name = name;
-        this.face = face;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFace(String face) {
-        this.face = face;
     }
 
     /**
@@ -137,8 +103,7 @@ public class QRCode implements Comparable, Serializable {
         return 0;
     }
 
-
-
 }
+
 
 
