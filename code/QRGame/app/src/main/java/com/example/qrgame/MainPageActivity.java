@@ -29,13 +29,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -233,13 +241,35 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                         } else {
                             // If the QR code does not exist yet, a new one is created
+                            //also, add the qrcode to user database
                             QRCode qrCode = new QRCode(hash);
                             qrInfoIntent.putExtra("qrCode", qrCode);
+                          //  Map<String, Object> curUser = new HashMap<>();
+                           // dataList = new ArrayList<>();
+                           // qrList=new ArrayList<>();
+                           // qrList.add(qrCode);
+                            FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+                            DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            String Username = document.getString("UserNameKey");
+                                            DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+                                            docRef2.update("QRCode", FieldValue.arrayUnion(qrCode));
+
+                                        }
+                                    }
+                                }
+
+                            });
+
                             dbAdapter.pushQR(qrCode);
                             startActivity(qrInfoIntent);
                         }
                     }
-                });
+              });
             }
         }
     }
