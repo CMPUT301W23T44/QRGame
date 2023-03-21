@@ -4,8 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 /**
  * Represents a QR code object
@@ -13,58 +15,80 @@ import java.security.NoSuchAlgorithmException;
 @IgnoreExtraProperties
 public class QRCode implements Comparable, Serializable {
 
-    //LatLng Near1 = new LatLng(54, -114);
-
-
     @PropertyName("score")
     private int score;
     @PropertyName("hash")
     private String hash;
-
     @PropertyName("name")
     private String name;
-
     @PropertyName("face")
     private String face;
 
-    @PropertyName("Location")
-    private LatLng Location;
+    @PropertyName("longitude")
+    private double longitude;
+    @PropertyName("latitude")
+    private double latitude;
+
+    @PropertyName("users")
+    private ArrayList<String> users;
+    @PropertyName("comments")
+    private ArrayList<String> comments;
 
     public QRCode() {
     }
 
-    public QRCode(String data) throws NoSuchAlgorithmException {
+    public QRCode(String hash){
 
-        hash = QRCodeHasher.hash(data);
+        this.hash = hash;
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);
-        //Location = Near1;
+        this.latitude = 0;
+        this.longitude = 0;
+        users = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
 
 
-    public QRCode(int score, String hash, String name, String face) {
+    public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
+                  ArrayList<String> users, ArrayList<String> comments) {
         this.score = score;
         this.hash = hash;
         this.name = name;
         this.face = face;
+        setLatLong(latitude, longitude);
+        this.users = users;
+        this.comments = comments;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+//    public void setScore(int score) {
+//        this.score = score;
+//    }
+//
+//    public void setHash(String hash) {
+//        this.hash = hash;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public void setFace(String face) {
+//        this.face = face;
+//    }
+
+    public void addUsers(String uid) {
+        users.add(uid);
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void addComments(String comment) {
+        comments.add(comment);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFace(String face) {
-        this.face = face;
+    public void setLatLong(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -129,16 +153,23 @@ public class QRCode implements Comparable, Serializable {
         return face;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        if (this.score > ((QRCode) o).getScore()) {
-            return 1;
-        }
-        return 0;
+    public ArrayList<String> getUsers() {
+        return users;
+    }
+    public LatLng getLatLng() {
+        return new com.google.android.gms.maps.model.LatLng(latitude, longitude);
     }
 
+    public ArrayList<String> getComments() {
+        return comments;
+    }
 
-
+    @Override
+    public int compareTo(Object o) {
+        QRCode qrCode = (QRCode) o;
+        return ((Integer) this.getScore())
+                .compareTo((Integer) qrCode.getScore());
+    }
 }
 
 

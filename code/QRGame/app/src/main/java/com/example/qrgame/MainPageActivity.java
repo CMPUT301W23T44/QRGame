@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.location.LocationRequest;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -100,7 +101,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
 //        mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
-        String deviceId= getUdid();
+        String deviceId = getUdid();
 //        ActivityCompat.requestPermissions(this,
 //                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 //        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -119,8 +120,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                 startActivity(login_page);
             }
         });
-        addQr_button = findViewById(R.id.add_qr);
 
+
+        addQr_button = findViewById(R.id.add_qr);
         Intent qr_scanner = new Intent(this, QRScannerActivity.class);
         // Player chose to add a QR code
         addQr_button.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +133,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         });
 
         inventory_button = findViewById(R.id.inventory_button);
-        Intent inventory =new Intent(MainPageActivity.this,Inventory_activity.class);
+        Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
         inventory_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,11 +146,12 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         social_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent social_page  = new Intent(MainPageActivity.this, Social.class);
+                Intent social_page = new Intent(MainPageActivity.this, Social.class);
                 startActivity(social_page);
             }
         });
     }
+
     private void OnGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -189,37 +192,61 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         return Current;
     }
 
+    // Handles activities that return with a result
+    private String hash;
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == QR_SCANNER_REQUEST) {
-                try {
-                    String result = null;
-                    if (data != null) {
-                        result = data.getStringExtra("result");
-                    } else {
-                        result = "00000000";    // TODO - Change with a zero score QR code
-                    }
-                    // Create a new QR code and add it to the database
-                    QRCode qrCode = new QRCode(result);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
 
-                    QRDatabaseController qrDB = new QRDatabaseController();
-                    qrDB.addQR(qrCode);
-                    // Display the QR codes info
-                    Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
-                    qrInfoIntent.putExtra("qrCode", qrCode);
-                    startActivity(qrInfoIntent);
-
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+        // A scanner activity was called and finished here
+        if (requestCode == QR_SCANNER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                if (result != null) {
+                    hash = result.getStringExtra("result");
+                } else {
+                    hash = "00000000";    // TODO - Change with a zero score QR code
                 }
 
+                // Get instance of the database
+                QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
+                Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
+
+                /*
+                 Find the QR code and perform actions based on if it exists
+                 LOOK HERE FOR EXAMPLE OF DATABASE
+                */
+                dbAdapter.findQR(hash, new QRDatabaseController.QRCodeExistsCallback() {
+                    @Override
+                    public void onQRCodeCallback(boolean qrExists) {
+                        Log.d("TestQR", String.valueOf(qrExists));
+                        if (qrExists) {
+                            // If the QR code exists, the code is retrieved from the database and
+                            // updated
+                            dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
+                                @Override
+                                public void onGetQRCodeCallback(QRCode qrCode) {
+                                    qrInfoIntent.putExtra("qrCode", qrCode);
+                                    startActivity(qrInfoIntent);
+                                }
+                            });
+
+                        } else {
+                            // If the QR code does not exist yet, a new one is created
+                            QRCode qrCode = new QRCode(hash);
+                            qrInfoIntent.putExtra("qrCode", qrCode);
+                            dbAdapter.pushQR(qrCode);
+                            startActivity(qrInfoIntent);
+                        }
+                    }
+                });
             }
         }
     }
+
     /**
      * return the AndroidID
+     *
      * @return
      */
     public String AndroidID() {
@@ -229,11 +256,12 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
     /**
      * return the deviceId
+     *
      * @return
      */
     public String getUdid() {
-        String androidID=AndroidID();
-        return"2"+ UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-","");
+        String androidID = AndroidID();
+        return "2" + UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-", "");
     }
 
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -260,7 +288,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         distanceList10 = new ArrayList<>();
         for (int i = 0; i < locationArrayList.size() - 2; i++) {
             LatLng loc1 = locationArrayList.get(i);
-            LatLng loc2 = locationArrayList.get(locationArrayList.size()-1);
+            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
             float[] distanceResult = new float[1];
             Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
             float distanceInMeters = distanceResult[0];
@@ -268,16 +296,15 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
         }
         Collections.sort(lists);
-        if (lists.size() > 9){
-            lists1 = lists.subList(0,10);
-        }
-        else{
+        if (lists.size() > 9) {
+            lists1 = lists.subList(0, 10);
+        } else {
             lists1 = lists;
         }
 
         for (int i = 0; i < locationArrayList.size() - 2; i++) {
             LatLng loc1 = locationArrayList.get(i);
-            LatLng loc2 = locationArrayList.get(locationArrayList.size()-1);
+            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
             float[] distanceResult = new float[1];
             Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
             float distanceInMeters = distanceResult[0];

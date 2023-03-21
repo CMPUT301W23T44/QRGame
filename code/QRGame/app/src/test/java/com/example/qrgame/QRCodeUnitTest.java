@@ -36,11 +36,11 @@ public class QRCodeUnitTest {
         String mockData2 = "Another Random String";
 
         String hash1 = QRCodeHasher.hash(mockData1);
-        QRCode qrCode = MockQRCode(mockData1);
+        QRCode qrCode = MockQRCode(hash1);
         assertEquals(qrCode.getHash(), hash1);
 
         String hash2 = QRCodeHasher.hash(mockData2);
-        QRCode qrCode2 = MockQRCode(mockData2);
+        QRCode qrCode2 = MockQRCode(hash2);
         assertEquals(qrCode2.getHash(), hash2);
 
         assertNotEquals(qrCode.getHash(), qrCode2.getHash());
