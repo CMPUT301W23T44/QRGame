@@ -61,7 +61,7 @@ public class QRScannerActivity extends AppCompatActivity {
         // Check for camera permission before continuing
         if (ContextCompat.checkSelfPermission(QRScannerActivity.this, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[] {
+            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_CODE);
         }

@@ -32,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,8 +79,14 @@ public class Inventory_activity extends AppCompatActivity {
                                 String hash= (String) map.get("hash");
                                 String name= (String) map.get("name");
                                 String face= (String) map.get("face");
+                                Map latLng = (Map) map.get("latLng");
+                                double lat = (Double) latLng.get("latitude");
+                                double lng = (Double) latLng.get("longitude");
 
-                                QRCode qrCode=new QRCode(score,hash,name,face);
+                                ArrayList<String> users = (ArrayList<String>) map.get("users");
+                                ArrayList<String> comments = (ArrayList<String>) map.get("comments");
+
+                                QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments);
 
                                 QrAdapter.add(qrCode);
                                 QrAdapter.notifyDataSetChanged();
