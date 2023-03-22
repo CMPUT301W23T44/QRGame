@@ -9,28 +9,21 @@
         android:id="@+id/inventory_qr_point"
         android:layout_width="301dp"
         android:layout_height="33dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="92dp"
+        android:layout_marginEnd="108dp"
         android:text="points:"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_name" />
 
     <TextView
         android:id="@+id/inventory_qr_name"
         android:layout_width="316dp"
         android:layout_height="33dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="76dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="96dp"
         android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_point" />
-
-    <TextView
-        android:id="@+id/inventory_face"
-        android:layout_width="313dp"
-        android:layout_height="42dp"
-        android:text="Face:"
-        tools:layout_editor_absoluteX="22dp"
-        tools:layout_editor_absoluteY="79dp" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

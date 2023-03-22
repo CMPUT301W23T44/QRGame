@@ -1,12 +1,11 @@
 package com.example.qrgame;
 
-import org.checkerframework.checker.units.qual.A;
-
 /**
  * Generates a unique face and name based off a hash
  */
 public class NameFaceScheme {
 
+    // Buckets to represent the different sections of the face and name of a QR code
     static final private String[] STRING_0 = new String[]{"Concerned ",
                                                 "Ambiguous ",
                                                 "Far ",
@@ -73,13 +72,13 @@ public class NameFaceScheme {
                                                         "\\  /-----\\  /",
                                                         "|  _    _  |"};
 
-    static final private String FACE_FILLER = "|                |";
+    static final private String FACE_FILLER = "|                  |";
     static final private String FACE_CHIN = "\\___/";
-    static final private String NEWLINE_CARRIAGE = "\n";
+    static final private String NEWLINE_CHAR = "\n";
 
     static final private int HASH_FRACTION_LENGTH = 16;
     static final private int ARRAY_LENGTH = 8;
-    static private int RADIX = 16;
+    static final private int RADIX = 16;
 
     /**
      * Generates a name based on the hexadecimal digits of the hash provided
@@ -138,19 +137,19 @@ public class NameFaceScheme {
                 int index = hashFraction%ARRAY_LENGTH;
                 // Takes the index based on the amount of options in the arrays
                 if (section == 1) {
-                    face.append(FACE_0[index]).append(NEWLINE_CARRIAGE);
-                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
+                    face.append(FACE_0[index]).append(NEWLINE_CHAR);
+                    face.append(FACE_FILLER + NEWLINE_CHAR);
                     section++;
                 } else if (section == 2) {
-                    face.append(FACE_1[index]).append(NEWLINE_CARRIAGE);
-                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
+                    face.append(FACE_1[index]).append(NEWLINE_CHAR);
+                    face.append(FACE_FILLER + NEWLINE_CHAR);
                     section++;
                 } else if (section == 3) {
-                    face.append(FACE_2[index]).append(NEWLINE_CARRIAGE);
+                    face.append(FACE_2[index]).append(NEWLINE_CHAR);
                     section++;
                 } else {
-                    face.append(FACE_3[index]).append(NEWLINE_CARRIAGE);
-                    face.append(FACE_FILLER + NEWLINE_CARRIAGE);
+                    face.append(FACE_3[index]).append(NEWLINE_CHAR);
+                    face.append(FACE_FILLER + NEWLINE_CHAR);
                     face.append(FACE_CHIN);
                 }
                 hashFraction = 0;

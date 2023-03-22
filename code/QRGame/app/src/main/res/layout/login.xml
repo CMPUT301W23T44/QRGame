@@ -21,13 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="User Name"
+        android:hint="UserName"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="phone" />

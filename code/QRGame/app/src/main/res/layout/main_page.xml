@@ -6,13 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+<!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/mMap"-->
+<!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
+
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="550dp" />-->
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/grey" />
+        android:background="@color/white" />
+    <Button
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +33,7 @@
 
         <Button
             android:id="@+id/inventory_button"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
@@ -35,7 +46,7 @@
 
         <Button
             android:id="@+id/social_button"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
@@ -49,17 +60,19 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_qr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
             android:clickable="true"
+            android:foreground="@drawable/ic_code_scanner_auto_focus_off"
+            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:layout_constraintVertical_bias="0.0" />
+
 
         <Button
             android:id="@+id/logout_button"
@@ -72,6 +85,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_qr" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

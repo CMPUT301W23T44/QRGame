@@ -1,5 +1,6 @@
 package com.example.qrgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Displays all the information of a QR code to the user
+ */
 public class QRInfoActivity extends AppCompatActivity {
 
     private TextView qrImageTextView;
@@ -26,18 +30,21 @@ public class QRInfoActivity extends AppCompatActivity {
         scoreTextView = findViewById(R.id.textView_score);
         nextButton = findViewById(R.id.button_next);
 
+
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
 
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
-        scoreTextView.setText("Score: " + String.valueOf(qrCode.getScore()));
+        scoreTextView.setText("Score: " + qrCode.getScore());
+        Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(surroundingsPictureActivity);
                 finish();
             }
         });
-
 
 
     }
