@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Opens a camera and allows the user to take a picture
  */
@@ -49,20 +51,13 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CODE);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_NEXT);
-                finish();
-            }
+        nextButton.setOnClickListener(view -> {
+            finish();
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_BACK);
-                finish();
-            }
+        backButton.setOnClickListener(view -> {
+            setResult(RESULT_BACK, null);
+            finish();
         });
     }
 
@@ -73,6 +68,16 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
             assert data != null;
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(bitmap);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            Intent previous = new Intent();
+            previous.putExtra("bytes", byteArray);
+            setResult(RESULT_NEXT, previous);
+
+
         }
     }
 }

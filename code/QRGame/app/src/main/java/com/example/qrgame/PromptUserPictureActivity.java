@@ -46,6 +46,10 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // If the user was happy with the picture, the system returns to the main page
         if (resultCode == RESULT_NEXT) {
+            byte[] byteArray = (byte[]) data.getExtras().get("bytes");
+            Intent previous = new Intent();
+            previous.putExtra("bytes", byteArray);
+            setResult(RESULT_OK, previous);
             finish();
         // If the user does not like the picture, another one can be taken
         } else {
