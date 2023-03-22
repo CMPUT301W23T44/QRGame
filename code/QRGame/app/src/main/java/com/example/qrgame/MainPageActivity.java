@@ -78,6 +78,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int QR_SCANNER_REQUEST = 0;
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
+    public static String userName = "";
 
     private User currUser;
 
@@ -96,6 +97,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+
+        userName = (String) getIntent().getSerializableExtra("userName");
         logout_button = findViewById(R.id.logout_button);
 //        search_button = findViewById(R.id.search);
 //        search_button.setOnClickListener(v -> {
@@ -321,5 +324,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
             }
         }
+    }
+
+    public static String getUserName() {
+        return userName;
     }
 }

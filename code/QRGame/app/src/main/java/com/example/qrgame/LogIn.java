@@ -109,6 +109,7 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View view) {
                 FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
                 String userName = username.getText().toString();
+                main_page.putExtra("username", userName);
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();
                 User checkUser= new User(userName, phoneNumber, androidId);
