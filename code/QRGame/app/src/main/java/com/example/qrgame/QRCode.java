@@ -1,5 +1,8 @@
 package com.example.qrgame;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
@@ -33,6 +36,8 @@ public class QRCode implements Comparable, Serializable {
     private ArrayList<String> users;
     @PropertyName("comments")
     private ArrayList<String> comments;
+    @PropertyName("location_image")
+    private String location_image;
 
     public QRCode() {
     }
@@ -47,12 +52,13 @@ public class QRCode implements Comparable, Serializable {
         this.longitude = 0;
         users = new ArrayList<>();
         comments = new ArrayList<>();
+        location_image = "";
     }
 
 
 
     public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
-                  ArrayList<String> users, ArrayList<String> comments) {
+                  ArrayList<String> users, ArrayList<String> comments, String location_image) {
         this.score = score;
         this.hash = hash;
         this.name = name;
@@ -60,6 +66,7 @@ public class QRCode implements Comparable, Serializable {
         setLatLong(latitude, longitude);
         this.users = users;
         this.comments = comments;
+        this.location_image = location_image;
     }
 
 //    public void setScore(int score) {
@@ -89,6 +96,10 @@ public class QRCode implements Comparable, Serializable {
     public void setLatLong(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public void setLocation_image(String bytes) {
+        location_image = bytes;
     }
 
     /**
@@ -162,6 +173,10 @@ public class QRCode implements Comparable, Serializable {
 
     public ArrayList<String> getComments() {
         return comments;
+    }
+
+    public String getLocation_image() {
+        return location_image;
     }
 
     @Override

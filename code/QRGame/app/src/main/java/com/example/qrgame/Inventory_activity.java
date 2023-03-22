@@ -85,8 +85,9 @@ public class Inventory_activity extends AppCompatActivity {
 
                                 ArrayList<String> users = (ArrayList<String>) map.get("users");
                                 ArrayList<String> comments = (ArrayList<String>) map.get("comments");
+                                String location_image = (String) map.get("location_image");
 
-                                QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments);
+                                QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
 
                                 QrAdapter.add(qrCode);
                                 QrAdapter.notifyDataSetChanged();

@@ -226,6 +226,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
+                                    qrCode.addUsers(""); // TODO - get user id and add to list
                                     qrInfoIntent.putExtra("qrCode", qrCode);
                                     startActivity(qrInfoIntent);
                                 }
@@ -235,8 +236,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             // If the QR code does not exist yet, a new one is created
                             QRCode qrCode = new QRCode(hash);
                             qrInfoIntent.putExtra("qrCode", qrCode);
-                            dbAdapter.pushQR(qrCode);
                             startActivity(qrInfoIntent);
+//                            dbAdapter.pushQR(qrCode);
                         }
                     }
                 });
