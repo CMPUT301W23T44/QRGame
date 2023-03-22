@@ -29,6 +29,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -37,6 +39,8 @@ import androidx.core.content.ContextCompat;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * QR scanner activity allowing the scanning of a QR code with a camera
  */
@@ -44,6 +48,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
     private final static int REQUEST_CODE = 1;
+    Button nextButton;
 
 
     @Override
@@ -56,18 +61,33 @@ public class QRScannerActivity extends AppCompatActivity {
         // Check for camera permission before continuing
         if (ContextCompat.checkSelfPermission(QRScannerActivity.this, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[] {
+            ActivityCompat.requestPermissions(QRScannerActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, REQUEST_CODE);
         }
 
         mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
             Intent previous = new Intent();
-            previous.putExtra("result", result.getText());
+            try {
+                previous.putExtra("result", QRCodeHasher.hash(result.getText()));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             setResult(RESULT_OK, previous);
             finish();
         }));
+
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
+
+        nextButton = findViewById(R.id.button_next);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent previous = new Intent();
+                setResult(RESULT_CANCELED, previous);
+                finish();
+            }
+        });
     }
 
     @Override
