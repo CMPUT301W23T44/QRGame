@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +78,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int QR_SCANNER_REQUEST = 0;
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
+
+    private User currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
