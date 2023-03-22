@@ -235,6 +235,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         } else {
                             // If the QR code does not exist yet, a new one is created
                             QRCode qrCode = new QRCode(hash);
+                            qrCode.addUsers(""); // TODO - get user id and add to list
                             qrInfoIntent.putExtra("qrCode", qrCode);
                             startActivity(qrInfoIntent);
 //                            dbAdapter.pushQR(qrCode);
