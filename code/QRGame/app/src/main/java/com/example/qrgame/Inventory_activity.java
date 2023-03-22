@@ -42,13 +42,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
+/**
+* keep track of all Qrcodes scanned by user and allow to view details and delete Qrcode
+ */
 public class Inventory_activity extends AppCompatActivity {
 
     private ArrayList<QRCode> QrDataList;
     private ListView QrCodeList;
     private QRCodeArrayAdapter QrAdapter;
-
-
 
 
     @Override
@@ -67,6 +69,9 @@ public class Inventory_activity extends AppCompatActivity {
         TextView username=findViewById(R.id.inventory_username_text);
 
         //
+        /**
+         * get username and qrcode scanned by this specific user
+         * */
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -154,7 +159,9 @@ public class Inventory_activity extends AppCompatActivity {
         Button sortButton=findViewById(R.id.inventory_sort_button);
         Button backButton=findViewById(R.id.inventory_back_button);
 
-
+        /**
+         * list listener to view/delete one item on selection
+         * */
 
         QrCodeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -195,6 +202,10 @@ public class Inventory_activity extends AppCompatActivity {
             }
         });
 
+
+        /**
+         * return back to main activity
+         * */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,6 +214,9 @@ public class Inventory_activity extends AppCompatActivity {
             }
         });
 
+        /**
+         * sort all scanned qrcodes in descending order
+         * */
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +230,9 @@ public class Inventory_activity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * @return total number of points from all scanned qrCodes
+     * */
     public int GetTotalPoints(){
         int total=0;
         for (int i=0;i<QrDataList.size();i++){
