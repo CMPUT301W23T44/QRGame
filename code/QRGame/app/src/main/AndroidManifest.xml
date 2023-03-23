@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,18 +17,14 @@
         tools:ignore="ExtraText"
         android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAVYei2V3bT-pPWp_Eg8Fy9s30HnYnb4K8"
+            ></meta-data>
 
-        <activity
-            android:name=".Inventory_activity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            android:screenOrientation="portrait"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,6 +36,7 @@
                 android:value="" />
         </activity>
 
+
         <activity
             android:name=".MainPageActivity"
             android:screenOrientation="portrait">
@@ -47,7 +46,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".QRInfoActivity"
+            android:name=".NewQRInfoActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -58,6 +57,21 @@
             android:name=".SaveSurroundingPictureActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".Inventory_activity"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+        <activity android:name=".LogIn"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".SignUp"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Social"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ExistingQRInfoActivity"
+            android:screenOrientation="portrait"></activity>
 
 
     </application>
@@ -71,5 +85,10 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false"/>
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAVYei2V3bT-pPWp_Eg8Fy9s30HnYnb4K8"
+        ></meta-data>
 
 </manifest>

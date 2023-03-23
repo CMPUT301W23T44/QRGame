@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     android:background="@color/background_teal">
 
+    <TextView
+        android:id="@+id/old_new_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.805"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/textView_image"
@@ -22,32 +34,24 @@
         app:layout_constraintVertical_bias="0.548"
         android:gravity="center"
         android:padding="25dp"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:textColor="@color/black"/>
+
 
     <EditText
         android:id="@+id/editText_comment"
         android:layout_width="196dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox_geolocation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="20sp"
+        android:layout_marginBottom="80dp"
         android:background="@color/white"
+        android:inputType="text"
         android:maxLength="100"
-        android:inputType="text">
-    </EditText>
-
-    <CheckBox
-        android:id="@+id/checkBox_geolocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
-        android:text="@string/string_geolocationPrompt"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/button_next"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/textView_comment"
@@ -59,14 +63,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.312"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
-        android:text="@string/string_next"
+        android:text="@string/finish"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -82,19 +87,20 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/textView_score"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.308"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/textView_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/score"
-        android:textSize="25sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textView_comment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.311"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
