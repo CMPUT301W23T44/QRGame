@@ -14,26 +14,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 //import com.example.qrgame.QRDatabaseController.deleteQR;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,7 +114,7 @@ public class Inventory_activity extends AppCompatActivity {
                                 double lng = (Double) latLng.get("longitude");
 
                                 ArrayList<String> users = (ArrayList<String>) map.get("users");
-                                ArrayList<String> comments = (ArrayList<String>) map.get("comments");
+                                HashMap<String, String> comments = (HashMap<String, String>) map.get("comments");
                                 String location_image = (String) map.get("location_image");
 
                                 QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
@@ -193,7 +183,7 @@ public class Inventory_activity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent =new Intent(Inventory_activity.this,QRInfoActivity.class);
+                        Intent intent =new Intent(Inventory_activity.this, NewQRInfoActivity.class);
                         intent.putExtra("qrCode",QrDataList.get(i));
                         startActivity(intent);
                     }

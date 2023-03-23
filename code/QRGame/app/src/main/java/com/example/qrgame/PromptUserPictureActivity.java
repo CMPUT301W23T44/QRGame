@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
  */
 public class PromptUserPictureActivity extends AppCompatActivity {
 
-    ImageView imageView;
     Button captureButton;
     private final static int REQUEST_CODE = 0;
     private final static int RESULT_NEXT = 1;
@@ -31,7 +30,6 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_activity);
 
-        imageView = findViewById(R.id.imageview);
         captureButton = findViewById(R.id.capture_button);
 
 

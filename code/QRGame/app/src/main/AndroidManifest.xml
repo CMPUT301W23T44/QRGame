@@ -42,7 +42,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".QRInfoActivity"
+            android:name=".NewQRInfoActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -60,9 +60,14 @@
         </activity>
 
 
-        <activity android:name=".LogIn"></activity>
-        <activity android:name=".SignUp"></activity>
-        <activity android:name=".Social"></activity>
+        <activity android:name=".LogIn"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".SignUp"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Social"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ExistingQRInfoActivity"
+            android:screenOrientation="portrait"></activity>
 
 
     </application>
@@ -76,5 +81,10 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false"/>
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAVYei2V3bT-pPWp_Eg8Fy9s30HnYnb4K8"
+        ></meta-data>
 
 </manifest>

@@ -11,6 +11,8 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a QR code object
@@ -35,7 +37,7 @@ public class QRCode implements Comparable, Serializable {
     @PropertyName("users")
     private ArrayList<String> users;
     @PropertyName("comments")
-    private ArrayList<String> comments;
+    private HashMap<String, String> comments;
     @PropertyName("location_image")
     private String location_image;
 
@@ -51,14 +53,14 @@ public class QRCode implements Comparable, Serializable {
         this.latitude = 0;
         this.longitude = 0;
         users = new ArrayList<>();
-        comments = new ArrayList<>();
+        comments = new HashMap<>();
         location_image = "";
     }
 
 
 
     public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
-                  ArrayList<String> users, ArrayList<String> comments, String location_image) {
+                  ArrayList<String> users, HashMap comments, String location_image) {
         this.score = score;
         this.hash = hash;
         this.name = name;
@@ -89,8 +91,8 @@ public class QRCode implements Comparable, Serializable {
         users.add(uid);
     }
 
-    public void addComments(String comment) {
-        comments.add(comment);
+    public void addComments(String userName, String comment) {
+        comments.put(userName, comment);
     }
 
     public void setLatLong(double latitude, double longitude) {
@@ -171,7 +173,7 @@ public class QRCode implements Comparable, Serializable {
         return new com.google.android.gms.maps.model.LatLng(latitude, longitude);
     }
 
-    public ArrayList<String> getComments() {
+    public HashMap<String, String> getComments() {
         return comments;
     }
 
