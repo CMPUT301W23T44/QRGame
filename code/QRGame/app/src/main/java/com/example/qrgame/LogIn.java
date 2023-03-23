@@ -48,7 +48,7 @@ public class LogIn extends AppCompatActivity {
     EditText phone_number;
     public boolean isHave;
     ArrayList<User> dataList;
-
+    ArrayList<QRCode> qrcode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +111,7 @@ public class LogIn extends AppCompatActivity {
                 String userName = username.getText().toString();
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();
-                User checkUser= new User(userName, phoneNumber, androidId);
+                User checkUser= new User(userName, phoneNumber, androidId,qrcode);
                 DocumentReference docRef = fireStore.collection("UserCollection").document(checkUser.getUsername());
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     /**
@@ -127,7 +127,7 @@ public class LogIn extends AppCompatActivity {
                                 Log.d("RRG", phoneNumber);
                                 if (Objects.equals(document.getString("PhoneKey"), phoneNumber)) {
                                     dataList = new ArrayList<>();
-                                    dataList.add(new User(userName,phoneNumber,androidId));
+                                    dataList.add(new User(userName,phoneNumber,androidId,qrcode));
 
                                     currUser.put("UserNameKey", dataList.get(0).getUsername());
                                     currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
