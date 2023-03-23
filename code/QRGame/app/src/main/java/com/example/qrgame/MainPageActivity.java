@@ -38,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +86,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int QR_SCANNER_REQUEST = 0;
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
+
+    private User currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -234,6 +237,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
+
+                                    qrCode.addUsers(""); // TODO - get user id and add to list
+
                                     qrInfoIntent.putExtra("qrCode", qrCode);
                                     startActivity(qrInfoIntent);
                                 }
@@ -241,6 +247,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                         } else {
                             // If the QR code does not exist yet, a new one is created
+
                             //also, add the qrcode to user database
                             QRCode qrCode = new QRCode(hash);
                             qrInfoIntent.putExtra("qrCode", qrCode);
@@ -270,6 +277,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     }
               });
+
+
             }
         }
     }

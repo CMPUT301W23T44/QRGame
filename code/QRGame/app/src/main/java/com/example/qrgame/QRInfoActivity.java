@@ -20,6 +20,8 @@ public class QRInfoActivity extends AppCompatActivity {
     private QRCode qrCode;
     private Button nextButton;
 
+    private final int PICTURE_REQUEST = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +40,23 @@ public class QRInfoActivity extends AppCompatActivity {
         scoreTextView.setText("Score: " + qrCode.getScore());
         Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(surroundingsPictureActivity);
-                finish();
-            }
+        nextButton.setOnClickListener(view -> {
+            startActivityForResult(surroundingsPictureActivity, PICTURE_REQUEST);
+
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == PICTURE_REQUEST && resultCode == RESULT_OK) {
+            byte[] bytes = (byte[]) data.getExtras().get("bytes");
+            qrCode.setLocation_image(bytes.toString());
+        }
+        QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
+        dbAdapter.pushQR(qrCode);
+
+        finish();
     }
 }

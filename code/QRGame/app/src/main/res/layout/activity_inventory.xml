@@ -12,9 +12,11 @@
         android:layout_height="50dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Username:"
+        app:layout_constraintBottom_toTopOf="@+id/inventory_total_score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,10 +25,12 @@
         android:layout_width="312dp"
         android:layout_height="49dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Total score"
+        app:layout_constraintBottom_toTopOf="@+id/inventory_total_amount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inventory_username_text" />
 
@@ -36,9 +40,11 @@
         android:layout_height="49dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Total amount"
+        app:layout_constraintBottom_toTopOf="@+id/inventory_qr_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inventory_total_score" />
 
@@ -46,8 +52,8 @@
         android:id="@+id/inventory_qr_list"
         android:layout_width="465dp"
         android:layout_height="587dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="7dp"
         android:layout_marginEnd="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,42 +64,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="36dp"
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/inventory_sort_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_list" />
 
     <Button
         android:id="@+id/inventory_sort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="36dp"
         android:text="Sort"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/inventory_qr_details"
-        app:layout_constraintStart_toEndOf="@+id/inventory_delete_button" />
+        app:layout_constraintStart_toEndOf="@+id/inventory_delete_button"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_list" />
 
     <Button
         android:id="@+id/inventory_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="17dp"
         android:layout_marginBottom="36dp"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/inventory_qr_details" />
+        app:layout_constraintStart_toEndOf="@+id/inventory_qr_details"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_list" />
 
     <Button
         android:id="@+id/inventory_qr_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="36dp"
         android:text="Details"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/inventory_sort_button" />
+        app:layout_constraintEnd_toStartOf="@+id/inventory_back_button"
+        app:layout_constraintStart_toEndOf="@+id/inventory_sort_button"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_qr_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>
