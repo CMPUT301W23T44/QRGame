@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/background_teal">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/imageview">
-    </ImageView>
+        android:text="@string/add_location_prompt"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/capture_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/black"></TextView>
 
     <Button
+        android:id="@+id/capture_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/capture_image"
-        android:textStyle="bold"
-        android:textColor="@color/white"
+        android:layout_weight="0"
         android:backgroundTint="@color/teal_200"
-        android:id="@+id/capture_button"
-        android:layout_weight="0">
-    </Button>
+        android:text="@string/capture_image"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="-16dp"></Button>
 
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

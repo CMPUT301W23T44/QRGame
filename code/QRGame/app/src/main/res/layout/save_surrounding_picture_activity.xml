@@ -36,7 +36,7 @@
             android:id="@+id/button_next"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/string_next"
+            android:text="@string/finish"
             android:layout_weight="1"
             android:backgroundTint="@color/teal_200">
         </Button>

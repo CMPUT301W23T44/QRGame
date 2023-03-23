@@ -2,7 +2,6 @@ package com.example.qrgame;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,8 +36,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -218,7 +215,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                 // Get instance of the database
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
-                Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
 
                 /*
                  Find the QR code and perform actions based on if it exists
@@ -231,22 +227,28 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         if (qrExists) {
                             // If the QR code exists, the code is retrieved from the database and
                             // updated
+
                             dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
+                                    Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
                                     qrCode.addUsers(""); // TODO - get user id and add to list
                                     qrInfoIntent.putExtra("qrCode", qrCode);
+                                    boolean alreadyScanned = false;
+                                    // TODO - Check if QR code is already scanned
+                                    qrInfoIntent.putExtra("scanned", alreadyScanned);
                                     startActivity(qrInfoIntent);
                                 }
                             });
 
                         } else {
                             // If the QR code does not exist yet, a new one is created
+                            Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
                             QRCode qrCode = new QRCode(hash);
                             qrCode.addUsers(""); // TODO - get user id and add to list
-                            addQR(qrCode);
-                            qrInfoIntent.putExtra("qrCode", qrCode);
-                            startActivity(qrInfoIntent);
+                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+                            startActivity(newQRCodeInfoIntent);
+
 //                            dbAdapter.pushQR(qrCode);
                         }
                     }
