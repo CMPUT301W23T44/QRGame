@@ -41,7 +41,7 @@ public class Inventory_activity extends AppCompatActivity {
     private ArrayList<QRCode> QrDataList;
     private ListView QrCodeList;
     private QRCodeArrayAdapter QrAdapter;
-
+    private ArrayList<QRCode> qrcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class Inventory_activity extends AppCompatActivity {
                         String androidKey=(String) map.get("AndroidKey");
                         String phone=(String)map.get("PhoneKey");
                         String usern=(String) map.get("UserNameKey");
-                        User user=new User(usern,phone,androidKey);
+                        User user=new User(usern,phone,androidKey,qrcode);
                         username.setText("username:"+user.getUsername());
                     }
                 }
