@@ -32,6 +32,7 @@ public class SignUp extends AppCompatActivity {
     ArrayList<User> dataList;
     String UserCollection;
     String LoginCollection;
+    ArrayList<QRCode> qrcode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class SignUp extends AppCompatActivity {
                 String userName = UserName.getText().toString();
                 String phoneNumber = PhoneNumber.getText().toString();
                 String androidId = getUdid();
-                User checkUser= new User(userName, phoneNumber, androidId);
+                User checkUser= new User(userName, phoneNumber, androidId,qrcode);
                 if (userName.isEmpty()) {
                     Toast warningToast = Toast.makeText(SignUp.this, "Username is empty", Toast.LENGTH_SHORT);
                     warningToast.show();
@@ -93,13 +94,13 @@ public class SignUp extends AppCompatActivity {
                                 if (document.exists()){
                                     Toast.makeText(getBaseContext(), "Username exist " , Toast.LENGTH_SHORT).show();
                                 }else{
-                                    dataList.add((new User(userName, phoneNumber, androidId)));
+                                    dataList.add((new User(userName, phoneNumber, androidId,qrcode)));
                                     CollectionReference user = fireStore.collection( UserCollection);
                                     CollectionReference logUser = fireStore.collection(LoginCollection);
                                     curUser.put("UserNameKey", dataList.get(0).getUsername());
                                     curUser.put("PhoneKey", dataList.get(0).getPhonenumber());
                                     curUser.put("AndroidKey", dataList.get(0).getAndroidId());
-
+                                    curUser.put("QRCode", dataList.get(0).getQrcode());
                                     user.document(dataList.get(0).getUsername()).set(curUser);
                                     logUser.document(dataList.get(0).getAndroidId()).set(curUser);
                                     startActivity(sign_page);

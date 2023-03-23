@@ -11,13 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-
+/**
+ *custom adapter for list of qrcodes
+ *  */
 public class QRCodeArrayAdapter extends ArrayAdapter {
 
     public QRCodeArrayAdapter(Context context, ArrayList<QRCode> QrCodeList){
         super (context,0,QrCodeList);
     }
 
+
+    /**
+     * add a new element to the array
+     * @return View of new list with added content
+     * */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

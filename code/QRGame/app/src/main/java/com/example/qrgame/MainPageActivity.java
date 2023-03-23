@@ -2,7 +2,6 @@ package com.example.qrgame;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,10 +41,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,6 +103,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int QR_SCANNER_REQUEST = 0;
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
+
+    private User currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -233,7 +238,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                 // Get instance of the database
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
-                Intent qrInfoIntent = new Intent(this, QRInfoActivity.class);
 
                 /*
                  Find the QR code and perform actions based on if it exists
@@ -246,20 +250,29 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         if (qrExists) {
                             // If the QR code exists, the code is retrieved from the database and
                             // updated
+
                             dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
+                                    Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
+                                    qrCode.addUsers(""); // TODO - get user id and add to list
                                     qrInfoIntent.putExtra("qrCode", qrCode);
+                                    boolean alreadyScanned = false;
+                                    // TODO - Check if QR code is already scanned
+                                    qrInfoIntent.putExtra("scanned", alreadyScanned);
                                     startActivity(qrInfoIntent);
                                 }
                             });
 
                         } else {
                             // If the QR code does not exist yet, a new one is created
+                            Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
                             QRCode qrCode = new QRCode(hash);
-                            qrInfoIntent.putExtra("qrCode", qrCode);
-                            dbAdapter.pushQR(qrCode);
-                            startActivity(qrInfoIntent);
+                            qrCode.addUsers(""); // TODO - get user id and add to list
+                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+                            startActivity(newQRCodeInfoIntent);
+
+//                            dbAdapter.pushQR(qrCode);
                         }
                     }
                 });
@@ -285,6 +298,28 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     public String getUdid() {
         String androidID = AndroidID();
         return "2" + UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-", "");
+    }
+    /**
+     * add QRcode in UserCollection
+     * @param qrCode
+     */
+    public void addQR(QRCode qrCode){
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String Username = document.getString("UserNameKey");
+                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+                        docRef2.update("QRCode", FieldValue.arrayUnion(qrCode));
+
+                    }
+                }
+            }
+
+        });
     }
 
     public void onMapReady(@NonNull GoogleMap googleMap) {

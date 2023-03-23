@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
  */
 public class PromptUserPictureActivity extends AppCompatActivity {
 
-    ImageView imageView;
     Button captureButton;
     private final static int REQUEST_CODE = 0;
     private final static int RESULT_NEXT = 1;
@@ -31,7 +30,6 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_activity);
 
-        imageView = findViewById(R.id.imageview);
         captureButton = findViewById(R.id.capture_button);
 
 
@@ -46,6 +44,10 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // If the user was happy with the picture, the system returns to the main page
         if (resultCode == RESULT_NEXT) {
+            byte[] byteArray = (byte[]) data.getExtras().get("bytes");
+            Intent previous = new Intent();
+            previous.putExtra("bytes", byteArray);
+            setResult(RESULT_OK, previous);
             finish();
         // If the user does not like the picture, another one can be taken
         } else {

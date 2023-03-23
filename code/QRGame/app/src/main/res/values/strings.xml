@@ -13,4 +13,8 @@
     <string name="name">Name</string>
     <string name="score">Score</string>
     <string name="image">Image</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="finish">Finish</string>
+    <string name="new_qr_code">New QR Code!</string>
+    <string name="add_location_prompt">Add a picture of your location!</string>
 </resources>
