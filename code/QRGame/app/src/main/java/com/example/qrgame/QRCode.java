@@ -1,11 +1,17 @@
 package com.example.qrgame;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
+import android.location.Location;
+import android.location.LocationManager;
+import android.widget.Toast;
+import android.location.Location;
+import android.location.LocationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -41,6 +47,8 @@ public class QRCode implements Comparable, Serializable {
     @PropertyName("location_image")
     private String location_image;
 
+    private LatLng location;
+
     public QRCode() {
     }
 
@@ -50,6 +58,8 @@ public class QRCode implements Comparable, Serializable {
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);
+        //LocationGetter loc = new LocationGetter();
+        //location = getLocation();
         this.latitude = 0;
         this.longitude = 0;
         users = new ArrayList<>();
@@ -103,6 +113,29 @@ public class QRCode implements Comparable, Serializable {
     public void setLocation_image(String bytes) {
         location_image = bytes;
     }
+
+//    private LatLng getLocation() {
+//        LatLng Current = null;
+////        if (ActivityCompat.checkSelfPermission(
+////                MainPageActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+////                MainPageActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+////            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+////        } else {
+//        @SuppressLint("MissingPermission") Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        if (locationGPS != null) {
+//            double lat = locationGPS.getLatitude();
+//            double longi = locationGPS.getLongitude();
+//            latitude = Double.parseDouble(String.valueOf(lat));
+//            longitude = Double.parseDouble(String.valueOf(longi));
+//            Current = new LatLng(latitude, longitude);
+//            //locationArrayList.add(Current);
+//
+//        }else {
+//            //Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        return Current;
+//    }
 
     /**
      * Calculates the score of a QR code based off the hash provided
