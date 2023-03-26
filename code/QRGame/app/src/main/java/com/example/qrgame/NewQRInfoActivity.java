@@ -19,6 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -77,10 +79,11 @@ public class NewQRInfoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICTURE_REQUEST && resultCode == RESULT_OK) {
+            assert data != null;
             byte[] bytes = (byte[]) data.getExtras().get("bytes");
-            qrCode.setLocation_image(bytes.toString());
+            qrCode.setLocation_image(Base64.getEncoder().encodeToString(bytes));
         }
-        qrCode.addComments(userName, comment); // TODO - Set to username instead of test
+        qrCode.addComments(userName, comment);
         QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
         dbAdapter.pushQR(qrCode);
         addQR(qrCode);
