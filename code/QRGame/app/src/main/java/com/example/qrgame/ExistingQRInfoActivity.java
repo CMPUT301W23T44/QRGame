@@ -1,6 +1,6 @@
 package com.example.qrgame;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +20,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
     private QRCode qrCode;
     private Button nextButton;
     private boolean scanned;
+    private String userName;
 
     private final int PICTURE_REQUEST = 1;
 
@@ -37,17 +38,18 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
 
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         scanned = (boolean) getIntent().getBooleanExtra("scanned", false);
+        userName = (String) getIntent().getStringExtra("Username");
+
 
 
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
-        Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
-        HashMap commentsMap = qrCode.getComments();
+        HashMap<String, String> commentsMap = qrCode.getComments();
 
         if (scanned) {
             tag.setText("Already Owned!");
-            commentEditText.setText((CharSequence) commentsMap.get("test"));
+            commentEditText.setText((CharSequence) commentsMap.get(userName));
             commentEditText.setEnabled(false);
         } else {
             tag.setText("New QR Code!");
@@ -57,7 +59,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         nextButton.setOnClickListener(view -> {
             if (!scanned) {
                 String comment = String.valueOf(commentEditText.getText());
-                qrCode.addComments("test", comment); // TODO - Set to username instead of test
+                qrCode.addComments(userName, comment);
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrCode);
             }
