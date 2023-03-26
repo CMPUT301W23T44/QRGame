@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +82,11 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
 
-    private User currUser;
+    private final String MISSINGNONAME = "MissingNo";
+    private final String MISSINGNOFACE = "   |-------|\n   |       |\n   |       |\n   |       |\n" +
+            "|          |\n|          |\n|          |\n|----------|";
+
+    private String currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +104,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
+        currUser = (String) getIntent().getStringExtra("Username");
+
 //        search_button = findViewById(R.id.search);
 //        search_button.setOnClickListener(v -> {
 //            new Map().show(getSupportFragmentManager(), "Search QRCode");
@@ -210,7 +217,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                 if (result != null) {
                     hash = result.getStringExtra("result");
                 } else {
-                    hash = "00000000";    // TODO - Change with a zero score QR code
+                    MISSINGNO();
                 }
 
                 // Get instance of the database
@@ -232,10 +239,15 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
                                     Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
-                                    qrCode.addUsers(""); // TODO - get user id and add to list
+                                    boolean alreadyScanned = true;
+                                    if (!(qrCode.getUsers()).contains(currUser)) {
+                                        qrCode.addUsers(currUser); // TODO - get user id and add to list
+                                        addQR(qrCode);
+                                        alreadyScanned = false;
+                                    }
                                     qrInfoIntent.putExtra("qrCode", qrCode);
-                                    boolean alreadyScanned = false;
                                     // TODO - Check if QR code is already scanned
+                                    qrInfoIntent.putExtra("Username", currUser);
                                     qrInfoIntent.putExtra("scanned", alreadyScanned);
                                     startActivity(qrInfoIntent);
                                 }
@@ -244,8 +256,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         } else {
                             // If the QR code does not exist yet, a new one is created
                             Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
+                            newQRCodeInfoIntent.putExtra("Username", currUser);
                             QRCode qrCode = new QRCode(hash);
-                            qrCode.addUsers(""); // TODO - get user id and add to list
+                            qrCode.addUsers(currUser); // TODO - get user id and add to list
                             newQRCodeInfoIntent.putExtra("qrCode", qrCode);
                             startActivity(newQRCodeInfoIntent);
 
@@ -253,8 +266,21 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     }
                 });
+            } else if (resultCode == RESULT_CANCELED) {
+                MISSINGNO();
             }
         }
+    }
+
+    private void MISSINGNO() {
+        hash = "0";    // TODO - Change with a zero score QR code
+        QRCode qrCode = new QRCode(0, hash, MISSINGNONAME, MISSINGNOFACE,
+                0, 0, new ArrayList<>(), new HashMap(), "");
+        Intent qrInfoIntent = new Intent(MainPageActivity.this,
+                ExistingQRInfoActivity.class);
+        qrInfoIntent.putExtra("qrCode", qrCode);
+        qrInfoIntent.putExtra("scanned", true);
+        startActivity(qrInfoIntent);
     }
 
     /**
