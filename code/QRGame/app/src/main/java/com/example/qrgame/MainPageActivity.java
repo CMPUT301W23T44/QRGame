@@ -2,6 +2,7 @@ package com.example.qrgame;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -106,22 +107,22 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         logout_button = findViewById(R.id.logout_button);
         currUser = (String) getIntent().getStringExtra("Username");
 
-//        search_button = findViewById(R.id.search);
-//        search_button.setOnClickListener(v -> {
-//            new Map().show(getSupportFragmentManager(), "Search QRCode");
-//        });
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
-//        mapFragment.getMapAsync(this);
+        search_button = findViewById(R.id.search);
+        search_button.setOnClickListener(v -> {
+            new Map().show(getSupportFragmentManager(), "Search QRCode");
+        });
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
+        mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
         String deviceId = getUdid();
-//        ActivityCompat.requestPermissions(this,
-//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            OnGPS();
-//        } else {
-//            getLocation();
-//        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            OnGPS();
+        } else {
+            getLocation();
+        }
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override

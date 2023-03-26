@@ -16,9 +16,5 @@
         android:ems="10"
         android:hint="longitude" />
 
-    <Button
-        android:id="@+id/Search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search" />
+
 </LinearLayout>
