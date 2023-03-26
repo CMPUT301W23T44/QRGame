@@ -103,8 +103,9 @@ public class SignUp extends AppCompatActivity {
                                     curUser.put("QRCode", dataList.get(0).getQrcode());
                                     user.document(dataList.get(0).getUsername()).set(curUser);
                                     logUser.document(dataList.get(0).getAndroidId()).set(curUser);
-                                    startActivity(sign_page);
 
+                                    sign_page.putExtra("Username", dataList.get(0).getUsername());
+                                    startActivity(sign_page);
                                 }
 
                             }else {
