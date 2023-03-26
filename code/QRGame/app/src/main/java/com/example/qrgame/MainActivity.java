@@ -14,14 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button start = findViewById(R.id.start_button);
-
         Intent Log_page = new Intent(this, LogIn.class);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(Log_page);
-            }
-        });
+        startActivity(Log_page);
+
     }
 }

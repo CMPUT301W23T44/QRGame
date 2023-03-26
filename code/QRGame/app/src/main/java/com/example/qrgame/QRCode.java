@@ -12,6 +12,7 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,14 +40,12 @@ public class QRCode implements Comparable, Serializable {
     private ArrayList<String> users;
     @PropertyName("comments")
     private HashMap<String, String> comments;
+
     @PropertyName("location_image")
     private String location_image;
 
-    public QRCode() {
-    }
-
+    public QRCode() {}
     public QRCode(String hash){
-
         this.hash = hash;
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
@@ -57,8 +56,6 @@ public class QRCode implements Comparable, Serializable {
         comments = new HashMap<>();
         location_image = "";
     }
-
-
 
     public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
                   ArrayList<String> users, HashMap comments, String location_image) {
@@ -75,7 +72,6 @@ public class QRCode implements Comparable, Serializable {
     public void addUsers(String uid) {
         users.add(uid);
     }
-
     public void addComments(String userName, String comment) {
         comments.put(userName, comment);
     }
@@ -135,40 +131,39 @@ public class QRCode implements Comparable, Serializable {
     public int getScore() {
         return score;
     }
-
     @PropertyName("hash")
     public String getHash() {
         return hash;
     }
-
     @PropertyName("name")
     public String getName() {
         return name;
     }
-
     @PropertyName("face")
     public String getFace() {
         return face;
     }
-
     public ArrayList<String> getUsers() {
         return users;
     }
     public LatLng getLatLng() {
         return new com.google.android.gms.maps.model.LatLng(latitude, longitude);
     }
-
     public HashMap<String, String> getComments() {
         return comments;
     }
-
     public String getLocation_image() {
         return location_image;
     }
 
+    /**
+     * Converts the string representation of the location image to a Bitmap
+     * @return
+     *      Bitmap containing the location image of a QR code
+     */
     @Exclude
     public Bitmap getLocationImageBitmap() {
-        byte[] bytes = location_image.getBytes();
+        byte[] bytes = Base64.getDecoder().decode(location_image);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
