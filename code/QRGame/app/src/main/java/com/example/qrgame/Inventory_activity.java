@@ -56,6 +56,9 @@ public class Inventory_activity extends AppCompatActivity {
         QrCodeList.setAdapter(QrAdapter);
         final int[] totalPoints = new int[1];
 
+        TextView totalPoint=findViewById(R.id.inventory_total_score);
+        TextView totalQr=findViewById(R.id.inventory_total_amount);
+
         TextView username=findViewById(R.id.inventory_username_text);
 
         //
@@ -81,7 +84,38 @@ public class Inventory_activity extends AppCompatActivity {
                                                                            String androidKey = (String) map.get("AndroidKey");
                                                                            String phone = (String) map.get("PhoneKey");
                                                                            String usern = (String) map.get("UserNameKey");
-                                                                           ArrayList<QRCode> qrcode =(ArrayList<QRCode>) map.get("QRCode");
+                                                                           ArrayList<QRCode> qrcode = (ArrayList<QRCode>) map.get("QRCode");
+                                                                          // System.out.println("iciiiiiiiiii"+map.get("QRCode").size());
+
+
+                                                                           for (int i=0;i<qrcode.size();i++){
+                                                                               Map map1= (Map) qrcode.get(i);
+                                                                               int score=( (Long) map1.get("score")).intValue();
+                                                                                String hash= (String) map1.get("hash");
+                                                                                String name= (String) map1.get("name");
+                                                                                String face= (String) map1.get("face");
+                                                                                Map latLng = (Map) map1.get("latLng");
+                                                                                double lat = (Double) latLng.get("latitude");
+                                                                                double lng = (Double) latLng.get("longitude");
+
+                                                                                ArrayList<String> users = (ArrayList<String>) map1.get("users");
+//                                                                                ArrayList<HashMap<String, String>> comments = (ArrayList<HashMap<String, String>>) map1.get("comments");
+//                                                                                for (int j=0;j<comments.size();++i){
+//
+//                                                                                }
+                                                                                HashMap<String, String>comments =new HashMap<>();
+                                                                                String location_image = (String) map1.get("location_image");
+
+                                                                                QRCode qr = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
+                                                                                QrAdapter.add(qr);
+                                                                           }
+                                                                           totalPoints[0] =GetTotalPoints();
+                                                                            totalPoint.setText("Total score: "+totalPoints[0]);
+                                                                            totalQr.setText("Total QR codes: "+QrDataList.size());
+
+
+
+                                                                            QrAdapter.notifyDataSetChanged();
                                                                            User user = new User(usern, phone, androidKey, qrcode);
                                                                            Log.d("RRG", "check1"+user.getQrcode());
                                                                            username.setText("username:" + user.getUsername());
@@ -99,54 +133,53 @@ public class Inventory_activity extends AppCompatActivity {
 //
 
 
-        TextView totalPoint=findViewById(R.id.inventory_total_score);
-        TextView totalQr=findViewById(R.id.inventory_total_amount);
 
 
 
-        FirebaseFirestore qrDB = FirebaseFirestore.getInstance();
-        String COLLECTION_NAME = "qrCodes";
-        CollectionReference QR_CODE_COLLECTION = qrDB.collection(COLLECTION_NAME);
 
-        qrDB.collection(COLLECTION_NAME)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                System.out.println(document.getData());
-                                Map map=document.getData();
-                                int score=( (Long) map.get("score")).intValue();
-                                String hash= (String) map.get("hash");
-                                String name= (String) map.get("name");
-                                String face= (String) map.get("face");
-                                Map latLng = (Map) map.get("latLng");
-                                double lat = (Double) latLng.get("latitude");
-                                double lng = (Double) latLng.get("longitude");
-
-                                ArrayList<String> users = (ArrayList<String>) map.get("users");
-                                HashMap<String, String> comments = (HashMap<String, String>) map.get("comments");
-                                String location_image = (String) map.get("location_image");
-
-                                QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
-
-                                QrAdapter.add(qrCode);
-                                totalPoints[0] =GetTotalPoints();
-                                totalPoint.setText("Total score: "+totalPoints[0]);
-                                totalQr.setText("Total QR codes: "+QrDataList.size());
-
-
-
-                                QrAdapter.notifyDataSetChanged();
-
-
-                            }}else{
-                            Log.d("QRread","error on getting doc",task.getException());
-                            }
-                        }
-
-                });
+//        FirebaseFirestore qrDB = FirebaseFirestore.getInstance();
+//        String COLLECTION_NAME = "qrCodes";
+//        CollectionReference QR_CODE_COLLECTION = qrDB.collection(COLLECTION_NAME);
+//
+//        qrDB.collection(COLLECTION_NAME)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()){
+//                            for (QueryDocumentSnapshot document : task.getResult()){
+//                                System.out.println(document.getData());
+//                                Map map=document.getData();
+//                                int score=( (Long) map.get("score")).intValue();
+//                                String hash= (String) map.get("hash");
+//                                String name= (String) map.get("name");
+//                                String face= (String) map.get("face");
+//                                Map latLng = (Map) map.get("latLng");
+//                                double lat = (Double) latLng.get("latitude");
+//                                double lng = (Double) latLng.get("longitude");
+//
+//                                ArrayList<String> users = (ArrayList<String>) map.get("users");
+//                                HashMap<String, String> comments = (HashMap<String, String>) map.get("comments");
+//                                String location_image = (String) map.get("location_image");
+//
+//                                QRCode qrCode = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
+//
+//                                QrAdapter.add(qrCode);
+//                                totalPoints[0] =GetTotalPoints();
+//                                totalPoint.setText("Total score: "+totalPoints[0]);
+//                                totalQr.setText("Total QR codes: "+QrDataList.size());
+//
+//
+//
+//                                QrAdapter.notifyDataSetChanged();
+//
+//
+//                            }}else{
+//                            Log.d("QRread","error on getting doc",task.getException());
+//                            }
+//                        }
+//
+//                });
 
 
 
@@ -195,7 +228,7 @@ public class Inventory_activity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent =new Intent(Inventory_activity.this, NewQRInfoActivity.class);
+                        Intent intent =new Intent(Inventory_activity.this, ExistingQRInfoActivity.class);
                         intent.putExtra("qrCode",QrDataList.get(i));
                         startActivity(intent);
                     }
