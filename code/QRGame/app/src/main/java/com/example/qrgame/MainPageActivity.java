@@ -125,44 +125,28 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
             getLocation();
         }
 
-        logout_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        logout_button.setOnClickListener(view -> {
+            FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
 
-                fireStore.collection("LoginUser").document(deviceId).delete();
-                startActivity(login_page);
-            }
+            fireStore.collection("LoginUser").document(deviceId).delete();
+            startActivity(login_page);
         });
 
 
         addQr_button = findViewById(R.id.add_qr);
         Intent qr_scanner = new Intent(this, QRScannerActivity.class);
         // Player chose to add a QR code
-        addQr_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(qr_scanner, QR_SCANNER_REQUEST);
-            }
-        });
+        addQr_button.setOnClickListener(view -> startActivityForResult(qr_scanner, QR_SCANNER_REQUEST));
 
         inventory_button = findViewById(R.id.inventory_button);
         Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
-        inventory_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(inventory);
-            }
-        });
+        inventory_button.setOnClickListener(view -> startActivity(inventory));
 
         social_button = findViewById(R.id.social_button);
 
-        social_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent social_page = new Intent(MainPageActivity.this, Social.class);
-                startActivity(social_page);
-            }
+        social_button.setOnClickListener(view -> {
+            Intent social_page = new Intent(MainPageActivity.this, Social.class);
+            startActivity(social_page);
         });
     }
 
@@ -201,6 +185,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
             } else {
                 Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+                Current = new LatLng(0,0);
             }
         }
         return Current;
@@ -229,47 +214,47 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                  Find the QR code and perform actions based on if it exists
                  LOOK HERE FOR EXAMPLE OF DATABASE
                 */
-                dbAdapter.findQR(hash, new QRDatabaseController.QRCodeExistsCallback() {
-                    @Override
-                    public void onQRCodeCallback(boolean qrExists) {
-                        Log.d("TestQR", String.valueOf(qrExists));
-                        if (qrExists) {
-                            // If the QR code exists, the code is retrieved from the database and
-                            // updated
+                dbAdapter.findQR(hash, qrExists -> {
+                    Log.d("TestQR", String.valueOf(qrExists));
+                    if (qrExists) {
+                        // If the QR code exists, the code is retrieved from the database and
+                        // updated
 
-                            dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
-                                @Override
-                                public void onGetQRCodeCallback(QRCode qrCode) {
-                                    Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
-                                    boolean alreadyScanned = true;
-                                    // If the user has not scanned the QR code yet, they are added to the
-                                    // user list
-                                    if (!(qrCode.getUsers()).contains(currUser)) {
-                                        qrCode.addUsers(currUser);
-                                        addQR(qrCode);
-                                        alreadyScanned = false;
-                                    }
+                        dbAdapter.getQRCode(hash, qrCode -> {
+                            Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
+                            boolean alreadyScanned = true;
+                            // If the user has not scanned the QR code yet, they are added to the
+                            // user list
+                            if (!(qrCode.getUsers()).contains(currUser)) {
+                                qrCode.addUsers(currUser);
+                                addQR(qrCode);
+                                alreadyScanned = false;
+                            }
 
-                                    qrInfoIntent.putExtra("qrCode", qrCode);
-                                    qrInfoIntent.putExtra("Username", currUser);
-                                    qrInfoIntent.putExtra("scanned", alreadyScanned);
-                                    // Display the QR code information
-                                    startActivity(qrInfoIntent);
-                                }
-                            });
-
-                        } else {
-                            // If the QR code does not exist yet, a new one is created
-                            Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
-                            newQRCodeInfoIntent.putExtra("Username", currUser);
-
-                            // New QR code is created and the user is added to the user list
-                            QRCode qrCode = new QRCode(hash);
-                            qrCode.addUsers(currUser);
-                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+                            qrInfoIntent.putExtra("qrCode", qrCode);
+                            qrInfoIntent.putExtra("Username", currUser);
+                            qrInfoIntent.putExtra("scanned", alreadyScanned);
                             // Display the QR code information
-                            startActivity(newQRCodeInfoIntent);
-                        }
+                            startActivity(qrInfoIntent);
+                        });
+
+                    } else {
+                        // If the QR code does not exist yet, a new one is created
+                        Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
+                        newQRCodeInfoIntent.putExtra("Username", currUser);
+
+                        // Get current location for if the user wants to save it with the QR code
+                        LatLng currLocation = getLocation();
+                        newQRCodeInfoIntent.putExtra("latitude", (Double) currLocation.latitude);
+                        newQRCodeInfoIntent.putExtra("longitude", (Double) currLocation.longitude);
+
+                        // New QR code is created and the user is added to the user list
+                        QRCode qrCode = new QRCode(hash);
+                        qrCode.addUsers(currUser);
+                        newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+
+                        // Display the QR code information
+                        startActivity(newQRCodeInfoIntent);
                     }
                 });
             } else if (resultCode == RESULT_CANCELED) {
@@ -287,7 +272,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         // MissingNo has a hash of '0'
         hash = "0";
         QRCode qrCode = new QRCode(0, hash, MISSINGNONAME, MISSINGNOFACE,
-                0, 0, new ArrayList<>(), new HashMap(), "");
+                0, 0, new ArrayList<>(), new HashMap<String, String>(), "");
 
         Intent qrInfoIntent = new Intent(MainPageActivity.this,
                 ExistingQRInfoActivity.class);

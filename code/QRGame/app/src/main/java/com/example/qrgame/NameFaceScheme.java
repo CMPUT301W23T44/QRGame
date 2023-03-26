@@ -39,41 +39,45 @@ public class NameFaceScheme {
                                                 "ould",
                                                 "hey"};
 
-    static final private String[] FACE_0 = new String[] {"<--->",
-                                                        "/_________\\",
-                                                        ".~~~~~~~~~~.",
-                                                        "T__________T",
-                                                        "I----------I",
-                                                        "/0000000000\\",
-                                                        "|----|",
-                                                        "''''''''''"};
-    static final private String[] FACE_1 = new String[] {"$|  @  @  |$",
-                                                            "$|    ^   ^   |$",
-                                                            "%|  U U  |%",
-                                                            "(  OO  )",
-                                                            "<(  ?  ?  )>",
-                                                            "^| I  I |^",
-                                                            "%/    O    O   /%",
-                                                            "$(  U U  )$"};
-    static final private String[] FACE_2 = new String[] {"|   ^   |",
-                                                        "/   V   \\",
-                                                        "\\    .    //",
-                                                        "|   []   |",
-                                                        "(   v   )",
-                                                        "<    x    >",
-                                                        "[     #     ]",
-                                                        "{    V    }"};
-    static final private String[] FACE_3 = new String[] {"(    w    )",
-                                                        "|    xxxxx    |",
-                                                        "/  uu  \\",
-                                                        "(  \\________/  )",
-                                                        "|  v-----v  |",
-                                                        "/    ~~~~~~~   \\",
-                                                        "\\  /-----\\  /",
-                                                        "|  _    _  |"};
+    static final private String[] FACE_0 = new String[] {
+            "<--------------->",
+            "/_______________\\",
+            ".~~~~~~~~~~~~~~~.",
+            "T_______________T",
+            "I---------------I",
+            "/000000000000000\\",
+            "|---------------|",
+            "'''''''''''''''''"};
+    static final private String[] FACE_1 = new String[] {
+            "$|     @    @     |$",
+            "$|     ^    ^     |$",
+            "%|      U  U      |%",
+            "(        OO        )",
+            "<(     ?    ?     )>",
+            "^|      I  I      |^",
+            "%/     O     O    /%",
+            "$(      U  U      )$"};
+    static final private String[] FACE_2 = new String[] {
+            "|       ^       |",
+            "/       V       \\",
+            "\\        .        //",
+            "|       []       |",
+            "(      v      )",
+            "<        x        >",
+            "[        #        ]",
+            "{       V       }"};
+    static final private String[] FACE_3 = new String[] {
+            "(        www        )",
+            "|        xxxxx      |",
+            "/         uu        \\",
+            "(      \\________/      )",
+            "|      v-----v       |",
+            "/       ~~~~~~~      \\",
+            "\\     /-----\\     /",
+            "|    ___     ___     |"};
 
     static final private String FACE_FILLER = "|                  |";
-    static final private String FACE_CHIN = "\\___/";
+    static final private String FACE_CHIN = "\\______________/";
     static final private String NEWLINE_CHAR = "\n";
 
     static final private int HASH_FRACTION_LENGTH = 16;
