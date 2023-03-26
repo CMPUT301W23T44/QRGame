@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -51,9 +50,7 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CODE);
 
-        nextButton.setOnClickListener(view -> {
-            finish();
-        });
+        nextButton.setOnClickListener(view -> finish());
 
         backButton.setOnClickListener(view -> {
             setResult(RESULT_BACK, null);
@@ -64,11 +61,13 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // If the user is happy with the picture, it is stored to the QR code
         if (requestCode == REQUEST_CODE) {
             assert data != null;
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(bitmap);
 
+            // Compresses the image into a png
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
@@ -76,8 +75,6 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
             Intent previous = new Intent();
             previous.putExtra("bytes", byteArray);
             setResult(RESULT_NEXT, previous);
-
-
         }
     }
 }

@@ -50,7 +50,6 @@ public class QRScannerActivity extends AppCompatActivity {
     private final static int REQUEST_CODE = 1;
     Button nextButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

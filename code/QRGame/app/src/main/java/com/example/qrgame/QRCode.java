@@ -89,8 +89,8 @@ public class QRCode implements Comparable, Serializable {
      * Calculates the score of a QR code based off the hash provided
      */
     private int calcScore() {
-        int RADIX = 16;
-        int ZERO_VALUE = 20;
+        final int RADIX = 16;
+        final int ZERO_VALUE = 20;
         String previousChar = String.valueOf(hash.charAt(0));
         String currentChar;
         int currentScoreValue = 0;
@@ -152,6 +152,8 @@ public class QRCode implements Comparable, Serializable {
     public HashMap<String, String> getComments() {
         return comments;
     }
+
+    // Needed to interface with the Firebase
     public String getLocation_image() {
         return location_image;
     }
