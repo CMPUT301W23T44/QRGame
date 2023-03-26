@@ -1,23 +1,18 @@
 package com.example.qrgame;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.location.LocationManager;
-import android.widget.Toast;
-import android.location.Location;
-import android.location.LocationManager;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,30 +40,22 @@ public class QRCode implements Comparable, Serializable {
     private ArrayList<String> users;
     @PropertyName("comments")
     private HashMap<String, String> comments;
+
     @PropertyName("location_image")
     private String location_image;
 
-    private LatLng location;
-
-    public QRCode() {
-    }
-
+    public QRCode() {}
     public QRCode(String hash){
-
         this.hash = hash;
         score = calcScore();
         face = NameFaceScheme.generateFace(hash);
         name = NameFaceScheme.generateName(hash);
-        //LocationGetter loc = new LocationGetter();
-        //location = getLocation();
         this.latitude = 0;
         this.longitude = 0;
         users = new ArrayList<>();
         comments = new HashMap<>();
         location_image = "";
     }
-
-
 
     public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
                   ArrayList<String> users, HashMap comments, String location_image) {
@@ -85,7 +72,6 @@ public class QRCode implements Comparable, Serializable {
     public void addUsers(String uid) {
         users.add(uid);
     }
-
     public void addComments(String userName, String comment) {
         comments.put(userName, comment);
     }
@@ -98,29 +84,6 @@ public class QRCode implements Comparable, Serializable {
     public void setLocation_image(String bytes) {
         location_image = bytes;
     }
-
-//    private LatLng getLocation() {
-//        LatLng Current = null;
-////        if (ActivityCompat.checkSelfPermission(
-////                MainPageActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-////                MainPageActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-////            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-////        } else {
-//        @SuppressLint("MissingPermission") Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        if (locationGPS != null) {
-//            double lat = locationGPS.getLatitude();
-//            double longi = locationGPS.getLongitude();
-//            latitude = Double.parseDouble(String.valueOf(lat));
-//            longitude = Double.parseDouble(String.valueOf(longi));
-//            Current = new LatLng(latitude, longitude);
-//            //locationArrayList.add(Current);
-//
-//        }else {
-//            //Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        return Current;
-//    }
 
     /**
      * Calculates the score of a QR code based off the hash provided
@@ -168,40 +131,39 @@ public class QRCode implements Comparable, Serializable {
     public int getScore() {
         return score;
     }
-
     @PropertyName("hash")
     public String getHash() {
         return hash;
     }
-
     @PropertyName("name")
     public String getName() {
         return name;
     }
-
     @PropertyName("face")
     public String getFace() {
         return face;
     }
-
     public ArrayList<String> getUsers() {
         return users;
     }
     public LatLng getLatLng() {
         return new com.google.android.gms.maps.model.LatLng(latitude, longitude);
     }
-
     public HashMap<String, String> getComments() {
         return comments;
     }
-
     public String getLocation_image() {
         return location_image;
     }
 
+    /**
+     * Converts the string representation of the location image to a Bitmap
+     * @return
+     *      Bitmap containing the location image of a QR code
+     */
     @Exclude
     public Bitmap getLocationImageBitmap() {
-        byte[] bytes = location_image.getBytes();
+        byte[] bytes = Base64.getDecoder().decode(location_image);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 

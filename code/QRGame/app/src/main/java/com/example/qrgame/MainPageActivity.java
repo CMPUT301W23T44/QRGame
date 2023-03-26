@@ -83,6 +83,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
 
+    // Name and face of MissingNo
     private final String MISSINGNONAME = "MissingNo";
     private final String MISSINGNOFACE = "   |-------|\n   |       |\n   |       |\n   |       |\n" +
             "|          |\n|          |\n|          |\n|----------|";
@@ -207,7 +208,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
     // Handles activities that return with a result
     private String hash;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
         super.onActivityResult(requestCode, resultCode, result);
@@ -218,6 +218,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                 if (result != null) {
                     hash = result.getStringExtra("result");
                 } else {
+                    // If the QR code did not have any data, a generic QR code is displayed
                     MISSINGNO();
                 }
 
@@ -241,15 +242,18 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                                 public void onGetQRCodeCallback(QRCode qrCode) {
                                     Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
                                     boolean alreadyScanned = true;
+                                    // If the user has not scanned the QR code yet, they are added to the
+                                    // user list
                                     if (!(qrCode.getUsers()).contains(currUser)) {
-                                        qrCode.addUsers(currUser); // TODO - get user id and add to list
+                                        qrCode.addUsers(currUser);
                                         addQR(qrCode);
                                         alreadyScanned = false;
                                     }
+
                                     qrInfoIntent.putExtra("qrCode", qrCode);
-                                    // TODO - Check if QR code is already scanned
                                     qrInfoIntent.putExtra("Username", currUser);
                                     qrInfoIntent.putExtra("scanned", alreadyScanned);
+                                    // Display the QR code information
                                     startActivity(qrInfoIntent);
                                 }
                             });
@@ -258,29 +262,38 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             // If the QR code does not exist yet, a new one is created
                             Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
                             newQRCodeInfoIntent.putExtra("Username", currUser);
-                            QRCode qrCode = new QRCode(hash);
-                            qrCode.addUsers(currUser); // TODO - get user id and add to list
-                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
-                            startActivity(newQRCodeInfoIntent);
 
-//                            dbAdapter.pushQR(qrCode);
+                            // New QR code is created and the user is added to the user list
+                            QRCode qrCode = new QRCode(hash);
+                            qrCode.addUsers(currUser);
+                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+                            // Display the QR code information
+                            startActivity(newQRCodeInfoIntent);
                         }
                     }
                 });
             } else if (resultCode == RESULT_CANCELED) {
+                // If the user cancelled the scanner, the default QR code is displayed
                 MISSINGNO();
             }
         }
     }
 
+    /**
+     * Used for when a QR code does not exist. Generates a QR code worth 0 points
+     * called MissingNo
+     */
     private void MISSINGNO() {
-        hash = "0";    // TODO - Change with a zero score QR code
+        // MissingNo has a hash of '0'
+        hash = "0";
         QRCode qrCode = new QRCode(0, hash, MISSINGNONAME, MISSINGNOFACE,
                 0, 0, new ArrayList<>(), new HashMap(), "");
+
         Intent qrInfoIntent = new Intent(MainPageActivity.this,
                 ExistingQRInfoActivity.class);
         qrInfoIntent.putExtra("qrCode", qrCode);
         qrInfoIntent.putExtra("scanned", true);
+
         startActivity(qrInfoIntent);
     }
 

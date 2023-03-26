@@ -59,7 +59,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         nextButton.setOnClickListener(view -> {
             if (!scanned) {
                 String comment = String.valueOf(commentEditText.getText());
-                qrCode.addComments(userName, comment); // TODO - Set to username instead of test
+                qrCode.addComments(userName, comment);
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrCode);
             }
