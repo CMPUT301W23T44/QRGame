@@ -9,6 +9,7 @@ import android.widget.Toast;
 import android.location.Location;
 import android.location.LocationManager;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.PropertyName;
 import com.google.android.gms.maps.model.LatLng;
@@ -80,22 +81,6 @@ public class QRCode implements Comparable, Serializable {
         this.comments = comments;
         this.location_image = location_image;
     }
-
-//    public void setScore(int score) {
-//        this.score = score;
-//    }
-//
-//    public void setHash(String hash) {
-//        this.hash = hash;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public void setFace(String face) {
-//        this.face = face;
-//    }
 
     public void addUsers(String uid) {
         users.add(uid);
@@ -212,6 +197,12 @@ public class QRCode implements Comparable, Serializable {
 
     public String getLocation_image() {
         return location_image;
+    }
+
+    @Exclude
+    public Bitmap getLocationImageBitmap() {
+        byte[] bytes = location_image.getBytes();
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     @Override

@@ -6,38 +6,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationRequest;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.app.Fragment;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -51,18 +38,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.widget.Toast;
-
-
-import org.checkerframework.checker.units.qual.Current;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 
@@ -104,7 +82,11 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
 
-    private User currUser;
+    private final String MISSINGNONAME = "MissingNo";
+    private final String MISSINGNOFACE = "   |-------|\n   |       |\n   |       |\n   |       |\n" +
+            "|          |\n|          |\n|          |\n|----------|";
+
+    private String currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,22 +104,24 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
-        search_button = findViewById(R.id.search);
-        search_button.setOnClickListener(v -> {
-            new Map().show(getSupportFragmentManager(), "Search QRCode");
-        });
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
-        mapFragment.getMapAsync(this);
+        currUser = (String) getIntent().getStringExtra("Username");
+
+//        search_button = findViewById(R.id.search);
+//        search_button.setOnClickListener(v -> {
+//            new Map().show(getSupportFragmentManager(), "Search QRCode");
+//        });
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
+//        mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
         String deviceId = getUdid();
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            OnGPS();
-        } else {
-            getLocation();
-        }
+//        ActivityCompat.requestPermissions(this,
+//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            OnGPS();
+//        } else {
+//            getLocation();
+//        }
 
         logout_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +217,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                 if (result != null) {
                     hash = result.getStringExtra("result");
                 } else {
-                    hash = "00000000";    // TODO - Change with a zero score QR code
+                    MISSINGNO();
                 }
 
                 // Get instance of the database
@@ -255,10 +239,15 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                                 @Override
                                 public void onGetQRCodeCallback(QRCode qrCode) {
                                     Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
-                                    qrCode.addUsers(""); // TODO - get user id and add to list
+                                    boolean alreadyScanned = true;
+                                    if (!(qrCode.getUsers()).contains(currUser)) {
+                                        qrCode.addUsers(currUser); // TODO - get user id and add to list
+                                        addQR(qrCode);
+                                        alreadyScanned = false;
+                                    }
                                     qrInfoIntent.putExtra("qrCode", qrCode);
-                                    boolean alreadyScanned = false;
                                     // TODO - Check if QR code is already scanned
+                                    qrInfoIntent.putExtra("Username", currUser);
                                     qrInfoIntent.putExtra("scanned", alreadyScanned);
                                     startActivity(qrInfoIntent);
                                 }
@@ -267,8 +256,9 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         } else {
                             // If the QR code does not exist yet, a new one is created
                             Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
+                            newQRCodeInfoIntent.putExtra("Username", currUser);
                             QRCode qrCode = new QRCode(hash);
-                            qrCode.addUsers(""); // TODO - get user id and add to list
+                            qrCode.addUsers(currUser); // TODO - get user id and add to list
                             newQRCodeInfoIntent.putExtra("qrCode", qrCode);
                             startActivity(newQRCodeInfoIntent);
 
@@ -276,8 +266,21 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     }
                 });
+            } else if (resultCode == RESULT_CANCELED) {
+                MISSINGNO();
             }
         }
+    }
+
+    private void MISSINGNO() {
+        hash = "0";    // TODO - Change with a zero score QR code
+        QRCode qrCode = new QRCode(0, hash, MISSINGNONAME, MISSINGNOFACE,
+                0, 0, new ArrayList<>(), new HashMap(), "");
+        Intent qrInfoIntent = new Intent(MainPageActivity.this,
+                ExistingQRInfoActivity.class);
+        qrInfoIntent.putExtra("qrCode", qrCode);
+        qrInfoIntent.putExtra("scanned", true);
+        startActivity(qrInfoIntent);
     }
 
     /**

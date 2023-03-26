@@ -65,23 +65,35 @@ public class Inventory_activity extends AppCompatActivity {
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document=task.getResult();
-                    if (document.exists()){
-                        Map map=document.getData();
-                        String androidKey=(String) map.get("AndroidKey");
-                        String phone=(String)map.get("PhoneKey");
-                        String usern=(String) map.get("UserNameKey");
-                        User user=new User(usern,phone,androidKey,qrcode);
-                        username.setText("username:"+user.getUsername());
-                    }
-                }
-            }
-        });
-        //
-
+                                               @Override
+                                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                   if (task.isSuccessful()) {
+                                                       DocumentSnapshot document = task.getResult();
+                                                       if (document.exists()) {
+                                                           String Username = document.getString("UserNameKey");
+                                                           DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+                                                           docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                   if (task.isSuccessful()) {
+                                                                       DocumentSnapshot document2 = task.getResult();
+                                                                       if (document2.exists()) {
+                                                                           Map map = document2.getData();
+                                                                           String androidKey = (String) map.get("AndroidKey");
+                                                                           String phone = (String) map.get("PhoneKey");
+                                                                           String usern = (String) map.get("UserNameKey");
+                                                                           ArrayList<QRCode> qrcode =(ArrayList<QRCode>) map.get("QRCode");
+                                                                           User user = new User(usern, phone, androidKey, qrcode);
+                                                                           Log.d("RRG", "check1"+user.getQrcode());
+                                                                           username.setText("username:" + user.getUsername());
+                                                                       }
+                                                                   }
+                                                               }
+                                                           });
+                                                           //
+                                                       }
+                                                   }
+                                               }
+                                           });
 
 
 //
