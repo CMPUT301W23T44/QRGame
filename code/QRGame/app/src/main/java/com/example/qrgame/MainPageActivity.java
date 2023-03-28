@@ -246,8 +246,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
                             QRCode qrCode = new QRCode(hash);
                             qrCode.addUsers(""); // TODO - get user id and add to list
-                            addQR(qrCode);
-                            
                             newQRCodeInfoIntent.putExtra("qrCode", qrCode);
                             startActivity(newQRCodeInfoIntent);
 
