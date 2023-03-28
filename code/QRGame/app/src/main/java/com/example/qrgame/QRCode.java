@@ -72,8 +72,14 @@ public class QRCode implements Comparable, Serializable {
     public void addUsers(String uid) {
         users.add(uid);
     }
+    public void removeUsers(String uid) {
+        users.remove(uid);
+    }
     public void addComments(String userName, String comment) {
         comments.put(userName, comment);
+    }
+    public void removeComments(String userName) {
+        comments.remove(userName);
     }
 
     public void setLatLong(double latitude, double longitude) {
