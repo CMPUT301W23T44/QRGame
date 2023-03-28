@@ -19,12 +19,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
 /**
- * Displays all the information of a QR code to the user
+ * Displays all the information of a new QR code to the user
  */
 public class NewQRInfoActivity extends AppCompatActivity {
 
@@ -55,20 +54,25 @@ public class NewQRInfoActivity extends AppCompatActivity {
         commentEditText = findViewById(R.id.editText_comment);
         locationCheckbox = findViewById(R.id.checkBox_geolocation);
 
-
+        // Gets new QR code and current user logged in
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         userName = (String) getIntent().getStringExtra("Username");
 
-
+        // Sets info to be displayed onto the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
+
+        // Creates intent to move to take a new picture
         Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
 
         nextButton.setOnClickListener(view -> {
+            // Saves the current comment and the location if the user chooses to
             comment = String.valueOf(commentEditText.getText());
             if (locationCheckbox.isChecked()) {
-
+                longitude = (Double) getIntent().getDoubleExtra("longitude", 0);
+                latitude = (Double) getIntent().getDoubleExtra("latitude", 0);
+                qrCode.setLatLong(latitude, longitude);
             }
             startActivityForResult(surroundingsPictureActivity, PICTURE_REQUEST);
         });
@@ -78,11 +82,14 @@ public class NewQRInfoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // If a picture was properly received, it is saved as a string
         if (requestCode == PICTURE_REQUEST && resultCode == RESULT_OK) {
             assert data != null;
             byte[] bytes = (byte[]) data.getExtras().get("bytes");
+            // Encodes a byte area into a string
             qrCode.setLocation_image(Base64.getEncoder().encodeToString(bytes));
         }
+        // Adds the comment to the QR code and then push the QR code to database
         qrCode.addComments(userName, comment);
         QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
         dbAdapter.pushQR(qrCode);
@@ -91,29 +98,29 @@ public class NewQRInfoActivity extends AppCompatActivity {
     }
 
     /**
-     * return the AndroidID
-     *
+     * Return the AndroidID
      * @return
+     *      Android ID of the current phone
      */
-    public String AndroidID() {
+    private String AndroidID() {
         String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         return id == null ? "" : id;
     }
 
     /**
-     * return the deviceId
-     *
+     * Return the deviceId
      * @return
+     *      Device ID of current phone
      */
-    public String getUdid() {
+    private String getUdid() {
         String androidID = AndroidID();
         return "2" + UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-", "");
     }
     /**
-     * add QRcode in UserCollection
-     * @param qrCode
+     * Add QR code in UserCollection
+     * @param qrCode - QR code to be added to the database
      */
-    public void addQR(QRCode qrCode){
+    private void addQR(QRCode qrCode){
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

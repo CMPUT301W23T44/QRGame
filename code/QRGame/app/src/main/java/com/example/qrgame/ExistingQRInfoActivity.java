@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 
+/**
+ * Displays all the information of an existing QR code to the user
+ */
 public class ExistingQRInfoActivity extends AppCompatActivity {
     private TextView qrImageTextView;
     private TextView nameTextView;
@@ -39,26 +42,28 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         tag = findViewById(R.id.old_new_tag);
         surroundingImageView=findViewById(R.id.view_surrounding_image);
 
+        // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         scanned = (boolean) getIntent().getBooleanExtra("scanned", false);
         userName = (String) getIntent().getStringExtra("Username");
 
-
-
+        // Sets the info to be displayed to the user on the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
         surroundingImageView.setImageBitmap(qrCode.getLocationImageBitmap());
         HashMap<String, String> commentsMap = qrCode.getComments();
 
+        // If the QR code has already been scanned, the user is notified and the comment
+        // they had previously entered is displayed
         if (scanned) {
             tag.setText("Already Owned!");
             commentEditText.setText((CharSequence) commentsMap.get(userName));
             commentEditText.setEnabled(false);
+            nextButton.setText("Finish");
         } else {
             tag.setText("New QR Code!");
         }
-
 
         nextButton.setOnClickListener(view -> {
             if (!scanned) {

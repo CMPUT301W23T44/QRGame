@@ -17,6 +17,10 @@
         tools:ignore="ExtraText"
         android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAVYei2V3bT-pPWp_Eg8Fy9s30HnYnb4K8"
+            ></meta-data>
 
         <activity
             android:name=".MainActivity"

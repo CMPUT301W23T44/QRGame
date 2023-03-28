@@ -23,7 +23,6 @@ public class PromptUserPictureActivity extends AppCompatActivity {
     Button captureButton;
     private final static int REQUEST_CODE = 0;
     private final static int RESULT_NEXT = 1;
-    private final static int RESULT_BACK = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         setContentView(R.layout.camera_activity);
 
         captureButton = findViewById(R.id.capture_button);
-
 
         captureButton.setOnClickListener(view -> {
             Intent savePicture = new Intent(this, SaveSurroundingPictureActivity.class);
@@ -44,6 +42,7 @@ public class PromptUserPictureActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // If the user was happy with the picture, the system returns to the main page
         if (resultCode == RESULT_NEXT) {
+            assert data != null;
             byte[] byteArray = (byte[]) data.getExtras().get("bytes");
             Intent previous = new Intent();
             previous.putExtra("bytes", byteArray);
