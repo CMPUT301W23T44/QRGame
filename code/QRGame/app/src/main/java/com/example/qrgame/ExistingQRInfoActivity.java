@@ -1,6 +1,6 @@
 package com.example.qrgame;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 
+/**
+ * Displays all the information of an existing QR code to the user
+ */
 public class ExistingQRInfoActivity extends AppCompatActivity {
     private TextView qrImageTextView;
     private TextView nameTextView;
@@ -20,6 +23,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
     private QRCode qrCode;
     private Button nextButton;
     private boolean scanned;
+    private String userName;
 
     private final int PICTURE_REQUEST = 1;
 
@@ -35,29 +39,32 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         commentEditText = findViewById(R.id.editText_comment);
         tag = findViewById(R.id.old_new_tag);
 
+        // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         scanned = (boolean) getIntent().getBooleanExtra("scanned", false);
+        userName = (String) getIntent().getStringExtra("Username");
 
-
+        // Sets the info to be displayed to the user on the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
-        Intent surroundingsPictureActivity = new Intent(this, PromptUserPictureActivity.class);
-        HashMap commentsMap = qrCode.getComments();
+        HashMap<String, String> commentsMap = qrCode.getComments();
 
+        // If the QR code has already been scanned, the user is notified and the comment
+        // they had previously entered is displayed
         if (scanned) {
             tag.setText("Already Owned!");
-            commentEditText.setText((CharSequence) commentsMap.get("test"));
+            commentEditText.setText((CharSequence) commentsMap.get(userName));
             commentEditText.setEnabled(false);
+            nextButton.setText("Finish");
         } else {
             tag.setText("New QR Code!");
         }
 
-
         nextButton.setOnClickListener(view -> {
             if (!scanned) {
                 String comment = String.valueOf(commentEditText.getText());
-                qrCode.addComments("test", comment); // TODO - Set to username instead of test
+                qrCode.addComments(userName, comment);
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrCode);
             }

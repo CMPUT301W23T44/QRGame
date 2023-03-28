@@ -45,6 +45,7 @@ public class QRDatabaseController {
     private static final String COLLECTION_NAME = "qrCodes";
     private final static String TAG = "QRDataBaseAction";
 
+
     private QRDatabaseController() {
         db = FirebaseFirestore.getInstance();
     }
@@ -121,11 +122,7 @@ public class QRDatabaseController {
         conflicts.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots.isEmpty()) {
-                    callback.onQRCodeCallback(false);
-                } else {
-                    callback.onQRCodeCallback(true);
-                }
+                callback.onQRCodeCallback(!queryDocumentSnapshots.isEmpty());
             }
         });
     }
@@ -149,5 +146,4 @@ public class QRDatabaseController {
                     }
                 });
     }
-
 }

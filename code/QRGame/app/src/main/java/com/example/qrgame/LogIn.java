@@ -85,6 +85,7 @@ public class LogIn extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document=task.getResult();
                     if (document.exists()) {
+                        main_page.putExtra("Username", document.getString("UserNameKey"));
                         startActivity(main_page);
                         Log.d("RRG", "check" + isHave);
 
@@ -133,6 +134,8 @@ public class LogIn extends AppCompatActivity {
                                     currUser.put("PhoneKey", dataList.get(0).getPhonenumber());
                                     currUser.put("AndroidKey", dataList.get(0).getAndroidId());
                                     logUser.document(dataList.get(0).getAndroidId()).set(currUser);
+
+                                    main_page.putExtra("Username",dataList.get(0).getUsername());
                                     startActivity(main_page);
                                 } else {
                                     Toast.makeText(getBaseContext(), "Wrong phone number" , Toast.LENGTH_SHORT).show();

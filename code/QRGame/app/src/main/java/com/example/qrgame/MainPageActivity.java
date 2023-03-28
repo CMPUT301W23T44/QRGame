@@ -2,6 +2,7 @@ package com.example.qrgame;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +83,12 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private final int INVENTORY_REQUEST = 1;
     private final int SOCIAL_REQUEST = 2;
 
-    private User currUser;
+    // Name and face of MissingNo
+    private final String MISSINGNONAME = "MissingNo";
+    private final String MISSINGNOFACE = "   |-------|\n   |       |\n   |       |\n   |       |\n" +
+            "|          |\n|          |\n|          |\n|----------|";
+
+    private String currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,61 +106,47 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
-//        search_button = findViewById(R.id.search);
-//        search_button.setOnClickListener(v -> {
-//            new Map().show(getSupportFragmentManager(), "Search QRCode");
-//        });
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
-//        mapFragment.getMapAsync(this);
+        currUser = (String) getIntent().getStringExtra("Username");
+
+        search_button = findViewById(R.id.search);
+        search_button.setOnClickListener(v -> {
+            new Map().show(getSupportFragmentManager(), "Search QRCode");
+        });
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
+        mapFragment.getMapAsync(this);
         Intent login_page = new Intent(this, LogIn.class);
         String deviceId = getUdid();
-//        ActivityCompat.requestPermissions(this,
-//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            OnGPS();
-//        } else {
-//            getLocation();
-//        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            OnGPS();
+        } else {
+            getLocation();
+        }
 
-        logout_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        logout_button.setOnClickListener(view -> {
+            FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
 
-                fireStore.collection("LoginUser").document(deviceId).delete();
-                startActivity(login_page);
-            }
+            fireStore.collection("LoginUser").document(deviceId).delete();
+            startActivity(login_page);
         });
 
 
         addQr_button = findViewById(R.id.add_qr);
         Intent qr_scanner = new Intent(this, QRScannerActivity.class);
         // Player chose to add a QR code
-        addQr_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(qr_scanner, QR_SCANNER_REQUEST);
-            }
-        });
+        addQr_button.setOnClickListener(view -> startActivityForResult(qr_scanner, QR_SCANNER_REQUEST));
 
         inventory_button = findViewById(R.id.inventory_button);
         Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
-        inventory_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(inventory);
-            }
-        });
+        inventory_button.setOnClickListener(view -> startActivity(inventory));
 
         social_button = findViewById(R.id.social_button);
 
-        social_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent social_page = new Intent(MainPageActivity.this, Social.class);
-                startActivity(social_page);
-            }
+        social_button.setOnClickListener(view -> {
+            Intent social_page = new Intent(MainPageActivity.this, Social.class);
+            startActivity(social_page);
         });
     }
 
@@ -192,6 +185,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
             } else {
                 Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+                Current = new LatLng(0,0);
             }
         }
         return Current;
@@ -199,7 +193,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
     // Handles activities that return with a result
     private String hash;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
         super.onActivityResult(requestCode, resultCode, result);
@@ -210,7 +203,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                 if (result != null) {
                     hash = result.getStringExtra("result");
                 } else {
-                    hash = "00000000";    // TODO - Change with a zero score QR code
+                    // If the QR code did not have any data, a generic QR code is displayed
+                    MISSINGNO();
                 }
 
                 // Get instance of the database
@@ -220,41 +214,72 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                  Find the QR code and perform actions based on if it exists
                  LOOK HERE FOR EXAMPLE OF DATABASE
                 */
-                dbAdapter.findQR(hash, new QRDatabaseController.QRCodeExistsCallback() {
-                    @Override
-                    public void onQRCodeCallback(boolean qrExists) {
-                        Log.d("TestQR", String.valueOf(qrExists));
-                        if (qrExists) {
-                            // If the QR code exists, the code is retrieved from the database and
-                            // updated
+                dbAdapter.findQR(hash, qrExists -> {
+                    Log.d("TestQR", String.valueOf(qrExists));
+                    if (qrExists) {
+                        // If the QR code exists, the code is retrieved from the database and
+                        // updated
 
-                            dbAdapter.getQRCode(hash, new QRDatabaseController.GetQRCodeCallback() {
-                                @Override
-                                public void onGetQRCodeCallback(QRCode qrCode) {
-                                    Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
-                                    qrCode.addUsers(""); // TODO - get user id and add to list
-                                    qrInfoIntent.putExtra("qrCode", qrCode);
-                                    boolean alreadyScanned = false;
-                                    // TODO - Check if QR code is already scanned
-                                    qrInfoIntent.putExtra("scanned", alreadyScanned);
-                                    startActivity(qrInfoIntent);
-                                }
-                            });
+                        dbAdapter.getQRCode(hash, qrCode -> {
+                            Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
+                            boolean alreadyScanned = true;
+                            // If the user has not scanned the QR code yet, they are added to the
+                            // user list
+                            if (!(qrCode.getUsers()).contains(currUser)) {
+                                qrCode.addUsers(currUser);
+                                addQR(qrCode);
+                                alreadyScanned = false;
+                            }
 
-                        } else {
-                            // If the QR code does not exist yet, a new one is created
-                            Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
-                            QRCode qrCode = new QRCode(hash);
-                            qrCode.addUsers(""); // TODO - get user id and add to list
-                            newQRCodeInfoIntent.putExtra("qrCode", qrCode);
-                            startActivity(newQRCodeInfoIntent);
+                            qrInfoIntent.putExtra("qrCode", qrCode);
+                            qrInfoIntent.putExtra("Username", currUser);
+                            qrInfoIntent.putExtra("scanned", alreadyScanned);
+                            // Display the QR code information
+                            startActivity(qrInfoIntent);
+                        });
 
-//                            dbAdapter.pushQR(qrCode);
-                        }
+                    } else {
+                        // If the QR code does not exist yet, a new one is created
+                        Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
+                        newQRCodeInfoIntent.putExtra("Username", currUser);
+
+                        // Get current location for if the user wants to save it with the QR code
+                        LatLng currLocation = getLocation();
+                        newQRCodeInfoIntent.putExtra("latitude", (Double) currLocation.latitude);
+                        newQRCodeInfoIntent.putExtra("longitude", (Double) currLocation.longitude);
+
+                        // New QR code is created and the user is added to the user list
+                        QRCode qrCode = new QRCode(hash);
+                        qrCode.addUsers(currUser);
+                        newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+
+                        // Display the QR code information
+                        startActivity(newQRCodeInfoIntent);
                     }
                 });
+            } else if (resultCode == RESULT_CANCELED) {
+                // If the user cancelled the scanner, the default QR code is displayed
+                MISSINGNO();
             }
         }
+    }
+
+    /**
+     * Used for when a QR code does not exist. Generates a QR code worth 0 points
+     * called MissingNo
+     */
+    private void MISSINGNO() {
+        // MissingNo has a hash of '0'
+        hash = "0";
+        QRCode qrCode = new QRCode(0, hash, MISSINGNONAME, MISSINGNOFACE,
+                0, 0, new ArrayList<>(), new HashMap<String, String>(), "");
+
+        Intent qrInfoIntent = new Intent(MainPageActivity.this,
+                ExistingQRInfoActivity.class);
+        qrInfoIntent.putExtra("qrCode", qrCode);
+        qrInfoIntent.putExtra("scanned", true);
+
+        startActivity(qrInfoIntent);
     }
 
     /**
