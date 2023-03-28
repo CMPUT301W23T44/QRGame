@@ -244,6 +244,11 @@ public class Inventory_activity extends AppCompatActivity {
         }
         return total;
     }
+
+    /**
+     * delete one qrcode in usercollection
+     * @param qrCode
+     */
     public void deleteQR(QRCode qrCode){
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
