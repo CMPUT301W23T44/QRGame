@@ -140,6 +140,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
         inventory_button = findViewById(R.id.inventory_button);
         Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
+        inventory.putExtra("Username", currUser);
         inventory_button.setOnClickListener(view -> startActivity(inventory));
 
         social_button = findViewById(R.id.social_button);
