@@ -19,24 +19,24 @@
         app:layout_constraintVertical_bias="0.805"
         android:textColor="@color/black"/>
 
+
     <TextView
         android:id="@+id/textView_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@color/white"
-        android:text="@string/image"
-        app:layout_constraintBottom_toTopOf="@+id/textView_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.548"
         android:gravity="center"
         android:padding="25dp"
+        android:text="@string/image"
+        android:textColor="@color/black"
         android:textSize="15sp"
-        android:textColor="@color/black"/>
-
+        app:layout_constraintBottom_toTopOf="@+id/textView_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.584" />
 
     <EditText
         android:id="@+id/editText_comment"
@@ -46,12 +46,12 @@
         android:background="@color/white"
         android:inputType="text"
         android:maxLength="100"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/button_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/black"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView_comment"
@@ -102,5 +102,21 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/view_surrounding_image"
+        android:layout_width="106dp"
+        android:layout_height="81dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="108dp"
+        android:layout_marginBottom="122dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/textView_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_image"
+        app:layout_constraintTop_toBottomOf="@+id/old_new_tag"
+        app:srcCompat="@drawable/button_shape"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
     private Button nextButton;
     private boolean scanned;
     private String userName;
+    private ImageView surroundingImageView;
 
     private final int PICTURE_REQUEST = 1;
 
@@ -38,6 +40,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.button_next);
         commentEditText = findViewById(R.id.editText_comment);
         tag = findViewById(R.id.old_new_tag);
+        surroundingImageView=findViewById(R.id.view_surrounding_image);
 
         // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
@@ -48,6 +51,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
+        surroundingImageView.setImageBitmap(qrCode.getLocationImageBitmap());
         HashMap<String, String> commentsMap = qrCode.getComments();
 
         // If the QR code has already been scanned, the user is notified and the comment
