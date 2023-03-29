@@ -44,6 +44,8 @@ public class Inventory_activity extends AppCompatActivity {
     private QRCodeArrayAdapter QrAdapter;
     private ArrayList<QRCode> qrcode;
 
+    private String currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class Inventory_activity extends AppCompatActivity {
 
 
         QrDataList=new ArrayList<>();
+        currUser = (String) getIntent().getStringExtra("Username");
 
         QrCodeList=findViewById(R.id.inventory_qr_list);
         QrAdapter=new QRCodeArrayAdapter(this,QrDataList);
@@ -104,7 +107,7 @@ public class Inventory_activity extends AppCompatActivity {
 //                                                                                for (int j=0;j<comments.size();++i){
 //
 //                                                                                }
-                                                                                HashMap<String, String>comments =new HashMap<>();
+                                                                                HashMap<String, String>comments = (HashMap<String, String>) map1.get("comments");
                                                                                 String location_image = (String) map1.get("location_image");
 
                                                                                 QRCode qr = new QRCode(score, hash, name, face, lat, lng, users, comments, location_image);
@@ -231,6 +234,10 @@ public class Inventory_activity extends AppCompatActivity {
 
                         Intent intent =new Intent(Inventory_activity.this, ExistingQRInfoActivity.class);
                         intent.putExtra("qrCode",QrDataList.get(i));
+                        intent.putExtra("scanned", true);
+                        intent.putExtra("Username", currUser);
+
+
                         startActivity(intent);
                     }
                 });
