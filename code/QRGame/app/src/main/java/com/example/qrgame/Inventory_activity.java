@@ -45,6 +45,8 @@ public class Inventory_activity extends AppCompatActivity {
     private ArrayList<QRCode> qrcode;
     int totalPoints  ;
 
+    private String currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,7 @@ public class Inventory_activity extends AppCompatActivity {
 
 
         QrDataList=new ArrayList<>();
+        currUser = (String) getIntent().getStringExtra("Username");
 
         QrCodeList=findViewById(R.id.inventory_qr_list);
         QrAdapter=new QRCodeArrayAdapter(this,QrDataList);
@@ -97,12 +100,18 @@ public class Inventory_activity extends AppCompatActivity {
                                                                                int score=( (Long) map1.get("score")).intValue();
                                                                                 String hash= (String) map1.get("hash");
 //
+<<<<<<< HEAD
                                                                                 dbAdapter.getQRCode(hash,qrCode -> {
                                                                                     QrAdapter.add(qrCode);
                                                                                     totalPoints =GetTotalPoints();
                                                                                     totalPoint.setText("Total score: "+totalPoints);
                                                                                     totalQr.setText("Total QR codes: "+QrDataList.size());
                                                                                 });
+=======
+//                                                                                }
+                                                                                HashMap<String, String>comments = (HashMap<String, String>) map1.get("comments");
+                                                                                String location_image = (String) map1.get("location_image");
+>>>>>>> fbe5785f9ff6f2795165a926d3c2fa6d1581e5bf
 
                                                                            }
 
@@ -226,6 +235,10 @@ public class Inventory_activity extends AppCompatActivity {
 
                         Intent intent =new Intent(Inventory_activity.this, ExistingQRInfoActivity.class);
                         intent.putExtra("qrCode",QrDataList.get(i));
+                        intent.putExtra("scanned", true);
+                        intent.putExtra("Username", currUser);
+
+
                         startActivity(intent);
                     }
                 });
