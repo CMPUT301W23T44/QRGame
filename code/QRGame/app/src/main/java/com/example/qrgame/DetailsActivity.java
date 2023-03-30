@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,6 +62,7 @@ public class DetailsActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("RRG", "checkqrcode2"+qrcode.getHash());
                 deleteQR(qrcode);
                 qrcode.removeUsers(userName);
                 QRDatabaseController dbAdapter=QRDatabaseController.getInstance();
@@ -91,6 +93,7 @@ public class DetailsActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String Username = document.getString("UserNameKey");
                         DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+                        Log.d("RRG", "checkqrcode3"+qrCode);
                         docRef2.update("QRCode", FieldValue.arrayRemove(qrCode));
 
                     }
