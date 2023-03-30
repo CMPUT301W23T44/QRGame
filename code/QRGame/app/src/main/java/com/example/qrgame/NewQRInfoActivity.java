@@ -58,6 +58,10 @@ public class NewQRInfoActivity extends AppCompatActivity {
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         userName = (String) getIntent().getStringExtra("Username");
 
+        if (userName == null) {
+            userName = " ";
+        }
+
         // Sets info to be displayed onto the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
