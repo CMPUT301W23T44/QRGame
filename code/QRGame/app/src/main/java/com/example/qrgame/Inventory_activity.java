@@ -47,7 +47,7 @@ public class Inventory_activity extends AppCompatActivity {
 
     private String currUser;
 
-    private String currUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,25 +96,25 @@ public class Inventory_activity extends AppCompatActivity {
                                                                            ArrayList<QRCode> qrcode = (ArrayList<QRCode>) map.get("QRCode");
 
 
-
-                                                                           for (int i=0;i<qrcode.size();i++){
-                                                                               Map map1= (Map) qrcode.get(i);
-                                                                               int score=( (Long) map1.get("score")).intValue();
-                                                                                String hash= (String) map1.get("hash");
+                                                                           if (qrcode !=null) {
+                                                                               for (int i = 0; i < qrcode.size(); i++) {
+                                                                                   Map map1 = (Map) qrcode.get(i);
+                                                                                   int score = ((Long) map1.get("score")).intValue();
+                                                                                   String hash = (String) map1.get("hash");
 //
-<<<<<<< HEAD
-                                                                                dbAdapter.getQRCode(hash,qrCode -> {
-                                                                                    QrAdapter.add(qrCode);
-                                                                                    totalPoints =GetTotalPoints();
-                                                                                    totalPoint.setText("Total score: "+totalPoints);
-                                                                                    totalQr.setText("Total QR codes: "+QrDataList.size());
-                                                                                });
-=======
-//                                                                                }
-                                                                                HashMap<String, String>comments = (HashMap<String, String>) map1.get("comments");
-                                                                                String location_image = (String) map1.get("location_image");
->>>>>>> fbe5785f9ff6f2795165a926d3c2fa6d1581e5bf
 
+                                                                                   dbAdapter.getQRCode(hash, qrCode -> {
+                                                                                       QrAdapter.add(qrCode);
+                                                                                       totalPoints = GetTotalPoints();
+                                                                                       totalPoint.setText("Total score: " + totalPoints);
+                                                                                       totalQr.setText("Total QR codes: " + QrDataList.size());
+                                                                                   });
+
+
+                                                                               }
+                                                                           }else{
+                                                                               totalPoint.setText("Total score: " + 0);
+                                                                               totalQr.setText("Total QR codes: " +0);
                                                                            }
 
 
@@ -208,42 +208,17 @@ public class Inventory_activity extends AppCompatActivity {
         QrCodeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Button deleteButton=findViewById(R.id.inventory_delete_button);
-                Button detailsButton=findViewById(R.id.inventory_qr_details);
 
 
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (i >=0 && QrDataList.size()>0) {
-                            //
-                            QRCode qrCode=QrDataList.get(i);
-//                            deleteQR(qrCode);
-
-                            //
-                            QrDataList.remove(i);
-
-                            totalPoints =GetTotalPoints();
-                            totalPoint.setText("total score: "+totalPoints);
-                            totalQr.setText("Total QR codes: "+QrDataList.size());
-                            QrAdapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-
-                detailsButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Intent intent =new Intent(Inventory_activity.this, ExistingQRInfoActivity.class);
-                        intent.putExtra("qrCode",QrDataList.get(i));
-                        intent.putExtra("scanned", true);
-                        intent.putExtra("Username", currUser);
+                Intent intent =new Intent(Inventory_activity.this, DetailsActivity.class);
+                intent.putExtra("qrCode",QrDataList.get(i));
+                intent.putExtra("scanned", true);
+                intent.putExtra("Username", currUser);
 
 
-                        startActivity(intent);
-                    }
-                });
+                startActivity(intent);
+
+
 
             }
         });

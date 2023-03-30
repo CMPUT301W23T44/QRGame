@@ -33,7 +33,7 @@
         </Button>
 
         <Button
-            android:id="@+id/button_next"
+            android:id="@+id/details_back_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/finish"

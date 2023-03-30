@@ -36,6 +36,9 @@ android {
             }
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -46,6 +49,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation 'com.google.firebase:firebase-database:20.0.4'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
     testImplementation 'junit:junit:4.13.2'
 
     implementation 'androidx.camera:camera-view:1.1.0-beta02'
