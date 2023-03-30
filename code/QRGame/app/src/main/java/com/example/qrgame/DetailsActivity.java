@@ -63,6 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 deleteQR(qrcode);
                 qrcode.removeUsers(userName);
+                qrcode.removeComments(userName);
                 QRDatabaseController dbAdapter=QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrcode);
 
