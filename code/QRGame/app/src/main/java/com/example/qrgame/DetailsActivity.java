@@ -65,6 +65,7 @@ public class DetailsActivity extends AppCompatActivity {
                 Log.d("RRG", "checkqrcode2"+qrcode.getHash());
                 deleteQR(qrcode);
                 qrcode.removeUsers(userName);
+                qrcode.removeComments(userName);
                 QRDatabaseController dbAdapter=QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrcode);
 

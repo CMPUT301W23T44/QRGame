@@ -279,6 +279,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         Intent qrInfoIntent = new Intent(MainPageActivity.this,
                 ExistingQRInfoActivity.class);
         qrInfoIntent.putExtra("qrCode", qrCode);
+        qrInfoIntent.putExtra("Username", currUser);
         qrInfoIntent.putExtra("scanned", true);
 
         startActivity(qrInfoIntent);
