@@ -47,6 +47,8 @@ public class Inventory_activity extends AppCompatActivity {
 
     private String currUser;
 
+    private String currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
