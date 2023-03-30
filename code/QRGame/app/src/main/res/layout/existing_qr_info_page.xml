@@ -7,12 +7,12 @@
     android:background="@color/background_teal">
 
     <TextView
-        android:id="@+id/old_new_tag"
+        android:id="@+id/details_qr_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_image"
+        app:layout_constraintBottom_toTopOf="@+id/details_qr_face"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +21,7 @@
 
 
     <TextView
-        android:id="@+id/textView_image"
+        android:id="@+id/details_qr_face"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -31,7 +31,7 @@
         android:text="@string/image"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_name"
+        app:layout_constraintBottom_toTopOf="@+id/details_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.216"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
         android:maxLength="100"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_next"
+        app:layout_constraintBottom_toTopOf="@+id/details_back_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
@@ -67,7 +67,7 @@
         android:textColor="@color/black"/>
 
     <Button
-        android:id="@+id/button_next"
+        android:id="@+id/details_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
@@ -79,19 +79,19 @@
         android:backgroundTint="@color/teal_200"/>
 
     <TextView
-        android:id="@+id/textView_name"
+        android:id="@+id/details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="@string/name"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_score"
+        app:layout_constraintBottom_toTopOf="@+id/details_score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/black"/>
 
     <TextView
-        android:id="@+id/textView_score"
+        android:id="@+id/details_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -104,7 +104,7 @@
         android:textColor="@color/black"/>
 
     <ImageView
-        android:id="@+id/view_surrounding_image"
+        android:id="@+id/details_surrounding_image"
         android:layout_width="106dp"
         android:layout_height="81dp"
         android:layout_marginStart="36dp"
@@ -112,10 +112,10 @@
         android:layout_marginEnd="108dp"
         android:layout_marginBottom="122dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/textView_name"
+        app:layout_constraintBottom_toTopOf="@+id/details_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_image"
-        app:layout_constraintTop_toBottomOf="@+id/old_new_tag"
+        app:layout_constraintStart_toEndOf="@+id/details_qr_face"
+        app:layout_constraintTop_toBottomOf="@+id/details_qr_name"
         app:srcCompat="@drawable/button_shape"
         tools:visibility="visible" />
 

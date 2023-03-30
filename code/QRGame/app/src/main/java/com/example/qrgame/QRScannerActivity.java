@@ -78,7 +78,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
 
-        nextButton = findViewById(R.id.button_next);
+        nextButton = findViewById(R.id.details_back_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

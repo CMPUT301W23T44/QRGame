@@ -36,7 +36,7 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
         setContentView(R.layout.save_surrounding_picture_activity);
 
         imageView = findViewById(R.id.imageview);
-        nextButton = findViewById(R.id.button_next);
+        nextButton = findViewById(R.id.details_back_button);
         backButton = findViewById(R.id.back_button);
 
         // Request permission to use the camera if permission is not already granted

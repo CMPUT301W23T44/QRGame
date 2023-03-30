@@ -47,10 +47,10 @@ public class NewQRInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_qr_info_page);
 
-        qrImageTextView = findViewById(R.id.textView_image);
-        nameTextView = findViewById(R.id.textView_name);
-        scoreTextView = findViewById(R.id.textView_score);
-        nextButton = findViewById(R.id.button_next);
+        qrImageTextView = findViewById(R.id.details_qr_face);
+        nameTextView = findViewById(R.id.details_name);
+        scoreTextView = findViewById(R.id.details_score);
+        nextButton = findViewById(R.id.details_back_button);
         commentEditText = findViewById(R.id.editText_comment);
         locationCheckbox = findViewById(R.id.checkBox_geolocation);
 

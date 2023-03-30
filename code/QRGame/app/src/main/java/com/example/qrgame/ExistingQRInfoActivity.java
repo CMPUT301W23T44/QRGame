@@ -1,6 +1,5 @@
 package com.example.qrgame;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,13 +33,13 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.existing_qr_info_page);
 
-        qrImageTextView = findViewById(R.id.textView_image);
-        nameTextView = findViewById(R.id.textView_name);
-        scoreTextView = findViewById(R.id.textView_score);
-        nextButton = findViewById(R.id.button_next);
+        qrImageTextView = findViewById(R.id.details_qr_face);
+        nameTextView = findViewById(R.id.details_name);
+        scoreTextView = findViewById(R.id.details_score);
+        nextButton = findViewById(R.id.details_back_button);
         commentEditText = findViewById(R.id.editText_comment);
-        tag = findViewById(R.id.old_new_tag);
-        surroundingImageView=findViewById(R.id.view_surrounding_image);
+        tag = findViewById(R.id.details_qr_name);
+        surroundingImageView=findViewById(R.id.details_surrounding_image);
 
         // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
