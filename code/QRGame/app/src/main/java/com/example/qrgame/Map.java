@@ -45,9 +45,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class Map extends DialogFragment {
+    private Context mContext;
     FirebaseFirestore firebaseDatabase;
+    private String currUser;
     private String value;
     private GeoPoint loc;
+    private int temp;
 //    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 
@@ -55,16 +58,19 @@ public class Map extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        temp = 0;
+        mContext = getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         firebaseDatabase = FirebaseFirestore.getInstance();
         CollectionReference test_value = firebaseDatabase.collection("qrCodes");
+        //currUser = (String) getIntent().getStringExtra("Username");
+
         View view = LayoutInflater.from(getContext()).inflate(R.layout.map, null);
         EditText la = view.findViewById(R.id.latitude);
-        EditText lo = view.findViewById(R.id.longitude);
 
         return builder
                 .setView(view)
-                .setTitle("test" + value)
+                .setTitle("Search QRCode by name")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Search", (dialog, which) -> {
                     String lat = la.getText().toString();
@@ -85,9 +91,20 @@ public class Map extends DialogFragment {
                                             //value = String.valueOf(task.getResult().getDocuments().get(0).getString("name"));
 
                                             value = document.getString("name");
+                                            //value += document.get("latLng");
+                                            //Toast.makeText(mContext, value , Toast.LENGTH_SHORT).show();
                                             //value += " location: ";
 //                                        GeoPoint loc1 = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lot));
                                             if (value.equals(lat)) {
+                                                //Intent qrInfoIntent = new Intent(mContext, ExistingQRInfoActivity.class);
+//                                                qrInfoIntent.putExtra("qrCode", qrCode);
+//                                                qrInfoIntent.putExtra("Username", currUser);
+//                                                qrInfoIntent.putExtra("scanned", alreadyScanned);
+                                                // Display the QR code information
+                                                //Intent qrInfoIntent = new Intent(mContext, ExistingQRInfoActivity.class);
+                                                //requireActivity().startActivity(qrInfoIntent);
+                                                Toast.makeText(mContext, lat + " is found , its score is" + document.getDouble("score"), Toast.LENGTH_SHORT).show();
+                                                temp = 1;
 
 //                                                if (Map.this.getContext() != null) {
 //                                                    Toast.makeText(Map.this.getContext(), lat + "finded", Toast.LENGTH_SHORT).show();
@@ -96,8 +113,12 @@ public class Map extends DialogFragment {
 //                                                }
 
                                             }
+
                                             //value += document.getString("location_test_string");Hallowed Bleismita
                                             //Toast.makeText(Map.this.getContext(), value, Toast.LENGTH_SHORT).show();Industrious Tryedeght
+                                        }
+                                        if (temp == 0){
+                                            Toast.makeText(mContext, lat + " is not found ", Toast.LENGTH_SHORT).show();
                                         }
 //                            Intent intent = new Intent(Map.this.getContext(), Activity.class);
 //                            intent.putExtra("name",task.getResult().getDocuments().get(0).getString("name"));
@@ -112,7 +133,7 @@ public class Map extends DialogFragment {
 
 
                             });
-                    Toast.makeText(Map.this.getContext(), value + "finded", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, value + "finded", Toast.LENGTH_SHORT).show();
 
                 })
                 .create();

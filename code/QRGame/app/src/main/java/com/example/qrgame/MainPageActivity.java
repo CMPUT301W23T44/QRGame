@@ -1,6 +1,7 @@
 package com.example.qrgame;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.google.firebase.firestore.CollectionReference;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -44,6 +48,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class MainPageActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -69,15 +74,19 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     FusedLocationProviderClient mFusedLocationClient;
     private static final int REQUEST_CODE = 101;
     private ArrayList<LatLng> locationArrayList;
+    private ArrayList<String> locationnameArrayList;
+
     private ArrayList<Float> distanceList;
     private ArrayList<Float> distanceList10;
 
     private FloatingActionButton addQr_button;
     private Button inventory_button;
+    private Context mContext;
     private Button search_button;
 
     private Button social_button;
     private Button logout_button;
+    FirebaseFirestore firebaseDatabase;
 
     private final int QR_SCANNER_REQUEST = 0;
     private final int INVENTORY_REQUEST = 1;
@@ -93,15 +102,17 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         locationArrayList = new ArrayList<>();
+        locationnameArrayList = new ArrayList<>();
 
-        locationArrayList.add(sydney);
-        locationArrayList.add(TamWorth);
-        locationArrayList.add(NewCastle);
-        locationArrayList.add(Brisbane);
-        locationArrayList.add(Near1);
-        locationArrayList.add(Near2);
-        locationArrayList.add(Near3);
-        locationArrayList.add(Near4);
+
+
+
+//        locationArrayList.add(sydney);
+//        locationArrayList.add(TamWorth);
+//        locationArrayList.add(NewCastle);
+//        locationArrayList.add(Brisbane);
+//        locationArrayList.add(Near1);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
@@ -325,9 +336,17 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        firebaseDatabase = FirebaseFirestore.getInstance();
+        CollectionReference test_value = firebaseDatabase.collection("qrCodes");
         mGoogleMap = googleMap;
-//        Location location = new Location();
+        locationnameArrayList.add("current");
 
+        //String deviceId = getUdid();
+        //mContext = getContext();
+
+//        locationArrayList.add(Near2);
+//        locationArrayList.add(Near3);
+//        locationArrayList.add(Near4);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -340,41 +359,146 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
             return;
         }
         mGoogleMap.setMyLocationEnabled(true);
-        List<Float> lists = new ArrayList<Float>();
-        List<Float> lists1 = new ArrayList<Float>();
 
 
-        distanceList = new ArrayList<>();
-        distanceList10 = new ArrayList<>();
-        for (int i = 0; i < locationArrayList.size() - 2; i++) {
-            LatLng loc1 = locationArrayList.get(i);
-            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
-            float[] distanceResult = new float[1];
-            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
-            float distanceInMeters = distanceResult[0];
-            lists.add(distanceInMeters);
+        test_value
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-        }
-        Collections.sort(lists);
-        if (lists.size() > 9) {
-            lists1 = lists.subList(0, 10);
-        } else {
-            lists1 = lists;
-        }
+                        if (task.isSuccessful()) {
+                            List<Float> lists = new ArrayList<Float>();
+                            //locationArrayList = new ArrayList<>();
+                            List<Float> lists1 = new ArrayList<Float>();
+                            for (DocumentSnapshot document : task.getResult().getDocuments()) {
+//                                value = task.getResult().getDocuments().get(0).getGeoPoint("latLng");
+//                                value = ((HashMap<String, Object>) document.getData().get("latLng"));
 
-        for (int i = 0; i < locationArrayList.size() - 2; i++) {
-            LatLng loc1 = locationArrayList.get(i);
-            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
-            float[] distanceResult = new float[1];
-            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
-            float distanceInMeters = distanceResult[0];
-            if (lists1.contains(distanceInMeters)) {
-                googleMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title("Marker"));
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
-                // below line is use to move our camera to the specific location.
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
+                                String test = "test";//"(String) document.get("latLng");""
+                                test += document.get("latLng");
+                                String[] temp;
+                                String[] temp1;
+                                String[] lat;
+                                String lot;
+                                String delimeter = "=";
+                                String delimeter1 = ",";
+                                temp = test.split(delimeter);
+                                temp1 = temp[1].split(delimeter1);
+                                lat = temp1[0].split(",");
+                                String lata = lat[0];
+                                lot = temp[2].substring(0,temp[2].length()-1);
+                                LatLng qrcode = new LatLng(Double.valueOf(lata),Double.valueOf(lot));
+                                locationnameArrayList.add(document.getString("name"));
+                                //Toast.makeText(MainPageActivity.this, document.getString("name") , Toast.LENGTH_SHORT).show();
+                                locationArrayList.add(qrcode);
+                                //value += " location: ";
+//                                        GeoPoint loc1 = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lot));
 
-            }
-        }
+
+                                //value += document.getString("location_test_string");Hallowed Bleismita
+                                //Toast.makeText(Map.this.getContext(), value, Toast.LENGTH_SHORT).show();Industrious Tryedeght
+                            }
+/*                            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                                OnGPS();
+                            } else {
+                                getLocation();*/
+                            //locationArrayList.add(getLocation());
+
+                            distanceList = new ArrayList<>();
+                            distanceList10 = new ArrayList<>();
+                            for (int i = 1; i < locationArrayList.size() - 1; i++) {
+                                LatLng loc1 = locationArrayList.get(i);
+                                LatLng loc2 = locationArrayList.get(0);
+                                float[] distanceResult = new float[1];
+                                Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
+                                float distanceInMeters = distanceResult[0];
+                                lists.add(distanceInMeters);
+
+                            }
+                            Collections.sort(lists);
+//                            if (lists.size() > 9) {
+//                                lists1 = lists.subList(0, 10);
+//                            } else {
+//                                lists1 = lists;
+//                            }
+                            lists1 = lists;
+
+
+                            for (int i = 1; i < locationArrayList.size() - 1; i++) {
+                                LatLng loc1 = locationArrayList.get(i);
+                                LatLng loc2 = locationArrayList.get(0);
+                                float[] distanceResult = new float[1];
+                                Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
+                                float distanceInMeters = distanceResult[0];
+                                if (lists1.contains(distanceInMeters)) {
+                                    googleMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title(locationnameArrayList.get(i)));
+                                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+                                    // below line is use to move our camera to the specific location.
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
+
+                                }
+                            }
+                            ActivityCompat.requestPermissions(MainPageActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+                            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+//                            Intent intent = new Intent(Map.this.getContext(), Activity.class);
+//                            intent.putExtra("name",task.getResult().getDocuments().get(0).getString("name"));
+//                            startActivity(intent);
+
+
+                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+//                            });
+
+
+                });
+//        ActivityCompat.requestPermissions(this,
+//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            OnGPS();
+//        } else {
+//            getLocation();
+//        }
+//
+//
+//        distanceList = new ArrayList<>();
+//        distanceList10 = new ArrayList<>();
+//        for (int i = 0; i < locationArrayList.size() - 2; i++) {
+//            LatLng loc1 = locationArrayList.get(i);
+//            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
+//            float[] distanceResult = new float[1];
+//            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
+//            float distanceInMeters = distanceResult[0];
+//            lists.add(distanceInMeters);
+//
+//        }
+//        Collections.sort(lists);
+//        if (lists.size() > 9) {
+//            lists1 = lists.subList(0, 10);
+//        } else {
+//            lists1 = lists;
+//        }
+//
+//        for (int i = 0; i < locationArrayList.size() - 2; i++) {
+//            LatLng loc1 = locationArrayList.get(i);
+//            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
+//            float[] distanceResult = new float[1];
+//            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
+//            float distanceInMeters = distanceResult[0];
+//            if (lists1.contains(distanceInMeters)) {
+//                googleMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title("Marker"));
+//                googleMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+//                // below line is use to move our camera to the specific location.
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
+//
+//            }
+//        }
     }
 }
