@@ -3,22 +3,27 @@
 
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="2">
 
-    <Button
-        android:id="@+id/details_back_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/string_next">
-    </Button>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1.6">
 
         <com.budiyev.android.codescanner.CodeScannerView
             android:id="@+id/scanner_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
+
+    <Button
+        android:id="@+id/finish_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:text="@string/back">
+    </Button>
 
 </LinearLayout>
