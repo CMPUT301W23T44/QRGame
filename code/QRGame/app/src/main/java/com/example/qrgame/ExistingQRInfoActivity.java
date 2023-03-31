@@ -24,7 +24,6 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
     private Button nextButton;
     private boolean scanned;
     private String userName;
-    private ImageView surroundingImageView;
 
     private final int PICTURE_REQUEST = 1;
 
@@ -39,18 +38,20 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.details_back_button);
         commentEditText = findViewById(R.id.editText_comment);
         tag = findViewById(R.id.details_qr_name);
-        surroundingImageView=findViewById(R.id.details_surrounding_image);
 
         // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
         scanned = (boolean) getIntent().getBooleanExtra("scanned", false);
         userName = (String) getIntent().getStringExtra("Username");
 
+        if (userName == null) {
+            userName = " ";
+        }
+
         // Sets the info to be displayed to the user on the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
-        surroundingImageView.setImageBitmap(qrCode.getLocationImageBitmap());
         HashMap<String, String> commentsMap = qrCode.getComments();
 
         // If the QR code has already been scanned, the user is notified and the comment
@@ -71,6 +72,7 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrCode);
             }
+
             finish();
         });
     }
