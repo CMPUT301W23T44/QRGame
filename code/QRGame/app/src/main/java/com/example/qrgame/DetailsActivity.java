@@ -20,12 +20,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private  QRCode qrcode;
     private String userName;
+    private ArrayList<QRCode>  qr;
+    private QRCode q;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
         Button back=findViewById(R.id.details_back_button);
         Button delete=findViewById(R.id.detail_delete_button);
 
-
+        //userQR= new ArrayList<>();
         qrcode = (QRCode) getIntent().getSerializableExtra("qrCode");
         userName = (String) getIntent().getStringExtra("Username");
 
@@ -62,8 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RRG", "checkqrcode2"+qrcode.getHash());
-                deleteQR(qrcode);
+                deleteQR(qrcode.getHash());
                 qrcode.removeUsers(userName);
                 qrcode.removeComments(userName);
                 QRDatabaseController dbAdapter=QRDatabaseController.getInstance();
@@ -84,7 +89,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-    public void deleteQR(QRCode qrCode){
+    public void deleteQR(String hash){
+
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -94,15 +100,39 @@ public class DetailsActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String Username = document.getString("UserNameKey");
                         DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
-                        Log.d("RRG", "checkqrcode3"+qrCode);
-                        docRef2.update("QRCode", FieldValue.arrayRemove(qrCode));
+                        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document2 = task.getResult();
+                                    if (document2.exists()) {
+                                        Map map = document2.getData();
+                                        ArrayList<QRCode> qr = (ArrayList<QRCode>) map.get("QRCode");
+                                            for (int i = 0; i < qr.size(); i++) {
+                                                Map map1 = (Map) qr.get(i);
+                                                String hash2=map1.get("hash").toString();
+                                                if (Objects.equals(hash, hash2)) {
+                                                    docRef2.update("QRCode", FieldValue.arrayRemove(qr.get(i)));
+                                                }
+
+                                            }
+
+
+
+                                        }
+
+                                    }
+                                }
+                            });
+
+                        }
+                    }
 
                     }
-                }
+                });
             }
 
-        });
-    }
+
+
 
 
 

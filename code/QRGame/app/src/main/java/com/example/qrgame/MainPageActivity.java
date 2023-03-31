@@ -228,7 +228,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             // user list
                             if (!(qrCode.getUsers()).contains(currUser)) {
                                 qrCode.addUsers(currUser);
-                                Log.d("RRG", "checkqr"+qrCode);
+                                Log.d("RRG", "checkqr1"+qrCode);
                                 addQR(qrCode);
                                 alreadyScanned = false;
                             }

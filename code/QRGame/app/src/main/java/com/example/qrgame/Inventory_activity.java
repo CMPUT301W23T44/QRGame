@@ -211,7 +211,7 @@ public class Inventory_activity extends AppCompatActivity {
 
                 Intent intent =new Intent(Inventory_activity.this, DetailsActivity.class);
                 intent.putExtra("qrCode",QrDataList.get(i));
-                Log.d("RRG", "checkqrcode"+QrDataList.get(i));
+                Log.d("RRG", "checkqrcodesss"+QrDataList.get(i).toString());
                 intent.putExtra("scanned", true);
                 intent.putExtra("Username", currUser);
 
