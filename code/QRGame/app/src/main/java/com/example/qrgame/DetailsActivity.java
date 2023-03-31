@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+
+import java.util.HashMap;
 import java.util.Map;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,13 +33,26 @@ public class DetailsActivity extends AppCompatActivity {
 
     private  QRCode qrcode;
     private String userName;
+
     private ArrayList<QRCode>  qr;
-    private QRCode q;
+
+    private CommentAdapter adapter;
+    private ListView commentList;
+    private HashMap<String ,String> commentMap;
+    private ArrayList<Comment> commentData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        commentList=findViewById(R.id.details_comment_list);
+        commentMap=new HashMap<>();
+        commentData=new ArrayList<>();
+        adapter=new CommentAdapter(this,commentData);
+        commentList.setAdapter(adapter);
+
 
 
         TextView qrname=findViewById(R.id.details_name);
@@ -50,6 +67,15 @@ public class DetailsActivity extends AppCompatActivity {
         //userQR= new ArrayList<>();
         qrcode = (QRCode) getIntent().getSerializableExtra("qrCode");
         userName = (String) getIntent().getStringExtra("Username");
+
+        commentMap=qrcode.getComments();
+        if (commentMap!=null) {
+            for (Map.Entry<String, String> entry : commentMap.entrySet()) {
+                Comment com = new Comment(entry.getKey(), entry.getValue());
+                adapter.add(com);
+            }
+        }
+
 
         qrname.setText(qrcode.getName());
         qrScore.setText("Score:"+qrcode.getScore());
