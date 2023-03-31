@@ -3,8 +3,10 @@ package com.example.qrgame;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -96,7 +98,7 @@ public class Inventory_activity extends AppCompatActivity {
                                                                            ArrayList<QRCode> qrcode = (ArrayList<QRCode>) map.get("QRCode");
 
 
-                                                                           if (qrcode !=null) {
+                                                                           if (qrcode !=null && qrcode.size()!=0) {
                                                                                for (int i = 0; i < qrcode.size(); i++) {
                                                                                    Map map1 = (Map) qrcode.get(i);
                                                                                    int score = ((Long) map1.get("score")).intValue();
@@ -215,7 +217,7 @@ public class Inventory_activity extends AppCompatActivity {
                 intent.putExtra("Username", currUser);
 
 
-                startActivity(intent);
+                startActivityForResult(intent,10);
 
 
 
@@ -230,6 +232,7 @@ public class Inventory_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(Inventory_activity.this,MainPageActivity.class);
+                intent.putExtra("Username",currUser);
                 startActivity(intent);
             }
         });
@@ -248,6 +251,10 @@ public class Inventory_activity extends AppCompatActivity {
         });
 
 
+
+
+
+
     }
 
     /**
@@ -262,29 +269,29 @@ public class Inventory_activity extends AppCompatActivity {
         }
         return total;
     }
-
-    /**
-     * delete one qrcode in usercollection
-     * @param qrCode
-     */
-    public void deleteQR(QRCode qrCode){
-        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String Username = document.getString("UserNameKey");
-                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
-                        docRef2.update("QRCode", FieldValue.arrayRemove(qrCode));
-
-                    }
-                }
-            }
-
-        });
-    }
+//
+//    /**
+//     * delete one qrcode in usercollection
+//     * @param qrCode
+//     */
+//    public void deleteQR(QRCode qrCode){
+//        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+//        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
+//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        String Username = document.getString("UserNameKey");
+//                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+//                        docRef2.update("QRCode", FieldValue.arrayRemove(qrCode));
+//
+//                    }
+//                }
+//            }
+//
+//        });
+//    }
 
     /**
      * Gets device Id
@@ -306,4 +313,38 @@ public class Inventory_activity extends AppCompatActivity {
         String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         return id == null ? "" : id;
     }
-}
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
+        super.onActivityResult(requestCode, resultCode, result);
+        if (resultCode== Activity.RESULT_OK){
+            if (requestCode==10){
+                if (result!=null){
+                    QRCode qrcode;
+                    qrcode = (QRCode) result.getSerializableExtra("qrcode");
+                    int index = 0;
+                    for (int i=0;i< QrDataList.size();++i){
+                        if (QrDataList.get(i).getHash()==qrcode.getHash()){
+                            index=i;
+                        }
+                    }
+                    System.out.println("iciiiiiiiiiiiiiiiiiiiiii index:"+index);
+                    QrDataList.remove(index);
+                    totalPoints = GetTotalPoints();
+                    TextView totalPoint=findViewById(R.id.inventory_total_score);
+                    TextView totalQr=findViewById(R.id.inventory_total_amount);
+
+                    totalPoint.setText("Total score: " + totalPoints);
+                    totalQr.setText("Total QR codes: " + QrDataList.size());
+                    QrAdapter.notifyDataSetChanged();
+
+
+                }
+            }
+        }
+    }
+
+
+    }

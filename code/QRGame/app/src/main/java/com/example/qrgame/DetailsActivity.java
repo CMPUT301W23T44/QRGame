@@ -3,6 +3,7 @@ package com.example.qrgame;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -99,8 +100,11 @@ public class DetailsActivity extends AppCompatActivity {
                 QRDatabaseController dbAdapter=QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrcode);
 
-                Intent intent =new Intent(DetailsActivity.this,Inventory_activity.class);
-                startActivity(intent);
+                Intent intent =new Intent();
+                intent.putExtra("qrcode",qrcode);
+                setResult(Activity.RESULT_OK,intent);
+                finish();
+//                startActivity(intent);
             }
         });
 
