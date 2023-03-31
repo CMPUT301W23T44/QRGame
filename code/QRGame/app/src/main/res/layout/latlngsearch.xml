@@ -8,8 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Type in name please" />
-
+        android:inputType="number|numberDecimal"
+        android:hint="latitude" />
+    <EditText
+        android:id="@+id/longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number|numberDecimal"
+        android:hint="longitude" />
 
 
 </LinearLayout>
