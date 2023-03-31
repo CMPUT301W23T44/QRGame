@@ -55,65 +55,28 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     LocationManager locationManager;
     String latitude, longitude;
     private static final int REQUEST_LOCATION = 1;
-
-    LatLng sydney = new LatLng(-34, 151);
-    LatLng TamWorth = new LatLng(-31.083332, 150.916672);
-    LatLng NewCastle = new LatLng(-32.916668, 151.750000);
-    LatLng Brisbane = new LatLng(-27.470125, 153.021072);
-    LatLng Near1 = new LatLng(54, -114);
-    LatLng Near2 = new LatLng(55, -115);
-    LatLng Near3 = new LatLng(56, -114);
-    LatLng Near4 = new LatLng(57, -115);
     GoogleMap mGoogleMap;
-    SupportMapFragment mapFrag;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    FusedLocationProviderClient mFusedLocationClient;
-    private static final int REQUEST_CODE = 101;
     private ArrayList<LatLng> locationArrayList;
     private ArrayList<String> locationnameArrayList;
-
     private ArrayList<Float> distanceList;
     private ArrayList<Float> distanceList10;
-
     private FloatingActionButton addQr_button;
     private Button inventory_button;
-    private Context mContext;
     private Button search_button;
-
     private Button social_button;
     private Button logout_button;
     FirebaseFirestore firebaseDatabase;
-
     private final int QR_SCANNER_REQUEST = 0;
-    private final int INVENTORY_REQUEST = 1;
-    private final int SOCIAL_REQUEST = 2;
-
     // Name and face of MissingNo
     private final String MISSINGNONAME = "MissingNo";
     private final String MISSINGNOFACE = "   |-------|\n   |       |\n   |       |\n   |       |\n" +
             "|          |\n|          |\n|          |\n|----------|";
-
     private String currUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         locationArrayList = new ArrayList<>();
         locationnameArrayList = new ArrayList<>();
-
-
-
-
-//        locationArrayList.add(sydney);
-//        locationArrayList.add(TamWorth);
-//        locationArrayList.add(NewCastle);
-//        locationArrayList.add(Brisbane);
-//        locationArrayList.add(Near1);
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
@@ -142,19 +105,14 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
             fireStore.collection("LoginUser").document(deviceId).delete();
             startActivity(login_page);
         });
-
-
         addQr_button = findViewById(R.id.add_qr);
         Intent qr_scanner = new Intent(this, QRScannerActivity.class);
         // Player chose to add a QR code
         addQr_button.setOnClickListener(view -> startActivityForResult(qr_scanner, QR_SCANNER_REQUEST));
-
         inventory_button = findViewById(R.id.inventory_button);
         Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
         inventory_button.setOnClickListener(view -> startActivity(inventory));
-
         social_button = findViewById(R.id.social_button);
-
         social_button.setOnClickListener(view -> {
             Intent social_page = new Intent(MainPageActivity.this, Social.class);
             startActivity(social_page);
@@ -340,14 +298,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         CollectionReference test_value = firebaseDatabase.collection("qrCodes");
         mGoogleMap = googleMap;
         locationnameArrayList.add("current");
-
-        //String deviceId = getUdid();
-        //mContext = getContext();
-
-//        locationArrayList.add(Near2);
-//        locationArrayList.add(Near3);
-//        locationArrayList.add(Near4);
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -359,8 +309,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
             return;
         }
         mGoogleMap.setMyLocationEnabled(true);
-
-
         test_value
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -370,12 +318,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                         if (task.isSuccessful()) {
                             List<Float> lists = new ArrayList<Float>();
-                            //locationArrayList = new ArrayList<>();
                             List<Float> lists1 = new ArrayList<Float>();
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-//                                value = task.getResult().getDocuments().get(0).getGeoPoint("latLng");
-//                                value = ((HashMap<String, Object>) document.getData().get("latLng"));
-
                                 String test = "test";//"(String) document.get("latLng");""
                                 test += document.get("latLng");
                                 String[] temp;
@@ -393,19 +337,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                                 locationnameArrayList.add(document.getString("name"));
                                 //Toast.makeText(MainPageActivity.this, document.getString("name") , Toast.LENGTH_SHORT).show();
                                 locationArrayList.add(qrcode);
-                                //value += " location: ";
-//                                        GeoPoint loc1 = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lot));
-
-
-                                //value += document.getString("location_test_string");Hallowed Bleismita
-                                //Toast.makeText(Map.this.getContext(), value, Toast.LENGTH_SHORT).show();Industrious Tryedeght
                             }
-/*                            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                                OnGPS();
-                            } else {
-                                getLocation();*/
-                            //locationArrayList.add(getLocation());
-
                             distanceList = new ArrayList<>();
                             distanceList10 = new ArrayList<>();
                             for (int i = 1; i < locationArrayList.size() - 1; i++) {
@@ -418,13 +350,12 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                             }
                             Collections.sort(lists);
-//                            if (lists.size() > 9) {
-//                                lists1 = lists.subList(0, 10);
-//                            } else {
-//                                lists1 = lists;
-//                            }
-                            lists1 = lists;
-
+                            if (lists.size() > 9) {
+                                lists1 = lists.subList(0, 10);
+                            } else {
+                                lists1 = lists;
+                            }
+//                            lists1 = lists;
 
                             for (int i = 1; i < locationArrayList.size() - 1; i++) {
                                 LatLng loc1 = locationArrayList.get(i);
@@ -437,68 +368,16 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
                                     // below line is use to move our camera to the specific location.
                                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
-
                                 }
                             }
                             ActivityCompat.requestPermissions(MainPageActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
                             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-//                            Intent intent = new Intent(Map.this.getContext(), Activity.class);
-//                            intent.putExtra("name",task.getResult().getDocuments().get(0).getString("name"));
-//                            startActivity(intent);
-
-
                         } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            Toast.makeText(MainPageActivity.this, "Unable to connect to database" , Toast.LENGTH_SHORT).show();
                         }
                     }
-//                            });
-
-
                 });
-//        ActivityCompat.requestPermissions(this,
-//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            OnGPS();
-//        } else {
-//            getLocation();
-//        }
-//
-//
-//        distanceList = new ArrayList<>();
-//        distanceList10 = new ArrayList<>();
-//        for (int i = 0; i < locationArrayList.size() - 2; i++) {
-//            LatLng loc1 = locationArrayList.get(i);
-//            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
-//            float[] distanceResult = new float[1];
-//            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
-//            float distanceInMeters = distanceResult[0];
-//            lists.add(distanceInMeters);
-//
-//        }
-//        Collections.sort(lists);
-//        if (lists.size() > 9) {
-//            lists1 = lists.subList(0, 10);
-//        } else {
-//            lists1 = lists;
-//        }
-//
-//        for (int i = 0; i < locationArrayList.size() - 2; i++) {
-//            LatLng loc1 = locationArrayList.get(i);
-//            LatLng loc2 = locationArrayList.get(locationArrayList.size() - 1);
-//            float[] distanceResult = new float[1];
-//            Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, distanceResult);
-//            float distanceInMeters = distanceResult[0];
-//            if (lists1.contains(distanceInMeters)) {
-//                googleMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).title("Marker"));
-//                googleMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
-//                // below line is use to move our camera to the specific location.
-//                googleMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList.get(i)));
-//
-//            }
-//        }
+
     }
 }
