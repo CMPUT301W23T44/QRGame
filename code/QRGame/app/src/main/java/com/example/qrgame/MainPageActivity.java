@@ -65,6 +65,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private Button search_button;
     private Button social_button;
     private Button logout_button;
+    private Button search_Latlng_button;
     FirebaseFirestore firebaseDatabase;
     private final int QR_SCANNER_REQUEST = 0;
     // Name and face of MissingNo
@@ -81,7 +82,10 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.main_page);
         logout_button = findViewById(R.id.logout_button);
         currUser = (String) getIntent().getStringExtra("Username");
-
+        search_Latlng_button = findViewById(R.id.searchlatLng);
+        search_Latlng_button.setOnClickListener(v -> {
+            new LatlngSearch().show(getSupportFragmentManager(), "Search QRCode");
+        });
         search_button = findViewById(R.id.search);
         search_button.setOnClickListener(v -> {
             new Map().show(getSupportFragmentManager(), "Search QRCode");
