@@ -36,7 +36,7 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
         setContentView(R.layout.save_surrounding_picture_activity);
 
         imageView = findViewById(R.id.imageview);
-        nextButton = findViewById(R.id.details_back_button);
+        nextButton = findViewById(R.id.finish_button);
         backButton = findViewById(R.id.back_button);
 
         // Request permission to use the camera if permission is not already granted
@@ -46,9 +46,13 @@ public class SaveSurroundingPictureActivity extends AppCompatActivity {
                     Manifest.permission.CAMERA
             }, REQUEST_CODE);
         }
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CODE);
+        if (!TestingMode.testingMode) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CODE);
+        } else {
+            // Used for units tests
+            imageView.setImageBitmap(TestingMode.MockExistingQRCode().getLocationImageBitmap());
+        }
 
         nextButton.setOnClickListener(view -> finish());
 

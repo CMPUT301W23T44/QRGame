@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -37,7 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView image=findViewById(R.id.details_surrounding_image);
 
 
-        Button back=findViewById(R.id.details_back_button);
+        Button back=findViewById(R.id.finish_button);
         Button delete=findViewById(R.id.detail_delete_button);
 
 
