@@ -59,7 +59,7 @@ public class QRCode implements Comparable, Serializable {
 
     public QRCode(int score, String hash, String name, String face, double latitude, double longitude,
                   ArrayList<String> users, HashMap comments, String location_image) {
-        this.score = score;
+        this.score = Math.max(score, 0);
         this.hash = hash;
         this.name = name;
         this.face = face;
@@ -70,13 +70,18 @@ public class QRCode implements Comparable, Serializable {
     }
 
     public void addUsers(String uid) {
-        users.add(uid);
+        if (!uid.equals("")) {
+            users.add(uid);
+        }
+
     }
     public void removeUsers(String uid) {
         users.remove(uid);
     }
     public void addComments(String userName, String comment) {
-        comments.put(userName, comment);
+        if (!userName.equals("")) {
+            comments.put(userName, comment);
+        }
     }
     public void removeComments(String userName) {
         comments.remove(userName);
@@ -178,8 +183,7 @@ public class QRCode implements Comparable, Serializable {
     @Override
     public int compareTo(Object o) {
         QRCode qrCode = (QRCode) o;
-        return ((Integer) this.getScore())
-                .compareTo((Integer) qrCode.getScore());
+        return Integer.compare(this.getScore(), qrCode.getScore());
     }
 }
 

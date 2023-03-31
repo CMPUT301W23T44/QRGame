@@ -1,5 +1,9 @@
 package com.example.qrgame;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 /**
@@ -37,5 +41,12 @@ public class User {
     public ArrayList<QRCode> getQrcode() {
         return qrcode;
     }
+
+    public static void addQRCode(QRCode qrCode, String userName) {
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        DocumentReference docRef2 = fireStore.collection("UserCollection").document(userName);
+        docRef2.update("QRCode", FieldValue.arrayUnion(qrCode));
+    }
 }
+
 

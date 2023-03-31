@@ -207,62 +207,74 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                     // If the QR code did not have any data, a generic QR code is displayed
                     MISSINGNO();
                 }
+                showInfo();
 
-                // Get instance of the database
-                QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
-
-                /*
-                 Find the QR code and perform actions based on if it exists
-                 LOOK HERE FOR EXAMPLE OF DATABASE
-                */
-                dbAdapter.findQR(hash, qrExists -> {
-                    Log.d("TestQR", String.valueOf(qrExists));
-                    if (qrExists) {
-                        // If the QR code exists, the code is retrieved from the database and
-                        // updated
-
-                        dbAdapter.getQRCode(hash, qrCode -> {
-                            Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
-                            boolean alreadyScanned = true;
-                            // If the user has not scanned the QR code yet, they are added to the
-                            // user list
-                            if (!(qrCode.getUsers()).contains(currUser)) {
-                                qrCode.addUsers(currUser);
-                                addQR(qrCode);
-                                alreadyScanned = false;
-                            }
-
-                            qrInfoIntent.putExtra("qrCode", qrCode);
-                            qrInfoIntent.putExtra("Username", currUser);
-                            qrInfoIntent.putExtra("scanned", alreadyScanned);
-                            // Display the QR code information
-                            startActivity(qrInfoIntent);
-                        });
-
-                    } else {
-                        // If the QR code does not exist yet, a new one is created
-                        Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
-                        newQRCodeInfoIntent.putExtra("Username", currUser);
-
-                        // Get current location for if the user wants to save it with the QR code
-                        LatLng currLocation = getLocation();
-                        newQRCodeInfoIntent.putExtra("latitude", (Double) currLocation.latitude);
-                        newQRCodeInfoIntent.putExtra("longitude", (Double) currLocation.longitude);
-
-                        // New QR code is created and the user is added to the user list
-                        QRCode qrCode = new QRCode(hash);
-                        qrCode.addUsers(currUser);
-                        newQRCodeInfoIntent.putExtra("qrCode", qrCode);
-
-                        // Display the QR code information
-                        startActivity(newQRCodeInfoIntent);
-                    }
-                });
             } else if (resultCode == RESULT_CANCELED) {
                 // If the user cancelled the scanner, the default QR code is displayed
-                MISSINGNO();
+                if (!TestingMode.testingMode) {
+                    MISSINGNO();
+                } else {
+                    // Used for unit tests
+                    currUser = TestingMode.testUser;
+                    hash = TestingMode.hash;
+                    showInfo();
+                }
             }
         }
+    }
+
+    /**
+     * Shows details of scanned QR codes
+     */
+    private void showInfo() {
+        // Get instance of the database
+        QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
+        /*
+        Find the QR code and perform actions based on if it exists
+        LOOK HERE FOR EXAMPLE OF DATABASE
+        */
+        dbAdapter.findQR(hash, qrExists -> {
+            Log.d("TestQR", String.valueOf(qrExists));
+            if (qrExists) {
+                // If the QR code exists, the code is retrieved from the database and
+                // updated
+
+                dbAdapter.getQRCode(hash, qrCode -> {
+                    Intent qrInfoIntent = new Intent(MainPageActivity.this, ExistingQRInfoActivity.class);
+                    boolean alreadyScanned = true;
+                    // If the user has not scanned the QR code yet, they are added to the
+                    // user list
+                    if (!(qrCode.getUsers()).contains(currUser)) {
+                        qrCode.addUsers(currUser);
+                        alreadyScanned = false;
+                    }
+
+                    qrInfoIntent.putExtra("qrCode", qrCode);
+                    qrInfoIntent.putExtra("Username", currUser);
+                    qrInfoIntent.putExtra("scanned", alreadyScanned);
+                    // Display the QR code information
+                    startActivity(qrInfoIntent);
+                });
+
+            } else {
+                // If the QR code does not exist yet, a new one is created
+                Intent newQRCodeInfoIntent = new Intent(MainPageActivity.this, NewQRInfoActivity.class);
+                newQRCodeInfoIntent.putExtra("Username", currUser);
+
+                // Get current location for if the user wants to save it with the QR code
+                LatLng currLocation = getLocation();
+                newQRCodeInfoIntent.putExtra("latitude", (Double) currLocation.latitude);
+                newQRCodeInfoIntent.putExtra("longitude", (Double) currLocation.longitude);
+
+                // New QR code is created and the user is added to the user list
+                QRCode qrCode = new QRCode(hash);
+                qrCode.addUsers(currUser);
+                newQRCodeInfoIntent.putExtra("qrCode", qrCode);
+
+                // Display the QR code information
+                startActivity(newQRCodeInfoIntent);
+            }
+        });
     }
 
     /**
@@ -302,28 +314,6 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     public String getUdid() {
         String androidID = AndroidID();
         return "2" + UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-", "");
-    }
-    /**
-     * add QRcode in UserCollection
-     * @param qrCode
-     */
-    public void addQR(QRCode qrCode){
-        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String Username = document.getString("UserNameKey");
-                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
-                        docRef2.update("QRCode", FieldValue.arrayUnion(qrCode));
-
-                    }
-                }
-            }
-
-        });
     }
 
     public void onMapReady(@NonNull GoogleMap googleMap) {
