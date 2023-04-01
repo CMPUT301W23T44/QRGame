@@ -1,5 +1,6 @@
 package com.example.qrgame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class CommentAdapter extends ArrayAdapter {
         super(context, 0,comments);
     }
 
+    @SuppressLint("ResourceAsColor")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -41,8 +43,8 @@ public class CommentAdapter extends ArrayAdapter {
 
         Comment item=(Comment)getItem(position);
 
-        point.setText("comment:"+item.getComment());
-        name.setText("name:"+item.getName());
+        point.setText("Comment: "+item.getComment());
+        name.setText("Username: "+item.getName());
 
 
 

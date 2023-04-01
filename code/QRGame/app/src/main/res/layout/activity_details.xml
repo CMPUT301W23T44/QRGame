@@ -12,16 +12,18 @@
         android:layout_width="165dp"
         android:layout_height="218dp"
         android:layout_centerInParent="true"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginStart="12dp"
         android:background="@color/white"
         android:gravity="center"
         android:padding="25dp"
         android:text="@string/image"
         android:textColor="@color/black"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/details_surrounding_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.164" />
 
     <Button
         android:id="@+id/finish_button"
@@ -39,7 +41,6 @@
         android:id="@+id/details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="172dp"
         android:layout_marginEnd="172dp"
         android:layout_marginBottom="22dp"
         android:text="@string/name"
@@ -47,7 +48,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/details_score"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.927" />
 
     <TextView
         android:id="@+id/details_score"
@@ -55,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
         android:layout_marginEnd="183dp"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="76dp"
         android:text="@string/score"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -68,11 +72,12 @@
         android:id="@+id/details_surrounding_image"
         android:layout_width="182dp"
         android:layout_height="228dp"
-        android:layout_marginTop="112dp"
         android:layout_marginEnd="16dp"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.165"
         app:srcCompat="@drawable/button_shape"
         tools:visibility="visible" />
 
