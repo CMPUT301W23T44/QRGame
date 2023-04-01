@@ -45,7 +45,6 @@ public class LatlngSearch extends DialogFragment {
 
     private Context mContext;
     FirebaseFirestore firebaseDatabase;
-    private String value;
     private int count;
 
     @SuppressLint("MissingInflatedId")
@@ -75,7 +74,8 @@ public class LatlngSearch extends DialogFragment {
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
                                         for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                            String test = "test";//"(String) document.get("latLng");""
+                                            //get the QRCode location and convert to Latlng
+                                            String test = "test";
                                             test += document.get("latLng");
                                             String[] temp;
                                             String[] temp1;
@@ -88,21 +88,22 @@ public class LatlngSearch extends DialogFragment {
                                             lat = temp1[0].split(",");
                                             String lata = lat[0];
                                             lot = temp[2].substring(0,temp[2].length()-1);
+                                            //If the lat and lot are different by the search <1, add it to nearby QRCodes
                                             if((Double.valueOf(lata) - lat1) < 1 ){
                                                 if((Double.valueOf(lot) - lot1) < 1){
                                                     count += 1;
                                                 }
-
                                             }
-                                            value = document.getString("name");
-                                            value += " location: ";
                                         }
-                                        //value += document.getString("location_test_string");
+                                        //make a toast of how many QRCodes founded
                                         Toast.makeText(mContext, "There are "+String.valueOf(count)+" Qrcodes near this location", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+                                        //make a toast if database cannot load
+                                        Toast.makeText(mContext, "Database load error", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-
-//                            });
 
                             });
 
