@@ -35,7 +35,7 @@ import java.util.UUID;
 
 
 /**
-* keep track of all Qrcodes scanned by user and allow to view details and delete Qrcode
+ * keep track of all Qrcodes scanned by user and allow to view details and delete Qrcode
  */
 public class Inventory_activity extends AppCompatActivity {
 
@@ -77,64 +77,63 @@ public class Inventory_activity extends AppCompatActivity {
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                               @Override
-                                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                   if (task.isSuccessful()) {
-                                                       DocumentSnapshot document = task.getResult();
-                                                       if (document.exists()) {
-                                                           String Username = document.getString("UserNameKey");
-                                                           DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
-                                                           docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                                   if (task.isSuccessful()) {
-                                                                       DocumentSnapshot document2 = task.getResult();
-                                                                       if (document2.exists()) {
-                                                                           Map map = document2.getData();
-                                                                           String androidKey = (String) map.get("AndroidKey");
-                                                                           String phone = (String) map.get("PhoneKey");
-                                                                           String usern = (String) map.get("UserNameKey");
-                                                                           ArrayList<QRCode> qrcode = (ArrayList<QRCode>) map.get("QRCode");
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String Username = document.getString("UserNameKey");
+                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
+                        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document2 = task.getResult();
+                                    if (document2.exists()) {
+                                        Map map = document2.getData();
+                                        String androidKey = (String) map.get("AndroidKey");
+                                        String phone = (String) map.get("PhoneKey");
+                                        String usern = (String) map.get("UserNameKey");
+                                        ArrayList<QRCode> qrcode = (ArrayList<QRCode>) map.get("QRCode");
 
 
-                                                                           if (qrcode !=null) {
-                                                                               for (int i = 0; i < qrcode.size(); i++) {
-                                                                                   Map map1 = (Map) qrcode.get(i);
-                                                                                   int score = ((Long) map1.get("score")).intValue();
-                                                                                   String hash = (String) map1.get("hash");
+                                        if (qrcode !=null) {
+                                            for (int i = 0; i < qrcode.size(); i++) {
+                                                Map map1 = (Map) qrcode.get(i);
+                                                int score = ((Long) map1.get("score")).intValue();
+                                                String hash = (String) map1.get("hash");
 //
 
-                                                                                   dbAdapter.getQRCode(hash, qrCode -> {
-                                                                                       QrAdapter.add(qrCode);
-                                                                                       totalPoints = GetTotalPoints();
-                                                                                       totalPoint.setText("Total score: " + totalPoints);
-                                                                                       totalQr.setText("Total QR codes: " + QrDataList.size());
-                                                                                   });
+                                                dbAdapter.getQRCode(hash, qrCode -> {
+                                                    QrAdapter.add(qrCode);
+                                                    totalPoints = GetTotalPoints();
+                                                    totalPoint.setText("Total score: " + totalPoints);
+                                                    totalQr.setText("Total QR codes: " + QrDataList.size());
+                                                });
 
 
-                                                                               }
-                                                                           }else{
-                                                                               totalPoint.setText("Total score: " + 0);
-                                                                               totalQr.setText("Total QR codes: " +0);
-                                                                           }
+                                            }
+                                        }else{
+                                            totalPoint.setText("Total score: " + 0);
+                                            totalQr.setText("Total QR codes: " +0);
+                                        }
 
 
 
 
-                                                                            QrAdapter.notifyDataSetChanged();
-                                                                           User user = new User(usern, phone, androidKey, qrcode);
-                                                                           Log.d("RRG", "check1"+user.getQrcode());
-                                                                           username.setText("username:" + user.getUsername());
+                                        QrAdapter.notifyDataSetChanged();
+                                        User user = new User(usern, phone, androidKey, qrcode);
+                                        Log.d("RRG", "check1"+user.getQrcode());
+                                        username.setText("username:" + user.getUsername());
 
-                                                                       }
-                                                                   }
-                                                               }
-                                                           });
-                                                           //
-                                                       }
-                                                   }
-                                               }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
 
-                                           });
+        });
 
 
 //
@@ -212,6 +211,7 @@ public class Inventory_activity extends AppCompatActivity {
 
                 Intent intent =new Intent(Inventory_activity.this, DetailsActivity.class);
                 intent.putExtra("qrCode",QrDataList.get(i));
+                Log.d("RRG", "checkqrcodesss"+QrDataList.get(i).toString());
                 intent.putExtra("scanned", true);
                 intent.putExtra("Username", currUser);
 
@@ -241,7 +241,7 @@ public class Inventory_activity extends AppCompatActivity {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // QrDataList.sort(((o1, o2) -> o1.getScore().compareTo(o2.getScore())));
+                // QrDataList.sort(((o1, o2) -> o1.getScore().compareTo(o2.getScore())));
                 Collections.sort(QrDataList,Comparator.comparing(QRCode::getScore));
                 Collections.reverse(QrDataList);
                 QrAdapter.notifyDataSetChanged();
