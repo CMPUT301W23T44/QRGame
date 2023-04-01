@@ -47,7 +47,7 @@ public class Scoreboard extends AppCompatActivity {
         ScAdapter = new ScoreboardAdapter(this,ScList);
         ScoreboardList.setAdapter(ScAdapter);
 
-        String currentUsername = (String) getIntent().getStringExtra("currUser");
+        String currentUsername = (String) getIntent().getStringExtra("Username");
 
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         CollectionReference collection = fireStore.collection("UserCollection");

@@ -120,6 +120,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         scoreboard_button = findViewById(R.id.scoreboard_button);
         scoreboard_button.setOnClickListener(view -> {
             Intent scoreboard_page = new Intent(MainPageActivity.this, Scoreboard.class);
+            scoreboard_page.putExtra("Username", currUser);
             startActivity(scoreboard_page);
         });
     }
