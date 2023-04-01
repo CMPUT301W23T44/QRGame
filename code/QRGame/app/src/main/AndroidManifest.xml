@@ -79,10 +79,16 @@
             android:name=".DetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Social"
+            android:name=".ExistingQRInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ExistingQRInfoActivity"
+            android:name=".Scoreboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchQR"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchUser"
             android:screenOrientation="portrait" />
     </application>
 

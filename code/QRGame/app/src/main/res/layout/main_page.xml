@@ -66,12 +66,12 @@
             app:layout_constraintVertical_bias="0.29" />
 
         <Button
-            android:id="@+id/social_button"
+            android:id="@+id/scoreboard_button"
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
-            android:text="Social"
+            android:text="Scoreboard"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.508"

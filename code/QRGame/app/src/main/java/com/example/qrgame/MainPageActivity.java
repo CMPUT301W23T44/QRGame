@@ -63,7 +63,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
     private FloatingActionButton addQr_button;
     private Button inventory_button;
     private Button search_button;
-    private Button social_button;
+    private Button scoreboard_button;
     private Button logout_button;
     private Button search_Latlng_button;
     FirebaseFirestore firebaseDatabase;
@@ -117,10 +117,10 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         Intent inventory = new Intent(MainPageActivity.this, Inventory_activity.class);
         inventory.putExtra("Username", currUser);
         inventory_button.setOnClickListener(view -> startActivity(inventory));
-        social_button = findViewById(R.id.social_button);
-        social_button.setOnClickListener(view -> {
-            Intent social_page = new Intent(MainPageActivity.this, Social.class);
-            startActivity(social_page);
+        scoreboard_button = findViewById(R.id.scoreboard_button);
+        scoreboard_button.setOnClickListener(view -> {
+            Intent scoreboard_page = new Intent(MainPageActivity.this, Scoreboard.class);
+            startActivity(scoreboard_page);
         });
     }
 
