@@ -31,8 +31,8 @@ public class ScoreboardAdapter extends ArrayAdapter {
         }
         ScoreRank item=(ScoreRank) getItem(position);
 
-        TextView score=view.findViewById(R.id.scoreboard_ct_score);
-        TextView name=view.findViewById(R.id.scoreboard_ct_name);
+        TextView score = view.findViewById(R.id.scoreboard_ct_score);
+        TextView name = view.findViewById(R.id.scoreboard_ct_name);
         TextView rank = view.findViewById(R.id.scoreboard_ct_rank);
 
 

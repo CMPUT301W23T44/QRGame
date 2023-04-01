@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,16 +30,24 @@ public class Scoreboard extends AppCompatActivity {
 
     private ScoreboardAdapter ScAdapter;
 
+    private TextView currentUserRank;
+
+    private TextView currentUserScore;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scoreboard);
+
+        currentUserRank = findViewById(R.id.cur_rank);
+        currentUserScore = findViewById(R.id.cur_score);
 
         ScList = new ArrayList<>();
         ScoreboardList = findViewById(R.id.scoreboard_list);
         ScAdapter = new ScoreboardAdapter(this,ScList);
         ScoreboardList.setAdapter(ScAdapter);
 
+        String currentUsername = (String) getIntent().getStringExtra("currUser");
 
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         CollectionReference collection = fireStore.collection("UserCollection");
@@ -71,6 +80,13 @@ public class Scoreboard extends AppCompatActivity {
                         for(int index = 0; index < ScAdapter.getCount();index++)
                         {
                             ScList.get(index).SetRank(index+1);
+                        }
+
+                        for (int index = 0; index < ScAdapter.getCount(); index++) {
+                            if (ScList.get(index).GetName().equals(currentUsername)) {
+                                currentUserRank.setText("Your Rank: " + ScList.get(index).GetRankString());
+                                currentUserScore.setText("Your Score: " + ScList.get(index).GetScoreInt());
+                            }
                         }
 
                         ScAdapter.notifyDataSetChanged();

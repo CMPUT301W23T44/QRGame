@@ -1,7 +1,12 @@
 package com.example.qrgame;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +32,7 @@ public class SearchQR extends AppCompatActivity {
 
     ArrayList<QRCode> qrcode;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,26 @@ public class SearchQR extends AppCompatActivity {
         TextView searchqrtotalamount = findViewById(R.id.searchqr_amount);
         EditText searchqrinputname = findViewById(R.id.searchqr_searchqr);
         Button search = findViewById(R.id.searchqr_search);
+        Button ViewDetail = findViewById(R.id.searchqr_detail);
+        ViewDetail.setEnabled(false);
+
+
+        searchqrinputname.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        searchqrinputname.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchqrinputname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    search.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
+
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +91,14 @@ public class SearchQR extends AppCompatActivity {
                                             Map map = document.getData();
                                             ArrayList<String> users = (ArrayList<String>) map.get("users");
                                             searchqrtotalamount.setText("Total Amount Scanned:  " + users.size());
+                                            ViewDetail.setEnabled(true);
                                             break;
                                         }
                                     }
 
                                     if (!qrCodeFound) {
                                         Toast.makeText(SearchQR.this, "Invalid QR Code name.", Toast.LENGTH_SHORT).show();
+                                        ViewDetail.setEnabled(false);
                                     }
                                 }
                             }
@@ -83,6 +111,24 @@ public class SearchQR extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SearchQR.super.onBackPressed();
+            }
+        });
+
+
+        ViewDetail.setOnClickListener(view -> {
+            Intent qrdetail_page = new Intent(SearchQR.this, SearchQRDetail.class);
+            startActivity(qrdetail_page);
+        });
+
+        ViewDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(SearchQR.this, SearchQRDetail.class);
+
+                String searchqrcodename = searchqrinputname.getText().toString().toLowerCase().replaceAll("\\s+", "");
+
+                intent.putExtra("qrcodename", searchqrcodename);
+                startActivityForResult(intent,10);
             }
         });
 
