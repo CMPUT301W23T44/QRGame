@@ -106,10 +106,12 @@ public class Inventory_activity extends AppCompatActivity {
 //
 
                                                                                    dbAdapter.getQRCode(hash, qrCode -> {
-                                                                                       QrAdapter.add(qrCode);
-                                                                                       totalPoints = GetTotalPoints();
-                                                                                       totalPoint.setText("Total score: " + totalPoints);
-                                                                                       totalQr.setText("Total QR codes: " + QrDataList.size());
+                                                                                       if (qrCode != null) {
+                                                                                           QrAdapter.add(qrCode);
+                                                                                           totalPoints = GetTotalPoints();
+                                                                                           totalPoint.setText("Total score: " + totalPoints);
+                                                                                           totalQr.setText("Total QR codes: " + QrDataList.size());
+                                                                                       }
                                                                                    });
 
 
