@@ -86,6 +86,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(DetailsActivity.this,Inventory_activity.class);
+                intent.putExtra("Username", userName);
                 startActivity(intent);
             }
         });
