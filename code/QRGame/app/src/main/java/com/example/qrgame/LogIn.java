@@ -109,6 +109,10 @@ public class LogIn extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+                if (username.getText().toString().isEmpty() || phone_number.getText().toString().isEmpty()) {
+                    Toast.makeText(getBaseContext(), "Please enter username and phone number" , Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String userName = username.getText().toString();
                 String phoneNumber = phone_number.getText().toString();
                 String androidId = getUdid();

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.util.Objects;
+
 import java.util.UUID;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -34,13 +35,13 @@ public class DetailsActivity extends AppCompatActivity {
     private  QRCode qrcode;
     private String userName;
 
+
     private ArrayList<QRCode>  qr;
 
     private CommentAdapter adapter;
     private ListView commentList;
     private HashMap<String ,String> commentMap;
     private ArrayList<Comment> commentData;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 deleteQR(qrcode.getHash());
                 qrcode.removeUsers(userName);
                 qrcode.removeComments(userName);
@@ -119,8 +121,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-    public void deleteQR(String hash){
 
+    public void deleteQR(String hash){
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -135,6 +137,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document2 = task.getResult();
                                     if (document2.exists()) {
+
                                         Map map = document2.getData();
                                         ArrayList<QRCode> qr = (ArrayList<QRCode>) map.get("QRCode");
                                             for (int i = 0; i < qr.size(); i++) {
@@ -157,11 +160,10 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                     }
 
+
                     }
                 });
             }
-
-
 
 
 

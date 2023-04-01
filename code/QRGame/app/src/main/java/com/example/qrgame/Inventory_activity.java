@@ -37,7 +37,7 @@ import java.util.UUID;
 
 
 /**
-* keep track of all Qrcodes scanned by user and allow to view details and delete Qrcode
+ * keep track of all Qrcodes scanned by user and allow to view details and delete Qrcode
  */
 public class Inventory_activity extends AppCompatActivity {
 
@@ -79,6 +79,7 @@ public class Inventory_activity extends AppCompatActivity {
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
                                                @Override
                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                    if (task.isSuccessful()) {
@@ -124,6 +125,7 @@ public class Inventory_activity extends AppCompatActivity {
 
 
 
+
                                                                             QrAdapter.notifyDataSetChanged();
                                                                            User user = new User(usern, phone, androidKey, qrcode);
                                                                            Log.d("RRG", "check1"+user.getQrcode());
@@ -137,7 +139,7 @@ public class Inventory_activity extends AppCompatActivity {
                                                    }
                                                }
 
-                                           });
+        });
 
 
 //
@@ -215,6 +217,7 @@ public class Inventory_activity extends AppCompatActivity {
 
                 Intent intent =new Intent(Inventory_activity.this, DetailsActivity.class);
                 intent.putExtra("qrCode",QrDataList.get(i));
+                Log.d("RRG", "checkqrcodesss"+QrDataList.get(i).toString());
                 intent.putExtra("scanned", true);
                 intent.putExtra("Username", currUser);
 
@@ -245,7 +248,7 @@ public class Inventory_activity extends AppCompatActivity {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // QrDataList.sort(((o1, o2) -> o1.getScore().compareTo(o2.getScore())));
+                // QrDataList.sort(((o1, o2) -> o1.getScore().compareTo(o2.getScore())));
                 Collections.sort(QrDataList,Comparator.comparing(QRCode::getScore));
                 Collections.reverse(QrDataList);
                 QrAdapter.notifyDataSetChanged();
