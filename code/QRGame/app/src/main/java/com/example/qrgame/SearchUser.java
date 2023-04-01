@@ -1,8 +1,12 @@
 package com.example.qrgame;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,8 +43,21 @@ public class SearchUser extends AppCompatActivity {
         TextView totalsearchuseramount = findViewById(R.id.searchuser_totalamount);
         EditText searchuser = findViewById(R.id.searchuser);
         Button search = findViewById(R.id.searchuser_search);
+        Button ViewDetail = findViewById(R.id.searchuser_viewdetail);
+        ViewDetail.setEnabled(false);
 
-
+        searchuser.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        searchuser.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchuser.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT || (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    search.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,9 +91,11 @@ public class SearchUser extends AppCompatActivity {
                                 totalsearchuserscore.setText("Total Score:  " + total);
 
                                 totalsearchuseramount.setText("Total Amount:  " + qrcode.size());
+                                ViewDetail.setEnabled(true);
 
                             } else {
                                 Toast.makeText(SearchUser.this, "Invalid user! User not found.", Toast.LENGTH_SHORT).show();
+                                ViewDetail.setEnabled(false);
                             }
                         }
                     }
@@ -89,6 +108,24 @@ public class SearchUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SearchUser.super.onBackPressed();
+            }
+        });
+
+
+        ViewDetail.setOnClickListener(view -> {
+            Intent userdetail_page = new Intent(SearchUser.this, SearchUserDetail.class);
+            startActivity(userdetail_page);
+        });
+
+        ViewDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(SearchUser.this, SearchUserDetail.class);
+
+                String searchusername = searchuser.getText().toString();
+
+                intent.putExtra("username", searchusername);
+                startActivityForResult(intent,10);
             }
         });
 

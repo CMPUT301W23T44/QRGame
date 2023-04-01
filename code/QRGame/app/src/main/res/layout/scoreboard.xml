@@ -23,8 +23,8 @@
 
     <ListView
         android:id="@+id/scoreboard_list"
-        android:layout_width="wrap_content"
-        android:layout_height="516dp"
+        android:layout_width="404dp"
+        android:layout_height="387dp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -104,5 +104,30 @@
             android:textAlignment="center"
             android:textSize="34sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/cur_score"
+        android:layout_width="354dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical|left"
+        android:text="Your Score:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cur_rank"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/cur_rank"
+        android:layout_width="354dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center_vertical|left"
+        android:text="Your Rank:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
