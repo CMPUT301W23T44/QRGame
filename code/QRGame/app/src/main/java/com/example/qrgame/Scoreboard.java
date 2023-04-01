@@ -88,11 +88,11 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        /**Button SearchUser = findViewById(R.id.button4);
+        Button SearchUser = findViewById(R.id.button4);
         SearchUser.setOnClickListener(view -> {
             Intent searchuser_page = new Intent(Scoreboard.this, SearchUser.class);
             startActivity(searchuser_page);
-        });**/
+        });
 
         Button SearchQR = findViewById(R.id.button3);
         SearchQR.setOnClickListener(view -> {
