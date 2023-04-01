@@ -109,7 +109,7 @@ public class Inventory_activity extends AppCompatActivity {
                                                                                        if (qrCode != null) {
                                                                                            QrAdapter.add(qrCode);
                                                                                            totalPoints = GetTotalPoints();
-                                                                                           totalPoint.setText("Total score: " + totalPoints);
+                                                                                           totalPoint.setText("Score: " + totalPoints);
                                                                                            totalQr.setText("Total QR codes: " + QrDataList.size());
                                                                                        }
                                                                                    });
@@ -117,7 +117,7 @@ public class Inventory_activity extends AppCompatActivity {
 
                                                                                }
                                                                            }else{
-                                                                               totalPoint.setText("Total score: " + 0);
+                                                                               totalPoint.setText("Score: " + 0);
                                                                                totalQr.setText("Total QR codes: " +0);
                                                                            }
 
@@ -127,7 +127,7 @@ public class Inventory_activity extends AppCompatActivity {
                                                                             QrAdapter.notifyDataSetChanged();
                                                                            User user = new User(usern, phone, androidKey, qrcode);
                                                                            Log.d("RRG", "check1"+user.getQrcode());
-                                                                           username.setText("username:" + user.getUsername());
+                                                                           username.setText("Username: " + user.getUsername());
 
                                                                        }
                                                                    }
