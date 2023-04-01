@@ -314,7 +314,12 @@ public class Inventory_activity extends AppCompatActivity {
         return id == null ? "" : id;
     }
 
-
+    /**
+     *
+     * @param requestCode Activity result
+     * @param resultCode Activity result
+     * @param result  Activity result
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent result) {
