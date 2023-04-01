@@ -30,6 +30,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+// Made by Alex Huo
+// The SearchUser class is an activity that allows users to search for a specific user by their username
+// Display the total score and the total number of QR codes scanned by the user
+// Navigate to a detailed view with more information about the user.
+
 public class SearchUser extends AppCompatActivity {
     ArrayList<QRCode> qrcode;
 
@@ -38,6 +43,7 @@ public class SearchUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchuser);
 
+        // Initialize
         TextView usern = findViewById(R.id.searchuser_username);
         TextView totalsearchuserscore = findViewById(R.id.searchuser_totalscore);
         TextView totalsearchuseramount = findViewById(R.id.searchuser_totalamount);
@@ -45,9 +51,10 @@ public class SearchUser extends AppCompatActivity {
         Button search = findViewById(R.id.searchuser_search);
         Button ViewDetail = findViewById(R.id.searchuser_viewdetail);
         ViewDetail.setEnabled(false);
-
         searchuser.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         searchuser.setInputType(InputType.TYPE_CLASS_TEXT);
+
+
         searchuser.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -59,6 +66,8 @@ public class SearchUser extends AppCompatActivity {
             }
         });
 
+
+        // Set the click listener for the search button
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +80,7 @@ public class SearchUser extends AppCompatActivity {
                     return;
                 }
 
+                // Create a new User object to store search query
                 User checkUser = new User(username, null, null, qrcode);
                 DocumentReference docRef = fireStore.collection("UserCollection").document(checkUser.getUsername());
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -78,6 +88,7 @@ public class SearchUser extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                // Update the TextViews with user information
                                 usern.setText("Username:  " + username);
 
                                 Map map = document.getData();
@@ -88,8 +99,8 @@ public class SearchUser extends AppCompatActivity {
                                     int score = ((Long) map1.get("score")).intValue();
                                     total += score;
                                 }
+                                // Display the total score and total amount of QR codes scanned
                                 totalsearchuserscore.setText("Total Score:  " + total);
-
                                 totalsearchuseramount.setText("Total Amount:  " + qrcode.size());
                                 ViewDetail.setEnabled(true);
 

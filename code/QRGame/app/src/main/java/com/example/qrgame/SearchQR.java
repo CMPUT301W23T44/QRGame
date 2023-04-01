@@ -28,26 +28,30 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Map;
 
+// Made by Alex Huo
+// The SearchQR class is an activity that allows users to search for a specific QR code by its name
+// Display the total number of times the QR code has been scanned
+// Navigate to a detailed view with more information about the QR code.
+
 public class SearchQR extends AppCompatActivity {
 
     ArrayList<QRCode> qrcode;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchqr);
 
+        // Initialize
         TextView searchqroutputname = findViewById(R.id.searchqr_qroutput);
         TextView searchqrtotalamount = findViewById(R.id.searchqr_amount);
         EditText searchqrinputname = findViewById(R.id.searchqr_searchqr);
         Button search = findViewById(R.id.searchqr_search);
         Button ViewDetail = findViewById(R.id.searchqr_detail);
         ViewDetail.setEnabled(false);
-
-
         searchqrinputname.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         searchqrinputname.setInputType(InputType.TYPE_CLASS_TEXT);
+
         searchqrinputname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -59,16 +63,14 @@ public class SearchQR extends AppCompatActivity {
             }
         });
 
-
-
-
-
+        // Set the click listener for the search button
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
                 String searchqrcodename = searchqrinputname.getText().toString().toLowerCase().replaceAll("\\s+", "");
 
+                // Check if the input is empty
                 if (searchqrcodename.isEmpty()) {
                     Toast.makeText(SearchQR.this, "Invalid input! Please enter a QR Code name.", Toast.LENGTH_SHORT).show();
                     return;
@@ -84,10 +86,13 @@ public class SearchQR extends AppCompatActivity {
                                     boolean qrCodeFound = false;
                                     for (DocumentSnapshot document : task.getResult().getDocuments()) {
                                         String databasecodename = document.getString("name").toLowerCase().replaceAll("\\s+", "");
+
+                                        // Check if the search query matches the QR code name in the database
                                         if (searchqrcodename.equals(databasecodename)) {
                                             qrCodeFound = true;
                                             searchqroutputname.setText(document.getString("name"));
 
+                                            // Get the data from the document and update the total amount scanned
                                             Map map = document.getData();
                                             ArrayList<String> users = (ArrayList<String>) map.get("users");
                                             searchqrtotalamount.setText("Total Amount Scanned:  " + users.size());
@@ -96,6 +101,7 @@ public class SearchQR extends AppCompatActivity {
                                         }
                                     }
 
+                                    // Display a message if the QR code is not found
                                     if (!qrCodeFound) {
                                         Toast.makeText(SearchQR.this, "Invalid QR Code name.", Toast.LENGTH_SHORT).show();
                                         ViewDetail.setEnabled(false);
@@ -105,6 +111,7 @@ public class SearchQR extends AppCompatActivity {
                         });
             }
         });
+
 
         Button Return = findViewById(R.id.searchqr_return);
         Return.setOnClickListener(new View.OnClickListener() {
