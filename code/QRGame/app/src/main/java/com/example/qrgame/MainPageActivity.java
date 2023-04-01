@@ -120,10 +120,12 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         scoreboard_button = findViewById(R.id.scoreboard_button);
         scoreboard_button.setOnClickListener(view -> {
             Intent scoreboard_page = new Intent(MainPageActivity.this, Scoreboard.class);
+            scoreboard_page.putExtra("Username", currUser);
             startActivity(scoreboard_page);
         });
     }
 
+    //Let the player turn on gps if it is not on
     private void OnGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -141,6 +143,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
         alertDialog.show();
     }
 
+//Return current location as LatLng
     private LatLng getLocation() {
         LatLng Current = null;
         if (ActivityCompat.checkSelfPermission(
@@ -316,7 +319,8 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             List<Float> lists = new ArrayList<Float>();
                             List<Float> lists1 = new ArrayList<Float>();
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                String test = "test";//"(String) document.get("latLng");""
+                                //get the QRCode location and convert to Latlng
+                                String test = "test";
                                 test += document.get("latLng");
                                 String[] temp;
                                 String[] temp1;
@@ -336,6 +340,7 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
                             }
                             distanceList = new ArrayList<>();
                             distanceList10 = new ArrayList<>();
+                            //Having distance between QRcodes and current location added to a list
                             for (int i = 1; i < locationArrayList.size() - 1; i++) {
                                 LatLng loc1 = locationArrayList.get(i);
                                 LatLng loc2 = locationArrayList.get(0);
@@ -346,13 +351,14 @@ public class MainPageActivity extends AppCompatActivity implements OnMapReadyCal
 
                             }
                             Collections.sort(lists);
+                            //Show the closest 10 Qrcode locations
                             if (lists.size() > 9) {
                                 lists1 = lists.subList(0, 10);
                             } else {
                                 lists1 = lists;
                             }
-//                            lists1 = lists;
 
+                            //Make maker on the map
                             for (int i = 1; i < locationArrayList.size() - 1; i++) {
                                 LatLng loc1 = locationArrayList.get(i);
                                 LatLng loc2 = locationArrayList.get(0);
