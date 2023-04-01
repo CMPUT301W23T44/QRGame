@@ -2,25 +2,15 @@ package com.example.qrgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * Displays all the information of a new QR code to the user
@@ -50,13 +40,17 @@ public class NewQRInfoActivity extends AppCompatActivity {
         qrImageTextView = findViewById(R.id.details_qr_face);
         nameTextView = findViewById(R.id.details_name);
         scoreTextView = findViewById(R.id.details_score);
-        nextButton = findViewById(R.id.details_back_button);
+        nextButton = findViewById(R.id.finish_button);
         commentEditText = findViewById(R.id.editText_comment);
         locationCheckbox = findViewById(R.id.checkBox_geolocation);
 
         // Gets new QR code and current user logged in
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
-        userName = (String) getIntent().getStringExtra("Username");
+        userName = getIntent().getStringExtra("Username");
+
+        if (userName == null) {
+            userName = " ";
+        }
 
         // Sets info to be displayed onto the screen
         qrImageTextView.setText(qrCode.getFace());
@@ -70,8 +64,8 @@ public class NewQRInfoActivity extends AppCompatActivity {
             // Saves the current comment and the location if the user chooses to
             comment = String.valueOf(commentEditText.getText());
             if (locationCheckbox.isChecked()) {
-                longitude = (Double) getIntent().getDoubleExtra("longitude", 0);
-                latitude = (Double) getIntent().getDoubleExtra("latitude", 0);
+                longitude = getIntent().getDoubleExtra("longitude", 0);
+                latitude = getIntent().getDoubleExtra("latitude", 0);
                 qrCode.setLatLong(latitude, longitude);
             }
             startActivityForResult(surroundingsPictureActivity, PICTURE_REQUEST);
@@ -93,48 +87,7 @@ public class NewQRInfoActivity extends AppCompatActivity {
         qrCode.addComments(userName, comment);
         QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
         dbAdapter.pushQR(qrCode);
-        addQR(qrCode);
+        User.addQRCode(qrCode, userName);
         finish();
-    }
-
-    /**
-     * Return the AndroidID
-     * @return
-     *      Android ID of the current phone
-     */
-    private String AndroidID() {
-        String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        return id == null ? "" : id;
-    }
-
-    /**
-     * Return the deviceId
-     * @return
-     *      Device ID of current phone
-     */
-    private String getUdid() {
-        String androidID = AndroidID();
-        return "2" + UUID.nameUUIDFromBytes(androidID.getBytes()).toString().replace("-", "");
-    }
-    /**
-     * Add QR code in UserCollection
-     * @param qrCode - QR code to be added to the database
-     */
-    private void addQR(QRCode qrCode){
-        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = fireStore.collection("LoginUser").document(getUdid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String Username = document.getString("UserNameKey");
-                        DocumentReference docRef2 = fireStore.collection("UserCollection").document(Username);
-                        docRef2.update("QRCode", FieldValue.arrayUnion(qrCode));
-
-                    }
-                }
-            }
-        });
     }
 }

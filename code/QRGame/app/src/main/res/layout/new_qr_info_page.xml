@@ -46,6 +46,7 @@
         android:background="@color/white"
         android:inputType="text"
         android:maxLength="100"
+        android:text=""
         android:textAlignment="textStart"
         android:textColor="@color/black"
         android:textSize="15sp"
@@ -60,7 +61,7 @@
         android:layout_marginBottom="36dp"
         android:text="@string/string_geolocationPrompt"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/details_back_button"
+        app:layout_constraintBottom_toTopOf="@+id/finish_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
@@ -79,7 +80,7 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/details_back_button"
+        android:id="@+id/finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

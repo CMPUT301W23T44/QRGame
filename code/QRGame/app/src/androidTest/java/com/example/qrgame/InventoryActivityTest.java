@@ -1,5 +1,7 @@
 package com.example.qrgame;
 
+import android.widget.Button;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -27,7 +29,7 @@ public class InventoryActivityTest {
     @Test
     public void InventoryButton() {
         solo.assertCurrentActivity("Wrong Activity", MainPageActivity.class);
-        solo.clickOnView((FloatingActionButton) solo.getView(R.id.inventory_button));
+        solo.clickOnView((Button) solo.getView(R.id.inventory_button));
         solo.assertCurrentActivity("Wrong Activity", Inventory_activity.class);
     }
 
@@ -35,9 +37,9 @@ public class InventoryActivityTest {
     @Test
     public void InventoryBackButton() {
         solo.assertCurrentActivity("Wrong Activity", MainPageActivity.class);
-        solo.clickOnView((FloatingActionButton) solo.getView(R.id.inventory_button));
+        solo.clickOnView((Button) solo.getView(R.id.inventory_button));
         solo.assertCurrentActivity("Wrong Activity", Inventory_activity.class);
-        solo.clickOnView((FloatingActionButton) solo.getView(R.id.inventory_back_button));
+        solo.clickOnView((Button) solo.getView(R.id.inventory_back_button));
         solo.assertCurrentActivity("Wrong Activity", MainPageActivity.class);
     }
 

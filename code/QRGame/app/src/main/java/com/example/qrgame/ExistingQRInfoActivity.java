@@ -3,7 +3,6 @@ package com.example.qrgame;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,7 +23,6 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
     private Button nextButton;
     private boolean scanned;
     private String userName;
-    private ImageView surroundingImageView;
 
     private final int PICTURE_REQUEST = 1;
 
@@ -36,28 +34,30 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
         qrImageTextView = findViewById(R.id.details_qr_face);
         nameTextView = findViewById(R.id.details_name);
         scoreTextView = findViewById(R.id.details_score);
-        nextButton = findViewById(R.id.details_back_button);
+        nextButton = findViewById(R.id.finish_button);
         commentEditText = findViewById(R.id.editText_comment);
         tag = findViewById(R.id.details_qr_name);
-        surroundingImageView=findViewById(R.id.details_surrounding_image);
 
         // Gets the QR, the current logged in user, and if the QR code has been scanned already
         qrCode = (QRCode) getIntent().getSerializableExtra("qrCode");
-        scanned = (boolean) getIntent().getBooleanExtra("scanned", false);
-        userName = (String) getIntent().getStringExtra("Username");
+        scanned = getIntent().getBooleanExtra("scanned", false);
+        userName = getIntent().getStringExtra("Username");
+
+        if (userName == null) {
+            userName = " ";
+        }
 
         // Sets the info to be displayed to the user on the screen
         qrImageTextView.setText(qrCode.getFace());
         nameTextView.setText(qrCode.getName());
         scoreTextView.setText("Score: " + qrCode.getScore());
-        surroundingImageView.setImageBitmap(qrCode.getLocationImageBitmap());
         HashMap<String, String> commentsMap = qrCode.getComments();
 
         // If the QR code has already been scanned, the user is notified and the comment
         // they had previously entered is displayed
         if (scanned) {
             tag.setText("Already Owned!");
-            commentEditText.setText((CharSequence) commentsMap.get(userName));
+            commentEditText.setText(commentsMap.get(userName));
             commentEditText.setEnabled(false);
             nextButton.setText("Finish");
         } else {
@@ -66,14 +66,14 @@ public class ExistingQRInfoActivity extends AppCompatActivity {
 
         nextButton.setOnClickListener(view -> {
             if (!scanned) {
+                // If not already scanned by the user, a comment can be added
                 String comment = String.valueOf(commentEditText.getText());
                 qrCode.addComments(userName, comment);
                 QRDatabaseController dbAdapter = QRDatabaseController.getInstance();
                 dbAdapter.pushQR(qrCode);
+                User.addQRCode(qrCode, userName);
             }
             finish();
         });
     }
-
-
 }
