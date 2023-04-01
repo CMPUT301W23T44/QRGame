@@ -1,7 +1,6 @@
 package com.example.qrgame;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
