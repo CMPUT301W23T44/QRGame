@@ -335,13 +335,16 @@ public class Inventory_activity extends AppCompatActivity {
                     QRCode qrcode;
                     qrcode = (QRCode) result.getSerializableExtra("qrcode");
                     int index = 0;
-                    for (int i=0;i< QrDataList.size();++i){
-                        if (QrDataList.get(i).getHash()==qrcode.getHash()){
-                            index=i;
+                    for (int i=0; i < QrDataList.size(); ++i){
+                        if (QrDataList.get(i).getHash().equals(qrcode.getHash())){
+                            QrDataList.remove(i);
+                            break;
                         }
+                        index++;
+
                     }
                     System.out.println("iciiiiiiiiiiiiiiiiiiiiii index:"+index);
-                    QrDataList.remove(index);
+                    //QrDataList.remove(index - 1);
                     totalPoints = GetTotalPoints();
                     TextView totalPoint=findViewById(R.id.inventory_total_score);
                     TextView totalQr=findViewById(R.id.inventory_total_amount);
