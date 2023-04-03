@@ -100,14 +100,20 @@ public class LatlngSearch extends DialogFragment {
                                                 String lata = lat[0];
                                                 lot = temp[2].substring(0,temp[2].length()-1);
                                                 //If the lat and lot are different by the search <1, add it to nearby QRCodes
-                                                if((Double.valueOf(lata) - lat1) < 1 ){
-                                                    if((Double.valueOf(lot) - lot1) < 1){
+                                                if(Math.abs((Double.valueOf(lata) - lat1)) < 1 ){
+                                                    if(Math.abs((Double.valueOf(lot) - lot1)) < 1){
                                                         count += 1;
                                                     }
                                                 }
                                             }
                                             //make a toast of how many QRCodes founded
-                                            Toast.makeText(mContext, "There are "+String.valueOf(count)+" Qrcodes near this location", Toast.LENGTH_SHORT).show();
+                                            if (count == 1 || count == 0){
+                                                Toast.makeText(mContext, "There is " + String.valueOf(count) + " Qrcode near this location", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                            else {
+                                                Toast.makeText(mContext, "There are " + String.valueOf(count) + " Qrcodes near this location", Toast.LENGTH_SHORT).show();
+                                            }
 
                                         }
                                         else {
