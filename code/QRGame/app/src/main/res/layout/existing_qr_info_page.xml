@@ -47,7 +47,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:text=" "
-        app:layout_constraintBottom_toTopOf="@+id/details_back_button"
+        app:layout_constraintBottom_toTopOf="@+id/finish_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
@@ -66,7 +66,7 @@
         android:textColor="@color/black"/>
 
     <Button
-        android:id="@+id/details_back_button"
+        android:id="@+id/finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"

@@ -29,7 +29,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,14 +77,11 @@ public class QRScannerActivity extends AppCompatActivity {
 
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
 
-        nextButton = findViewById(R.id.details_back_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent previous = new Intent();
-                setResult(RESULT_CANCELED, previous);
-                finish();
-            }
+        nextButton = findViewById(R.id.finish_button);
+        nextButton.setOnClickListener(view -> {
+            Intent previous = new Intent();
+            setResult(RESULT_CANCELED, previous);
+            finish();
         });
     }
 
